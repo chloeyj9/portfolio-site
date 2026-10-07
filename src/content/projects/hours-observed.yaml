@@ -4,7 +4,6 @@ cover: /images/projects/hours-observed/cover.jpg
 description: 9 to 5, as an algorithm sees it
 tags:
   - Speculative Design
-  - Physical Computing
   - AI
 year: '2026'
 caseStudy:
@@ -24,7 +23,6 @@ caseStudy:
     2 Developers
   timeline: 6 weeks, Fall 2025
   skills: |-
-    Physical Computing
     3D Modeling
     Vibe Coding
   sections:
