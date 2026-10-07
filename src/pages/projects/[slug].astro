@@ -1,0 +1,573 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+import Layout from '../../layouts/Layout.astro';
+import { richText, inline, lines } from '../../richText';
+
+export async function getStaticPaths() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const projects = await reader.collections.projects.all();
+  return projects
+    .filter((p) => p.entry.caseStudy.enabled)
+    .map((p) => ({ params: { slug: p.slug }, props: { project: p.entry } }));
+}
+
+const { project } = Astro.props;
+const cs = project.caseStudy;
+const id = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+// Sections with a sidebar name become the sidebar links.
+const sections = cs.sections.map((s) => {
+  const v = s.value as { navLabel?: string; label?: string };
+  return { ...s, anchor: v.navLabel ? id(v.navLabel) : undefined };
+});
+const navSections = sections
+  .filter((s) => s.anchor)
+  .map((s) => ({ key: s.anchor!, label: (s.value as { navLabel: string }).navLabel, href: `#${s.anchor}` }));
+
+const meta = [
+  { label: 'Role', items: lines(cs.role) },
+  { label: 'Team', items: lines(cs.team) },
+  { label: 'Timeline', items: lines(cs.timeline) },
+  { label: 'Skills', items: lines(cs.skills) },
+].filter((m) => m.items.length);
+---
+<Layout title={`${project.title} · Chloe Jung`} current="project" sections={navSections}>
+  <article class="case" style={`--accent:${cs.accent || "#175c35"};--tint:${cs.tint || "#d5eade"}`}>
+    <div class="hero media" data-reveal>
+      {cs.hero && <img src={cs.hero} alt="" />}
+    </div>
+
+    <ul class="tags">{project.tags.map((t) => <li>{t}</li>)}</ul>
+    <h1 class="title">{cs.headline || project.title}</h1>
+    <div class="summary prose" set:html={richText(cs.summary)} />
+
+    <dl class="meta">
+      {meta.map((m) => (
+        <div>
+          <dt class="eyebrow">{m.label}</dt>
+          <dd>{m.items.map((i) => <span>{i}</span>)}</dd>
+        </div>
+      ))}
+    </dl>
+
+    {sections.map((s) => {
+      const heading = (v: { label?: string; heading?: string }) => (
+        <>
+          {v.label && <p class="eyebrow">{v.label}</p>}
+          {v.heading && <h2 class="section-title">{v.heading}</h2>}
+        </>
+      );
+
+      if (s.discriminant === 'textWithImages') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class:list={['split split-images', { big: v.bigImages }]}>
+              <div class="prose" set:html={richText(v.body)} />
+              <div class="image-row">
+                {v.images.map((src, i) =>
+                  src ? <img src={src} alt="" /> : <div class={`media placeholder ${i === 0 && v.images.length > 1 ? 'narrow' : 'wide'}`} />,
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'cards') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            {v.intro && <div class="prose intro wide-intro" set:html={richText(v.intro)} />}
+            <div class:list={['cards', { tinted: v.tinted, two: v.cards.length === 2 }]}>
+              {v.cards.map((c) => (
+                <div class="card">
+                  {!v.tinted && <div class="media card-media">{c.image && <img src={c.image} alt="" />}</div>}
+                  <h3>{c.title}</h3>
+                  <div class="prose" set:html={richText(c.text)} />
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'callout') {
+        const v = s.value;
+        return (
+          <aside class="callout" data-reveal>
+            <p class="eyebrow">{v.label}</p>
+            <p class:list={['callout-text', { serif: v.serif }]} set:html={inline(v.text)} />
+          </aside>
+        );
+      }
+
+      if (s.discriminant === 'text') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class:list={['prose', 'intro', { 'wide-intro': v.wide }]} set:html={richText(v.body)} />
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'images') {
+        const v = s.value;
+        return (
+          v.images.every((im) => im.image) ? (
+            <div class="image-strip natural" data-reveal>
+              {v.images.map((im) => <img src={im.image!} alt="" style={`flex:${im.width || 1}`} />)}
+            </div>
+          ) : (
+            <div class="image-strip" data-reveal>
+              {v.images.map((im) => (
+                <div class="media" style={`flex:${im.width || 1}`}>{im.image && <img src={im.image} alt="" />}</div>
+              ))}
+            </div>
+          )
+        );
+      }
+
+      if (s.discriminant === 'stats') {
+        const v = s.value;
+        const image = <div class:list={['media stats-media', { filled: v.image }]}>{v.image && <img src={v.image} alt="" />}</div>;
+        const list = (
+          <ul class="stats">
+            {v.stats.map((st) => (
+              <li>
+                <span class="pill">{st.value}</span>
+                <div>
+                  <p class="stat-line">{st.line}</p>
+                  <p class="stat-detail">{st.detail}</p>
+                  {st.quote && <blockquote class="stat-quote">{st.quote}</blockquote>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        );
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            {v.imageRight ? (
+              <div class="split stats-split image-right">
+                <div>
+                  {v.intro && <div class="prose stats-intro" set:html={richText(v.intro)} />}
+                  {list}
+                  {v.quote && <blockquote>{v.quote}</blockquote>}
+                </div>
+                {image}
+              </div>
+            ) : (
+              <div class="split stats-split">
+                <div>
+                  <div class="prose" set:html={richText(v.intro)} />
+                  {image}
+                </div>
+                <div>
+                  {list}
+                  {v.quote && <blockquote>{v.quote}</blockquote>}
+                </div>
+              </div>
+            )}
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'features') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            {v.intro && <div class="prose intro" set:html={richText(v.intro)} />}
+            <div class="split features">
+              <ul class="feature-list">
+                {v.items.map((it) => (
+                  <li>
+                    <h3>{it.title}</h3>
+                    <div class="prose" set:html={richText(it.text)} />
+                  </li>
+                ))}
+              </ul>
+              <div class="media feature-media">{v.image && <img src={v.image} alt="" />}</div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'mediaText') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            {v.intro && <div class="prose intro mt-intro" set:html={richText(v.intro)} />}
+            <div class:list={['split media-text', { 'image-left': v.imageLeft }]}>
+              <div class="media mt-media">{v.image && <img src={v.image} alt="" />}</div>
+              <div class="prose mt-body" set:html={richText(v.body)} />
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'accordion') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class:list={['section accordion-section', { dark: v.dark }]} data-reveal>
+            {heading(v)}
+            {v.intro && <div class="prose intro" set:html={richText(v.intro)} />}
+            <div class="split accordion">
+              <div class="acc-list">
+                {v.items.map((it, i) => (
+                  <div class:list={['acc-item', { open: i === 0 }]} data-slide={it.video || it.image ? i : 'default'}>
+                    <button type="button" class="acc-head" aria-expanded={i === 0 ? 'true' : 'false'}>
+                      <span><strong>{it.title}:</strong> {it.subtitle}</span>
+                      <span class="acc-icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc-panel"><div class="acc-inner prose" set:html={richText(it.body)} /></div>
+                  </div>
+                ))}
+              </div>
+              <div class="media acc-media">
+                {v.items.map((it, i) => (it.video || it.image) && (
+                  <div class:list={['acc-slide', { on: i === 0 }]} data-slide={i} style={`--framing: ${it.framing ?? 50}%`}>
+                    {it.video
+                      ? <video src={it.video} muted loop playsinline preload="auto" autoplay={i === 0} />
+                      : <img src={it.image!} alt="" />}
+                    {it.floats.map((f, j) => f.image && (
+                      <img
+                        class="acc-float"
+                        src={f.image}
+                        alt=""
+                        style={`left:${f.left}%;top:${f.top}%;width:${f.width}%;animation-delay:${-j * 2.3}s`}
+                      />
+                    ))}
+                  </div>
+                ))}
+                {v.image && (
+                  <div class:list={['acc-slide', { on: !(v.items[0]?.video || v.items[0]?.image) }]} data-slide="default">
+                    <img src={v.image} alt="" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'nextSteps') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class="split next">
+              <div>
+                <div class="prose" set:html={richText(v.intro)} />
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>{v.tableHeadA}</th><th>{v.tableHeadB}</th></tr></thead>
+                    <tbody>{v.rows.map((r) => <tr><td>{r.a}</td><td>{r.b}</td></tr>)}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="prose">
+                {v.sideTitle && <p><strong>{v.sideTitle}</strong></p>}
+                <div class="side-body" set:html={richText(v.sideBody)} />
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'textAndImage') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class="split text-image">
+              <div class="prose" set:html={richText(v.body)} />
+              {v.image ? <img class="sketch" src={v.image} alt="" /> : <div class="media placeholder wide" />}
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'decisions') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class="decisions">
+              {v.rows.map((r) => (
+                <div class="decision">
+                  <div class="media">{r.imageA && <img src={r.imageA} alt="" />}</div>
+                  <div class="media">{r.imageB && <img src={r.imageB} alt="" />}</div>
+                  <div class="prose">
+                    <p><strong>{r.title}</strong></p>
+                    <div class="decision-text" set:html={richText(r.text)} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+    })}
+  </article>
+
+  <script>
+    import { animate, inView } from 'motion';
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+        inView(el, () => {
+          animate(el, { opacity: [0, 1], y: [28, 0] }, { duration: 0.8, ease: [0.2, 0.7, 0.2, 1] });
+        }, { amount: 0.15 });
+      });
+    } else {
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => (el.style.opacity = '1'));
+    }
+
+    // Drop-downs: one open at a time; the image follows the open item.
+    document.querySelectorAll<HTMLElement>('.accordion').forEach((acc) => {
+      const items = [...acc.querySelectorAll<HTMLElement>('.acc-item')];
+      const slides = [...acc.querySelectorAll<HTMLElement>('.acc-slide')];
+      // Show the open item's video or image (with its floating layers), else the section's default image.
+      const media = acc.querySelector<HTMLElement>('.acc-media')!;
+      const show = (key: string) => {
+        // With nothing to show (all closed, no default image), the box disappears.
+        media.classList.toggle('empty', !slides.some((slide) => slide.dataset.slide === key));
+        slides.forEach((slide) => {
+          const on = slide.dataset.slide === key;
+          slide.classList.toggle('on', on);
+          const video = slide.querySelector('video');
+          if (!video) return;
+          if (on) { video.currentTime = 0; video.play().catch(() => {}); } else video.pause();
+        });
+      };
+      items.forEach((item) => {
+        item.querySelector('.acc-head')!.addEventListener('click', () => {
+          const opening = !item.classList.contains('open');
+          items.forEach((other) => {
+            const on = other === item && opening;
+            other.classList.toggle('open', on);
+            other.querySelector('.acc-head')!.setAttribute('aria-expanded', String(on));
+          });
+          show(opening ? item.dataset.slide! : 'default');
+        });
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+  /* Sizes are design pixels measured on the 1560px SWAPP layout (--u). */
+  .case {
+    --body: max(15px, calc(18 * var(--u)));
+    padding-block: max(24px, calc(60 * var(--u))) max(48px, calc(120 * var(--u)));
+    font-size: var(--body);
+    line-height: 1.39;
+  }
+  .media { background: var(--color-placeholder); overflow: hidden; max-width: 100%; }
+  .media img, .image-row img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero { aspect-ratio: 1440 / 540; }
+
+  .tags { margin-top: max(24px, calc(60 * var(--u))); display: flex; flex-wrap: wrap; gap: max(8px, calc(14 * var(--u))); }
+  .tags li {
+    background: var(--tint); color: var(--accent); border-radius: 4px;
+    font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em;
+    font-size: max(11px, calc(16 * var(--u))); padding: max(3px, calc(5 * var(--u))) max(8px, calc(15 * var(--u)));
+  }
+  .title { margin-top: max(16px, calc(30 * var(--u))); font-family: var(--font-serif); font-size: max(34px, calc(65 * var(--u))); line-height: 1.05; letter-spacing: -0.01em; text-wrap: balance; }
+  .summary { margin-top: max(14px, calc(28 * var(--u))); max-width: max(32ch, calc(1260 * var(--u))); font-size: max(16px, calc(21 * var(--u))); }
+
+  .eyebrow { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); font-size: max(11px, calc(16 * var(--u))); }
+  .meta { margin-top: max(28px, calc(55 * var(--u))); display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  @container (min-width: 760px) { .meta { grid-template-columns: repeat(4, 1fr); } }
+  .meta dd { margin-top: max(10px, calc(22 * var(--u))); display: grid; font-size: max(15px, calc(21 * var(--u))); line-height: 1.38; }
+
+  .section { margin-top: max(56px, calc(90 * var(--u))); scroll-margin-top: 96px; }
+  @media (min-width: 768px) { .section { scroll-margin-top: calc(40 * var(--u)); } }
+  .section-title { margin-top: max(6px, calc(12 * var(--u))); font-family: var(--font-serif); font-size: max(28px, calc(50 * var(--u))); line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
+
+  .prose :global(p + p), .prose :global(ol + p), .prose :global(p + ol) { margin-top: 1.39em; }
+  .prose :global(strong) { font-weight: 600; }
+  .prose :global(ol) { list-style: decimal; padding-left: 1.6em; }
+  .intro { margin-top: max(18px, calc(40 * var(--u))); max-width: 50ch; }
+  .wide-intro { max-width: none; }
+
+  .split { margin-top: max(18px, calc(40 * var(--u))); display: grid; gap: 32px; }
+  @container (min-width: 900px) {
+    .split-images { grid-template-columns: 810fr 570fr; gap: calc(60 * var(--u)); }
+    .stats-split { grid-template-columns: 660fr 690fr; gap: calc(90 * var(--u)); }
+    .text-image { grid-template-columns: 470fr 520fr 390fr; gap: calc(54 * var(--u)); }
+  }
+  .split-images .prose { max-width: 810px; }
+  .image-row { display: flex; gap: calc(30 * var(--u)); height: max(160px, calc(240 * var(--u))); }
+  .image-row .narrow { flex: 120; }
+  .image-row .wide { flex: 420; }
+  .image-row img { flex: 1; width: auto; }
+
+  .cards { margin-top: max(24px, calc(40 * var(--u))); display: grid; gap: max(24px, calc(17 * var(--u))); }
+  @container (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  .card-media { aspect-ratio: 469 / 300; margin-bottom: max(14px, calc(40 * var(--u))); }
+  .card h3 { font-weight: 600; }
+  .card .prose { margin-top: 0.3em; }
+  .cards:not(.tinted) .card .prose { max-width: 46ch; }
+  .tinted { gap: max(16px, calc(45 * var(--u))); }
+  .tinted .card { border-radius: max(8px, calc(12 * var(--u))); background: var(--tint); padding: max(18px, calc(23 * var(--u))) max(18px, calc(23 * var(--u))) max(28px, calc(36 * var(--u))); }
+  .tinted h3 { font-size: max(17px, calc(21 * var(--u))); margin-bottom: 1em; }
+
+  .callout {
+    border-radius: max(8px, calc(12 * var(--u)));
+    margin-top: max(48px, calc(80 * var(--u)));
+    background: var(--tint); text-align: center;
+    padding: max(24px, calc(40 * var(--u))) max(20px, calc(40 * var(--u)));
+  }
+  .callout-text { margin: max(10px, calc(14 * var(--u))) auto 0; max-width: 1240px; font-size: max(18px, calc(28 * var(--u))); line-height: 1.36; text-wrap: balance; }
+  .callout-text :global(strong) { font-weight: 600; }
+
+  .callout-text.serif { font-family: var(--font-serif); font-size: max(22px, calc(32 * var(--u))); line-height: 1.2; max-width: none; }
+  .intro:not(.wide-intro) { max-width: max(32ch, calc(1260 * var(--u))); }
+  .image-strip { margin-top: max(32px, calc(46 * var(--u))); display: flex; gap: max(12px, calc(30 * var(--u))); height: max(200px, calc(480 * var(--u))); }
+  .image-strip img { width: 100%; height: 100%; object-fit: cover; }
+  @container (max-width: 600px) { .image-strip { flex-direction: column; height: auto; } .image-strip .media { aspect-ratio: 3 / 2; } }
+
+  .cards.two { column-gap: max(24px, calc(60 * var(--u))); }
+  @container (min-width: 760px) { .cards.two { grid-template-columns: repeat(2, 1fr); } }
+  .cards.two .card-media { aspect-ratio: 690 / 480; }
+  .image-strip.natural { height: auto; align-items: flex-start; }
+  .image-strip.natural img { width: auto; height: auto; max-width: min(100%, 1015px); flex: 0 1 auto !important; }
+  .prose :global(ul) { list-style: disc; padding-left: 1.4em; }
+  .prose :global(ul + ul), .prose :global(p + ul), .prose :global(ul + p) { margin-top: 1.39em; }
+
+  @container (min-width: 900px) {
+    .image-right { grid-template-columns: 810fr 570fr; gap: calc(60 * var(--u)); }
+    .features { grid-template-columns: 690fr 390fr 260fr; gap: calc(180 * var(--u)); }
+    .next { grid-template-columns: 707fr 660fr; gap: calc(73 * var(--u)); }
+  }
+  .image-right .stats-media { margin-top: 0; aspect-ratio: auto; min-height: 320px; height: 100%; }
+  .stats-intro + .stats { margin-top: max(20px, calc(40 * var(--u))); }
+  .stat-quote { margin-top: max(18px, calc(35 * var(--u))); }
+  .pill:empty { min-height: 1.5em; }
+
+  .feature-list { display: grid; gap: max(16px, calc(30 * var(--u))); align-content: start; }
+  .feature-list li { background: var(--color-placeholder); border-radius: max(16px, calc(30 * var(--u))); padding: max(20px, calc(30 * var(--u))) max(20px, calc(30 * var(--u))) max(22px, calc(26 * var(--u))); }
+  .feature-list h3 { font-weight: 600; font-size: max(16px, calc(21 * var(--u))); margin-bottom: 0.9em; }
+  .feature-list .prose { max-width: 30em; }
+  .feature-media { min-height: 320px; }
+
+  .table-wrap { margin-top: max(24px, calc(48 * var(--u))); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: #0a0a0a; color: #fafafa; font-size: max(13px, calc(16 * var(--u))); }
+  th { text-align: left; font-weight: 400; background: #171717; color: #e5e5e5; }
+  th, td { padding: max(6px, calc(9 * var(--u))) max(8px, calc(11 * var(--u))); border: 1px solid #262626; vertical-align: top; }
+  .side-body { margin-top: max(14px, calc(28 * var(--u))); }
+
+  .stats-media { margin-top: max(24px, calc(48 * var(--u))); aspect-ratio: 660 / 330; }
+  /* A real image (e.g. a diagram) shows whole, at its own shape, with no gray box. */
+  .stats-media.filled, .image-right .stats-media.filled { background: none; aspect-ratio: auto; min-height: 0; height: auto; align-self: center; }
+  .stats-media.filled img { height: auto; object-fit: contain; }
+  .stats { display: grid; gap: max(22px, calc(40 * var(--u))); }
+  .stats li { display: grid; grid-template-columns: max(64px, calc(90 * var(--u))) 1fr; gap: max(14px, calc(30 * var(--u))); align-items: start; }
+  .pill { background: var(--color-ink); color: var(--color-paper); font-weight: 600; text-align: center; border-radius: 3px; font-size: max(15px, calc(20 * var(--u))); line-height: 1.5; }
+  .stat-line { margin-top: 0.15em; }
+  .stat-detail { margin-top: 0.4em; color: color-mix(in srgb, var(--color-ink) 50%, transparent); max-width: 30em; }
+  blockquote {
+    margin-top: max(24px, calc(38 * var(--u)));
+    background: var(--color-ink); color: var(--color-paper); border-radius: 4px;
+    padding: max(16px, calc(26 * var(--u))) max(18px, calc(30 * var(--u)));
+  }
+
+  .decision-text { margin-top: 1.39em; }
+  .sketch { width: 100%; height: auto; max-width: 100%; }
+
+  .decisions { margin-top: max(24px, calc(40 * var(--u))); display: grid; gap: max(36px, calc(60 * var(--u))); }
+  .decision { display: grid; gap: 16px; align-items: center; }
+  .decision .media { aspect-ratio: 450 / 332; }
+  @container (min-width: 900px) {
+    .decision { grid-template-columns: 450fr 450fr 480fr; gap: calc(30 * var(--u)); }
+  }
+
+  /* One image beside text (Hours, Observed problem + solution). */
+  .intro.mt-intro { max-width: max(32ch, calc(800 * var(--u))); }
+  .mt-body { max-width: 44em; }
+  .mt-media { aspect-ratio: 932 / 400; }
+  .image-left .mt-media { aspect-ratio: 659 / 367; }
+  .mt-body :global(ul) { padding-left: 1.2em; list-style: disc; }
+  .mt-body :global(li + li) { margin-top: 1.1em; }
+  @container (min-width: 760px) {
+    .media-text { grid-template-columns: 450fr 932fr; gap: calc(108 * var(--u)); }
+    .media-text .mt-media { order: 2; }
+    .media-text.image-left { grid-template-columns: 660fr 780fr; gap: calc(60 * var(--u)); align-items: center; }
+    .media-text.image-left .mt-media { order: 0; }
+    .split-images.big { grid-template-columns: 450fr 930fr; gap: calc(60 * var(--u)); align-items: center; }
+  }
+  .split-images.big .image-row { height: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: calc(28 * var(--u)); }
+  .split-images.big .image-row > * { aspect-ratio: 451 / 360; width: 100%; height: auto; object-fit: cover; }
+  .split-images.big .prose :global(ul) { padding-left: 1.2em; list-style: disc; }
+  .split-images.big .prose :global(li + li) { margin-top: 1.1em; }
+
+  /* Drop-down section, measured on the Hours, Observed layout. */
+  .accordion-section.dark {
+    background: #000; color: #fff;
+    padding: max(24px, calc(58 * var(--u)));
+  }
+  .accordion-section.dark .eyebrow { color: #fff; }
+  .accordion { grid-template-columns: 512fr 750fr; gap: max(20px, calc(60 * var(--u))); align-items: start; }
+  .acc-list { display: grid; gap: max(12px, calc(30 * var(--u))); }
+  .acc-item {
+    background: #d9d9d9; color: #555; border-radius: max(18px, calc(29 * var(--u)));
+    transition: background 0.3s, color 0.3s;
+  }
+  .acc-item.open { background: #fff; color: var(--color-ink); }
+  .acc-head {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    text-align: left; cursor: pointer; font: inherit; color: inherit;
+    font-size: max(14px, calc(19 * var(--u)));
+    padding: max(12px, calc(17 * var(--u))) max(18px, calc(29 * var(--u)));
+  }
+  .acc-item.open .acc-head { padding-top: max(16px, calc(26 * var(--u))); }
+  .acc-head strong { font-weight: 600; }
+  .acc-icon {
+    position: relative; flex-shrink: 0; border-radius: 50%; background: var(--color-ink);
+    width: max(18px, calc(24 * var(--u))); aspect-ratio: 1;
+  }
+  .acc-icon::before, .acc-icon::after {
+    content: ''; position: absolute; left: 50%; top: 50%; background: #fff; border-radius: 1px;
+    width: 52%; height: max(2px, calc(3 * var(--u))); translate: -50% -50%;
+    transition: rotate 0.3s;
+  }
+  .acc-icon::after { rotate: 90deg; }
+  .acc-item.open .acc-icon::after { rotate: 0deg; }
+  .acc-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: inherit; }
+  .acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s cubic-bezier(.2, .8, .2, 1); }
+  .acc-item.open .acc-panel { grid-template-rows: 1fr; }
+  .acc-inner {
+    overflow: hidden; min-height: 0;
+    font-size: max(14px, calc(19 * var(--u)));
+    padding-inline: max(18px, calc(29 * var(--u)));
+  }
+  .acc-item.open .acc-inner { padding-bottom: max(18px, calc(36 * var(--u))); }
+  .acc-inner :global(p + p) { margin-top: 1.2em; }
+  /* 4:3 matches the Hours, Observed videos, so they show uncropped. */
+  .acc-media { aspect-ratio: 4 / 3; }
+  .acc-media { position: relative; transition: background-color 0.4s; }
+  .acc-media.empty { background-color: transparent; }
+  .acc-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+  .acc-slide.on { opacity: 1; visibility: visible; }
+  .acc-slide > video, .acc-slide > img:not(.acc-float) {
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% var(--framing, 50%); display: block;
+  }
+  /* Floating layers (e.g. code screenshots) drift gently over the image. */
+  .acc-media .acc-float {
+    position: absolute; height: auto; max-width: none; object-fit: fill;
+    animation: acc-float 6s ease-in-out infinite alternate;
+  }
+  @keyframes acc-float {
+    from { transform: translate(0, calc(-6 * var(--u))); }
+    to { transform: translate(calc(3 * var(--u)), calc(6 * var(--u))); }
+  }
+  @container (max-width: 759px) { .accordion { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .acc-panel, .acc-item, .acc-icon::after, .acc-slide { transition: none; } .acc-float { animation: none; } }
+</style>

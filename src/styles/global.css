@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/dm-mono/400.css";
+@import "@fontsource/dm-mono/500-italic.css";
+@import "@fontsource/noto-sans/400.css";
+@import "@fontsource/noto-sans/600.css";
+
+@theme {
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-paper: #fafafa;
+  --color-ink: #0a0a0a;
+  --color-placeholder: #d9d9d9;
+  --color-tag: #d9d9d9;
+}
+
+/* 1 design pixel on the 1920px canvas (360px nav + 1560px page). Everything scales with it. */
+:root { --u: calc(min(100vw, 1920px) / 1920); }
+
+html { background: var(--color-paper); color: var(--color-ink); scroll-behavior: smooth; }
+body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+/* Elements marked data-reveal start hidden and are animated in by script. */
+.js [data-reveal] { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  html { scroll-behavior: auto; }
+}

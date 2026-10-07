@@ -1,0 +1,170 @@
+title: Hours, Observed
+order: 5
+cover: /images/projects/hours-observed/cover.jpg
+description: 9 to 5, as an algorithm sees it
+tags:
+  - Speculative Design
+  - Physical Computing
+  - AI
+year: '2026'
+caseStudy:
+  enabled: true
+  accent: '#285762'
+  tint: '#d0e3d6'
+  hero: /images/projects/hours-observed/hero.jpg
+  headline: 9 to 5, as an algorithm sees it
+  summary: >-
+    An exploration of what AI looks like with a physical form: a friendly-looking
+    desk punch clock that uses facial tracking to decide whether your time
+    "counts." It turns a quiet trend in workplace tools, judging people by how
+    busy they look, into an object you can see and touch.
+  role: Designer
+  team: |-
+    2 Designers
+    2 Developers
+  timeline: 6 weeks, Fall 2025
+  skills: |-
+    Physical Computing
+    3D Modeling
+    Vibe Coding
+  sections:
+    - discriminant: text
+      value:
+        navLabel: Context
+        label: Context
+        heading: Exploring what workplace AI would look like if it sat on your desk.
+        wide: true
+        body: |-
+          **Hours, Observed explores how artificial intelligence might be physically embodied, turning invisible computational processes into something you can see and touch.**
+
+          The idea came from a conversation with friends about working in an office. Many described a quiet pressure to look busy, even during real work that doesn't show on a screen, like thinking, planning or problem-solving. That gap between appearing productive and being productive became our focus.
+
+          Workplace AI is starting to judge that gap. Most of it lives inside screens, where its decisions are easy to ignore. We wanted to pull one of those decisions onto a desk, where people would have to face it. Over 8 weeks, a team of 2 designers and 2 technical developers prototyped the concept.
+    - discriminant: mediaText
+      value:
+        navLabel: Problem
+        label: Problem
+        heading: Productivity tools promise focus but deliver surveillance.
+        intro: |-
+          Productivity tools promise optimization. In practice, they often trade well-being for constant monitoring and performance. We focused on three problems:
+        image: /images/projects/hours-observed/productivity-tools.png
+        imageLeft: true
+        body: |-
+          - **Surveillance sold as help:** Tools framed as support quietly monitor every minute. Because the tracking is invisible, most people never stop to question it.
+          - **The wrong metric:** Many tools measure presence and activity, not the quality of the work. People learn to look busy instead of doing their best work.
+          - **Lost trust:** When visibility replaces trust, people feel judged rather than supported. Their sense of self-worth gets tied to a number they can't control.
+    - discriminant: callout
+      value:
+        label: Problem Statement
+        serif: false
+        text: How might we make the **hidden cost of productivity** tracking **tangible** enough that people stop and question it?
+    - discriminant: stats
+      value:
+        navLabel: Insights
+        label: Insights
+        heading: Tracking turns real work into a performance of looking busy.
+        intro: ''
+        image: /images/projects/hours-observed/insights-flow.png
+        imageRight: true
+        quote: ''
+        stats:
+          - value: 78%
+            line: of employers use software to monitor employees.
+            detail: 'Watched: tracking feels like a normal work tool, so no one questions it.'
+            quote: ''
+          - value: 56%
+            line: of monitored workers feel tense or stressed at work.
+            detail: 'Pressured: the metric starts to feel like the boss, and people change how they act to satisfy it.'
+            quote: ''
+          - value: 58%
+            line: of workers say they regularly fake looking busy.
+            detail: 'Performing: people optimize for looking productive instead of doing their best work.'
+            quote: ''
+    - discriminant: mediaText
+      value:
+        navLabel: Solution
+        label: Solution
+        heading: A friendly desk clock that makes you question the cost of "productivity."
+        intro: ''
+        image: /images/projects/hours-observed/solution.jpg
+        imageLeft: false
+        body: |-
+          Hours, Observed is a desk-scale punch clock. It uses facial tracking to decide whether you look productive. If you don't, the clock slows down, so your logged hours reflect perceived productivity instead of actual time.
+    - discriminant: accordion
+      value:
+        navLabel: Experience Design
+        label: Experience Design
+        heading: Making every aspect of the experience provoke thought.
+        intro: ''
+        dark: true
+        image: null
+        items:
+          - title: Form
+            subtitle: harmless at first glance
+            image: null
+            video: /images/projects/hours-observed/form.mp4
+            floats: []
+            framing: 45
+            body: |-
+              **Decision:** a historical punch clock, shrunk into a soft, pastel desk object.
+
+              **Why it provokes:** It looks like a friendly gadget, so people accept it before realizing it's watching them. That mirrors how real tracking tools enter the workplace: quietly, and framed as help.
+          - title: Interaction
+            subtitle: watching your own hours shrink
+            image: null
+            video: /images/projects/hours-observed/interaction.mp4
+            floats: []
+            framing: 60
+            body: |-
+              **Decision:** the clock slows down when you don't look busy.
+
+              **Why it provokes:** As the clock falls behind real time, a hidden cost becomes something you can watch happen. By 5pm, a full 9-to-5 might register as far fewer hours, leaving you to ask where the rest went.
+          - title: System
+            subtitle: an AI that can't see real work
+            image: /images/projects/hours-observed/system-base.jpg
+            floats:
+              - image: /images/projects/hours-observed/system-code.png
+                left: 21.33
+                top: 5.33
+                width: 75.2
+              - image: /images/projects/hours-observed/system-console.png
+                left: 69.87
+                top: 29.84
+                width: 23.47
+            body: |-
+              **Decision:** the AI judges appearance, and its judgment is final.
+
+              **Why it provokes:** A camera can see a face but not a thought, so it penalizes exactly the invisible work our friends described. People feel the flaw in optimization logic instead of just reading about it.
+    - discriminant: textWithImages
+      value:
+        navLabel: Lasting Questions
+        label: Lasting Questions
+        heading: The experience might be short, but the impression should last.
+        bigImages: true
+        images:
+          - /images/projects/hours-observed/lasting-questions-1.jpg
+          - /images/projects/hours-observed/lasting-questions-2.jpg
+        body: |-
+          **What we want people to walk away asking:**
+
+          - What counts as real work if no one can see it?
+          - Who gets to decide what productive looks like?
+          - Would I change how I work just to satisfy this clock?
+    - discriminant: cards
+      value:
+        navLabel: Outcome
+        label: Outcome
+        heading: Designing a bad metric on purpose taught me to spot one.
+        intro: |-
+          Building a system that judges people the wrong way on purpose changed how I look at every metric a product tracks. The most useful thing a design can do is make an invisible decision visible enough to question.
+        tinted: true
+        cards:
+          - image: null
+            title: What you measure shapes behavior.
+            text: Productivity tools measure what's easy to see, not what matters. Building one on purpose made me much more careful about which metrics a product should track.
+          - image: null
+            title: Aesthetics guide assumptions.
+            text: A soft, friendly form made a controlling system feel harmless. Designers have to stay honest about what a product actually does.
+          - image: null
+            title: Making it physical makes people pay attention.
+            text: Turning an invisible algorithm into an object on a desk got people to question something they'd normally scroll past.

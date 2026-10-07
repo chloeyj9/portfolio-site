@@ -1,0 +1,154 @@
+---
+import SittingCat from './SittingCat.astro';
+import { navLinks, type NavLink, type Page } from '../navLinks';
+
+interface Props {
+  current: Page;
+  // A project page passes its own sections to list instead of the site links.
+  sections?: NavLink[];
+}
+const { current, sections } = Astro.props;
+const site = await navLinks(current);
+const nav = site.nav;
+const links = sections ?? site.links;
+const active = sections ? sections[0]?.key : current;
+const onHome = current === 'home';
+---
+<aside class="sidebar">
+  <div class="flex items-center justify-between md:block">
+    <a href={onHome ? '#top' : '/'} class="name font-serif leading-none tracking-[-0.01em]">{nav.siteName}</a>
+    <button
+      type="button"
+      class="menu-toggle font-mono text-sm uppercase tracking-wider md:hidden"
+      aria-expanded="false"
+      aria-controls="site-nav"
+    >Menu</button>
+  </div>
+
+  <div class="panel-wrap" id="site-nav">
+    <SittingCat class="cat" />
+    <nav class="panel" aria-label="Main">
+      <p class="label font-mono uppercase tracking-[0.04em] text-ink/60">{nav.panelLabel}</p>
+      <div class="links" data-active={active}>
+        <span class="highlight" aria-hidden="true"></span>
+        <ul class="grid">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} data-key={l.key} aria-current={!sections && l.key === current ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+        </ul>
+      </div>
+    </nav>
+  </div>
+</aside>
+
+<style>
+  /* Sizes are design pixels from the 360px nav layout, scaled by --n. */
+  .sidebar { --n: 1px; padding: 1.5rem 1rem 0; }
+  .name { font-size: calc(50 * var(--n)); }
+  .label { font-size: calc(21.6 * var(--n)); }
+  @media (min-width: 768px) {
+    .sidebar {
+      --n: max(0.667px, var(--u));
+      position: sticky; top: 0; height: 100svh;
+      width: calc(360 * var(--n)); flex-shrink: 0;
+      padding: calc(67 * var(--n)) calc(30 * var(--n)) 0 calc(60 * var(--n));
+    }
+  }
+
+  .panel-wrap { position: relative; margin-top: calc(90 * var(--n)); }
+  .panel-wrap :global(.cat) { position: absolute; left: calc(26 * var(--n)); top: calc(-51 * var(--n)); width: calc(94 * var(--n)); }
+  .panel { background: var(--color-placeholder); padding: calc(48 * var(--n)) calc(30 * var(--n)) calc(72 * var(--n)); }
+
+  .links { position: relative; margin-top: calc(18 * var(--n)); }
+  .links a {
+    position: relative; z-index: 1; display: block;
+    padding: calc(8 * var(--n)) calc(30 * var(--n));
+    font-size: calc(20.8 * var(--n)); line-height: calc(28 * var(--n));
+    color: var(--color-ink);
+    transition: color 0.25s, font-weight 0.25s;
+  }
+  .links a.on { color: var(--color-paper); font-weight: 600; }
+  .links a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+
+  .highlight {
+    position: absolute; left: 0; right: 0; top: 0; height: 0;
+    background: var(--color-ink);
+    transition: transform 0.45s cubic-bezier(.2, .8, .2, 1), height 0.45s cubic-bezier(.2, .8, .2, 1);
+  }
+
+  /* Phones: the panel opens from a Menu button. */
+  @media (max-width: 767px) {
+    .sidebar { position: sticky; top: 0; z-index: 20; background: var(--color-paper); padding-bottom: 1rem; }
+    .name { font-size: 2.6rem; }
+    .panel-wrap { display: none; margin-top: 3.6rem; padding-bottom: 1rem; }
+    .sidebar.open .panel-wrap { display: block; }
+    .panel { padding-bottom: 2.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .highlight { transition: none; } }
+</style>
+
+<script>
+  const sidebar = document.querySelector<HTMLElement>('.sidebar')!;
+  const list = sidebar.querySelector<HTMLElement>('.links')!;
+  const box = list.querySelector<HTMLElement>('.highlight')!;
+  const items = [...list.querySelectorAll<HTMLAnchorElement>('a')];
+  let active = list.dataset.active!;
+
+  // Slide the black box under one link and turn that link white.
+  const moveTo = (key: string) => {
+    const el = items.find((a) => a.dataset.key === key);
+    if (!el) return;
+    box.style.transform = `translateY(${el.offsetTop}px)`;
+    box.style.height = `${el.offsetHeight}px`;
+    items.forEach((a) => a.classList.toggle('on', a === el));
+  };
+
+  items.forEach((a) => {
+    a.addEventListener('mouseenter', () => moveTo(a.dataset.key!));
+    a.addEventListener('focus', () => moveTo(a.dataset.key!));
+  });
+  list.addEventListener('mouseleave', () => moveTo(active));
+  list.addEventListener('focusout', () => moveTo(active));
+
+  // Links to sections on this page follow the scroll position.
+  const targets = items.map((a) => {
+    const href = a.getAttribute('href') ?? '';
+    return href.startsWith('#') ? document.getElementById(href.slice(1)) : null;
+  });
+  if (targets.some((t) => t && t !== document.body)) {
+    const first = active;
+    const update = () => {
+      let next = first;
+      items.forEach((a, i) => {
+        const t = targets[i];
+        if (t && t.getBoundingClientRect().top < innerHeight * 0.4) next = a.dataset.key!;
+      });
+      if (next !== active) {
+        active = next;
+        if (!list.matches(':hover')) moveTo(active);
+      }
+    };
+    addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  // Mobile menu.
+  const toggle = sidebar.querySelector<HTMLButtonElement>('.menu-toggle')!;
+  toggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? 'Close' : 'Menu';
+    if (open) moveTo(active);
+  });
+  items.forEach((a) => a.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'Menu';
+  }));
+
+  moveTo(active);
+  addEventListener('resize', () => moveTo(active));
+  document.fonts?.ready.then(() => moveTo(active));
+</script>

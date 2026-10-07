@@ -1,0 +1,65 @@
+title: Kaiser Permanente
+order: 3
+description: Rethinking the outpatient clinic as an everyday health destination
+cover: /images/projects/kaiser-permanente/cover.jpg
+tags: [Strategy, Systems Thinking]
+year: '2026'
+caseStudy:
+  enabled: true
+  accent: '#367ba7'
+  tint: '#b9dae8'
+  hero: /images/projects/kaiser-permanente/hero.jpg
+  headline: Rethinking the outpatient clinic as an everyday health destination
+  summary: >-
+    A multidisciplinary partnership with Kaiser Permanente exploring how
+    outpatient clinics could support members' everyday health, not just their
+    appointments, through physical space, technology and clinical workflow.
+  role: Designer
+  team: |-
+    1 Business Analyst
+    1 Public Health Specialist
+    1 Engineer
+    1 Designer
+  timeline: 6 weeks, Fall 2025
+  skills: |-
+    Customer Discovery
+    Service Design
+    Business Strategy
+  sections:
+    - discriminant: text
+      value:
+        navLabel: Under NDA
+        label: Under NDA
+        heading: The full case study is confidential.
+        body: This project is under NDA. I'm happy to walk through the research, strategy and designs in conversation.
+        wide: false
+    - discriminant: text
+      value:
+        navLabel: Overview
+        label: Overview
+        heading: Helping Kaiser Permanente meet members' needs beyond the exam room.
+        body: Outpatient care is growing fast, and many patients arrive at the clinic carrying needs that medicine alone can't solve. Our multidisciplinary team partnered with Kaiser Permanente to explore how clinics could support members' everyday health, not just their appointments. We ran customer discovery across members, healthcare workers and administrators, then proposed a strategy spanning physical space, technology and clinical workflow, backed by a business case.
+        wide: false
+    - discriminant: callout
+      value:
+        label: Problem statement
+        serif: false
+        text: How might we turn the clinic into a place that connects members to the support they need to stay healthy, before they get sick?
+    - discriminant: text
+      value:
+        navLabel: Outcome
+        label: Outcome
+        heading: In healthcare, a good design has to work for the patient, the clinician and the budget.
+        body: |-
+          **Design for every customer in the room.**
+          Members, healthcare workers and administrators each needed something different from the same space. The strongest ideas were the ones that solved for all three at once, not just the patient.
+
+          **A design isn't done until it has a business case.**
+          Working alongside an MBA teammate, I learned to frame design decisions in terms of cost, return and scale. That made our ideas something a health system could actually say yes to.
+
+          **Designers can be the translator on a mixed team.**
+          With engineering, public health and business backgrounds on the team, visuals like journey maps and renderings became our shared language. Turning research into something everyone could see helped us agree faster.
+
+          **A physical space is part of the product.**
+          The clinic lobby turned out to be one of the most valuable touchpoints in the whole patient experience. Designing it as a service, not just a room, changed how I think about where products live.
+        wide: true

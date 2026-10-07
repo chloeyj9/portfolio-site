@@ -1,0 +1,157 @@
+title: Netflix
+order: 4
+description: Reimagining Netflix’s “My List” feature to be organizable and shareable
+cover: /images/projects/netflix/cover.jpg
+tags: [Product Design, Concept]
+year: '2025'
+caseStudy:
+  enabled: true
+  accent: '#9d0d0d'
+  tint: '#f8d1d2'
+  hero: /images/projects/netflix/hero.jpg
+  headline: Reimagining Netflix’s “My List” feature
+  summary: >-
+    Netflix's "My List" is one long, unsorted list, and sharing a show still
+    happens outside the app. I redesigned it around three features: custom
+    watchlists, shared watchlists and shared comments. The aim was to make the
+    list a place people organize and come back to, not just a place shows go to
+    be forgotten.
+  role: Product Designer
+  team: Individual
+  timeline: 3 weeks, Spring 2024
+  skills: |-
+    UX Research
+    Feature Design
+    UI Design
+  sections:
+    - discriminant: textWithImages
+      value:
+        navLabel: Context
+        label: Context
+        heading: I texted friends about shows to remember them, because "My List" didn't stick.
+        body: |-
+          While scrolling through my Netflix recommendations, I'd often find shows I wanted to watch. Sometimes I'd text a friend about one, partly hoping it would remind me later. Other times I would jot it down in my Notes app before forgetting about that, too. Every so often I'd add it to "My List," a watch-later type of feature on the Netflix app, only to never remember to check the list on a later day.
+
+          Netflix was great at helping me find shows, so I wanted to explore how it could help me actually come back to them. Over 7 weeks, I took the idea from research to a high-fidelity prototype, working solo, but constantly getting feedback from the fellow binge-watchers around me.
+        images: [null, null]
+    - discriminant: cards
+      value:
+        navLabel: Problem
+        label: Problem
+        heading: Viewers want to sort and share their saved shows, but "My List" can't do either.
+        intro: "When people manage their Netflix content, they want to organize and share watchlists for different moods or different people. Today they can't, for two reasons:"
+        tinted: false
+        cards:
+          - image: null
+            title: One list for everything
+            text: A comfort rewatch, a horror movie for Friday and a documentary for later all land in the same place. The longer the list gets, the harder it is to find the right watch.
+          - image: null
+            title: Recommendations happen outside the app
+            text: Sharing a show means remembering to bring it up in conversation or sending a link in a text. Most recommendations get lost before anyone presses play.
+    - discriminant: callout
+      value:
+        label: Problem statement
+        serif: false
+        text: How might we turn "My List" into a space where viewers organize shows their own way and share them with the people they watch with?
+    - discriminant: stats
+      value:
+        navLabel: Insights
+        label: Insights
+        heading: Viewers want Pinterest-style boards for shows, and an easier way to share them.
+        intro: "I interviewed Netflix users about how they save, find and share shows."
+        image: null
+        imageRight: true
+        stats:
+          - value: 80%
+            line: of users said they rarely use the “My List” feature
+            detail: Netflix’s homepage is built with strong recommendation algorithms. It’s easy to find something you want to watch, but hard to remember every single one.
+            quote: ''
+          - value: 80%
+            line: of users said their "My List" feels cluttered or hard to browse.
+            detail: Viewers think in categories, not one long list. They already sort shows in their heads by mood, genre or who they'll watch with.
+            quote: "“I’ll add stuff to it sporadically, but when I actually end up going back to “My List,” I forget why I even added some of the shows in the first place.”"
+          - value: ''
+            line: of users said they recommend shows mostly in person or over text.
+            detail: Recommendations depend on timing. If the moment doesn't come up, the recommendation never gets made.
+            quote: '"I can only recommend shows when I see that person or when I''m already talking about that show."'
+        quote: ''
+    - discriminant: text
+      value:
+        navLabel: Solution
+        label: Solution
+        heading: A few tweaks turn "My List" into a place to organize and recommend
+        body: "Brainstorming produced three opportunity areas: personalization and organization, social features, and easier sharing and discovery. I chose one feature for each, so every insight has a direct answer."
+        wide: false
+    - discriminant: images
+      value:
+        images:
+          - image: null
+            width: 1
+    - discriminant: features
+      value:
+        navLabel: Added Features
+        label: Added features
+        heading: Sort, plan, and recommend directly in the app
+        intro: "Brainstorming produced three opportunity areas: personalization and organization, social features, and easier sharing and discovery. I chose one feature for each, so every insight has a direct answer."
+        items:
+          - title: "Custom watchlists: sort shows your own way"
+            text: Viewers can create named lists, like Pinterest boards, so shows are grouped by mood or occasion the way people already sort them in their heads.
+          - title: "Shared watchlists: plan what to watch together"
+            text: Any watchlist can be shared, giving friends and partners one place in Netflix to decide what to watch next instead of a group chat.
+          - title: "Shared comments: recommend without waiting"
+            text: Viewers can create named lists, like Pinterest boards, so shows are grouped by mood or occasion the way people already sort them in their heads.
+        image: null
+    - discriminant: text
+      value:
+        navLabel: Process
+        label: Process
+        heading: Designed to fit right in with Netflix’s existing UI
+        body: To make the new features feel native, I studied Netflix's existing design system, including its typography, spacing, card layouts and interaction patterns. I then recreated the UI in high fidelity, so each feature looks and behaves like something Netflix could ship tomorrow.
+        wide: true
+    - discriminant: images
+      value:
+        images:
+          - image: /images/projects/netflix/design-system-and-flows.png
+            width: 1
+    - discriminant: cards
+      value:
+        navLabel: Outcome
+        label: Outcome
+        heading: Better lists could make Netflix something people plan around, not just scroll.
+        intro: |-
+          Redesigning "My List" showed me how much a small feature can shape the way people use a whole product. Matching how viewers already think about shows turned a forgotten list into something worth coming back to.
+        tinted: true
+        cards:
+          - image: null
+            title: Start from the mental model.
+            text: People already sorted shows in their heads. The best feature simply matched what they were doing anyway.
+          - image: null
+            title: A feature has to serve the business.
+            text: Shared lists and comments help users, but they also bring friends back into the app. Framing features this way made my decisions easier to defend.
+          - image: null
+            title: Scope is a design decision.
+            text: I picked one feature per opportunity area instead of building everything from brainstorming. Three focused features told a clearer story than ten loose ones.
+    - discriminant: nextSteps
+      value:
+        navLabel: What's Next
+        label: What’s next?
+        heading: Saving a show is only half the job.
+        intro: "If this shipped, here's how I'd measure success:"
+        tableHeadA: Metric
+        tableHeadB: Why it matters
+        rows:
+          - a: "% of users who create a second watchlist"
+            b: Shows people actually want to organize
+          - a: Shared watchlists per active user
+            b: Shows the social feature is used, not just seen
+          - a: Plays started from a watchlist
+            b: Shows lists lead to watching, which is what Netflix cares about
+          - a: Time from opening the app to pressing play
+            b: Shows less browsing and less decision fatigue
+        sideTitle: "Where I'd take it next:"
+        sideBody: |-
+          - **Gentle reminders:** notify viewers when a friend adds to a shared list or leaves a comment, so saved shows resurface instead of being forgotten.
+
+          - **Smart sorting:** suggest which list a show belongs in when it's saved, based on genre or mood.
+
+          - **Test with real groups:** run the shared watchlist with roommates or couples to see how people actually decide together.

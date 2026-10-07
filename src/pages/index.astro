@@ -1,0 +1,105 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+import Layout from '../layouts/Layout.astro';
+import PixelCat from '../components/PixelCat.astro';
+import PixelArrow from '../components/PixelArrow.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const home = await reader.singletons.home.readOrThrow();
+const projects = (await reader.collections.projects.all())
+  .filter((p) => !p.entry.hidden)
+  .sort((a, b) => (a.entry.order ?? 0) - (b.entry.order ?? 0));
+
+// "*why*" in the tagline becomes italic.
+const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+const tagline = escape(home.tagline).replace(/\*(.+?)\*/g, '<em class="font-medium">$1</em>');
+---
+<Layout title="Chloe Jung" current="home">
+  <section class="hero">
+    <PixelCat class="hero-cat text-ink" />
+    <h1 class="greeting font-serif" aria-label={home.greeting}>
+      {[...home.greeting].map((ch, i) => (
+        <span class="char" style={`--i:${i}`} aria-hidden="true">{ch === ' ' ? '\u00a0' : ch}</span>
+      ))}
+    </h1>
+    <p class="tagline font-mono" data-reveal set:html={tagline} />
+    <p class="subtitle font-mono" data-reveal>{home.subtitle}</p>
+  </section>
+
+  <a href="#projects" class="scroll-cue" data-reveal>
+    <span class="font-mono">{home.scrollPrompt}</span>
+    <PixelArrow />
+  </a>
+
+  <section id="projects" class="projects">
+    <h2 class="font-serif" data-reveal>{home.projectsHeading}</h2>
+    <div class="grid">
+      {projects.map(({ slug, entry }) => (
+        <ProjectCard
+          href={entry.caseStudy.enabled ? `/projects/${slug}` : `#${slug}`}
+          title={entry.title}
+          description={entry.description}
+          tags={entry.tags}
+          year={entry.year}
+          cover={entry.cover}
+        />
+      ))}
+    </div>
+  </section>
+
+    <script>
+      import { animate, inView, stagger } from 'motion';
+
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Greeting letters rise in under the cat.
+      if (!reduce) {
+        animate('.greeting .char', { opacity: [0, 1], y: [24, 0] }, {
+          delay: stagger(0.035, { startDelay: 0.55 }),
+          duration: 0.6,
+          ease: [0.2, 0.7, 0.2, 1],
+        });
+      }
+
+      // Everything else fades up as it scrolls into view; cards in a row stagger.
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+        if (reduce) return;
+        inView(el, () => {
+          const col = el.classList.contains('card')
+            ? [...el.parentElement!.children].indexOf(el) % 2
+            : 0;
+          animate(el, { opacity: [0, 1], y: [28, 0] }, {
+            duration: 0.8,
+            delay: 0.15 + col * 0.12,
+            ease: [0.2, 0.7, 0.2, 1],
+          });
+        }, { amount: 0.2 });
+      });
+
+    </script>
+</Layout>
+
+<style>
+  /* Sizes are design pixels on the 1560px frame (--u), with floors for small screens. */
+  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: max(72px, calc(240 * var(--u))); }
+  .hero :global(.hero-cat) { width: max(84px, calc(210 * var(--u))); }
+  .greeting { margin-top: max(16px, calc(46 * var(--u))); font-size: max(40px, calc(104 * var(--u))); line-height: 1; letter-spacing: -0.02em; }
+  .greeting .char { display: inline-block; }
+  .js .greeting .char { opacity: 0; }
+  .tagline { margin-top: max(24px, calc(54 * var(--u))); font-size: max(13px, calc(24 * var(--u))); }
+  .tagline :global(em) { font-weight: 500; }
+  .subtitle { margin-top: max(12px, calc(26 * var(--u))); font-size: max(13px, calc(24 * var(--u))); line-height: 1.3; white-space: pre-line; color: color-mix(in srgb, var(--color-ink) 60%, transparent); }
+
+  .scroll-cue { margin: max(48px, calc(170 * var(--u))) 0 0 auto; display: flex; width: fit-content; align-items: center; gap: max(20px, calc(60 * var(--u))); }
+  .scroll-cue span { white-space: pre-line; text-align: right; font-size: max(11px, calc(21 * var(--u))); line-height: 1.3; }
+  .scroll-cue :global(.pixel-arrow) { width: max(28px, calc(60 * var(--u))); height: auto; }
+
+  .projects { scroll-margin-top: 96px; padding-bottom: max(64px, calc(160 * var(--u))); }
+  .projects h2 { margin-top: max(32px, calc(90 * var(--u))); text-align: center; font-size: max(32px, calc(68 * var(--u))); line-height: 1; }
+  .projects .grid { margin-top: max(32px, calc(84 * var(--u))); display: grid; column-gap: calc(60 * var(--u)); row-gap: max(48px, calc(94 * var(--u))); }
+  @container (min-width: 900px) { .projects .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 768px) { .projects { scroll-margin-top: 40px; } }
+  @media (prefers-reduced-motion: reduce) { .js .greeting .char { opacity: 1; } }
+</style>

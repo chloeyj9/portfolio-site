@@ -1,0 +1,64 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+import { navLinks, type Page } from '../navLinks';
+
+interface Props { current: Page; }
+const { links } = await navLinks(Astro.props.current);
+const footer = await createReader(process.cwd(), keystaticConfig).singletons.footer.readOrThrow();
+
+const contact = [
+  { label: footer.emailLabel, href: footer.email ? `mailto:${footer.email}` : null },
+  { label: footer.linkedinLabel, href: footer.linkedinUrl || null },
+];
+---
+<footer class="site-footer">
+  <div class="top">
+    <div>
+      <h2 class="font-serif">{footer.heading}</h2>
+      <ul class="list contact font-mono">
+        {contact.map((c) => (
+          <li>
+            {c.href ? (
+              <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{c.label}</a>
+            ) : (
+              <span>{c.label}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <nav aria-label="Footer">
+      <ul class="list font-mono">
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+  <p class="copyright font-mono">{footer.copyright}</p>
+</footer>
+
+<style>
+  /* Measured on the 1560px frame: 370px tall, 66px heading, 24px mono text. */
+  .site-footer {
+    padding-block: max(40px, calc(64 * var(--u))) max(32px, calc(40 * var(--u)));
+    color: color-mix(in srgb, var(--color-ink) 64%, transparent);
+  }
+  .top { display: grid; gap: 40px; }
+  @container (min-width: 700px) { .top { grid-template-columns: 1fr calc(210 * var(--u)); } }
+  h2 {
+    color: var(--color-ink);
+    font-size: max(32px, calc(66 * var(--u)));
+    line-height: 1; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  .list { font-size: max(14px, calc(24 * var(--u))); line-height: 1.3; text-transform: uppercase; }
+  .contact { margin-top: max(18px, calc(30 * var(--u))); }
+  .copyright { margin-top: max(56px, calc(80 * var(--u))); font-size: max(13px, calc(24 * var(--u))); }
+
+  /* Links darken and draw an underline on hover. */
+  a {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: color 0.25s, background-size 0.4s cubic-bezier(.2, .7, .2, 1);
+  }
+  a:hover, a:focus-visible { color: var(--color-ink); background-size: 100% 1px; }
+  a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+</style>

@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import type { NavLink, Page } from '../navLinks';
+
+interface Props { title: string; current: Page; sections?: NavLink[]; }
+const { title, current, sections } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Every page opens at the top unless the link points at a section.
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      // scrollIntoView also moves a surrounding frame (like the preview window) to the top.
+      if (!location.hash) {
+        const toTop = () => {
+          scrollTo(0, 0);
+          document.body?.firstElementChild?.scrollIntoView({ block: 'start' });
+        };
+        addEventListener('DOMContentLoaded', toTop);
+        addEventListener('load', () => { toTop(); setTimeout(toTop, 150); });
+      }
+    </script>
+  </head>
+  <body id="top">
+    <div class="mx-auto max-w-[1920px] md:flex">
+      <Sidebar current={current} sections={sections} />
+      <!-- Content is designed on a 1560px frame and scales with the window (see --u). -->
+      <main class="frame min-w-0 flex-1">
+        <div class="page">
+          <slot />
+          <Footer current={current} />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
+<style>
+  .frame { container-type: inline-size; }
+  .page { padding-inline: max(16px, calc(60 * var(--u))); }
+</style>

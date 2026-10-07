@@ -1,0 +1,148 @@
+title: SWAPP
+order: 2
+description: Making campus resale app the easy choice at move-out
+cover: /images/projects/swapp/cover.jpg
+tags: [Design Systems, Product Design]
+year: '2025'
+caseStudy:
+  enabled: true
+  accent: '#175c35'
+  tint: '#d5eade'
+  hero: /images/projects/swapp/hero.jpg
+  headline: Making SWAPP the easy choice at move-out
+  summary: >-
+    SWAPP had demand but no adoption. We moved it from a mobile app to the web,
+    and I led the redesign of discovery, messaging and listings so students could
+    trust a stranger enough to trade.
+  role: |-
+    Lead Designer
+    Product Manager
+  team: |-
+    3 Designers
+    4 Developers
+  timeline: 6 weeks, Spring 2025
+  skills: |-
+    Product Strategy
+    UX Research
+    Web Design
+  sections:
+    - discriminant: textWithImages
+      value:
+        navLabel: Context
+        label: Context
+        heading: SWAPP aimed to cut move-out waste, but students weren't using it.
+        body: |-
+          Every move-out, Cornell students throw away things another student could use. SWAPP was built to keep those items circulating between students.
+
+          **The idea was right, but the product wasn't working.** The original mobile app had low downloads and almost no repeat use. Students who wanted to sell still went to Facebook Marketplace and Craigslist. Our team of 3 designers and 3 developers had 10 weeks to relaunch it. As UI/UX lead, I owned research synthesis, the information architecture and the final interface.
+        images: [null, null]
+    - discriminant: cards
+      value:
+        navLabel: Problem
+        label: Problem
+        heading: Students wanted to resell, just not through a mobile app.
+        intro: "Students wanted to buy and sell secondhand. They just didn't want to do it on SWAPP. Our audit of the old app found three reasons:"
+        tinted: false
+        cards:
+          - image: null
+            title: Too much friction to start
+            text: Selling a single item meant downloading an app first. For something students do once or twice a year, that step alone sent them back to Facebook Marketplace.
+          - image: null
+            title: No reason to come back
+            text: Resale clusters around move-out, so even students who downloaded SWAPP rarely opened it again. The app sat unused for most of the year.
+          - image: null
+            title: Hard to trust
+            text: Buyers couldn't easily tell whether a seller was legit. An inconsistent visual design made SWAPP feel less credible than the platforms students already used.
+    - discriminant: callout
+      value:
+        label: Problem statement
+        serif: false
+        text: How might we make campus resale feel as **fast and trustworthy** as the platforms students already use, during the few weeks a year they actually need it?
+    - discriminant: stats
+      value:
+        navLabel: Insights
+        label: Insights
+        heading: Students resell a few times a year, through tools and sellers they can know.
+        intro: "We ran semi-structured interviews with Cornell students who had bought or sold secondhand, backed by a survey and the old app's usage data."
+        image: null
+        stats:
+          - value: 80%
+            line: of students only buy or sell secondhand around move-out.
+            detail: Students don't download apps for seasonal needs. An app they use twice a year never earns a spot on their phone.
+          - value: 80%
+            line: of students buy and sell through a platform they already have.
+            detail: Students resell where they already are. A new, single-purpose app was one step too many.
+          - value: 80%
+            line: of students said seeing who the seller is affects whether they'd buy.
+            detail: Trust decides the deal. If that information is hidden, buyers leave for a platform where it's visible.
+        quote: ''
+    - discriminant: callout
+      value:
+        label: The pivot
+        serif: false
+        text: "All our research pushed me to make a strategic call: by rebuilding SWAPP as a web platform we would **remove download friction, make SWAPP more accessible,** and **let our devs iterate and ship faster.**"
+    - discriminant: cards
+      value:
+        navLabel: Solution
+        label: Solution
+        heading: We moved SWAPP to the web, with faster browsing and visible seller trust.
+        intro: |-
+          Two things kept students from choosing SWAPP over the platforms they already used:
+
+          1. Getting started took too much effort for something they only do a few times a year.
+          2. They couldn't tell whether a seller was trustworthy.
+
+          As a solution, we rebuilt SWAPP as a website around three principles from our user insights:
+        tinted: false
+        cards:
+          - image: null
+            title: Fast Discovery
+            text: Students can browse right away, with no download. Categories and filters stay in view, so they reach the right item in a few steps.
+          - image: null
+            title: Transparent Transactions
+            text: Price, condition, photos and pickup status are clear up front, so there are no surprises when it's time to meet.
+          - image: null
+            title: Integrated Trust
+            text: Seller profiles and ratings sit right next to listings and messages, so trust is part of every decision instead of a separate step.
+    - discriminant: textAndImage
+      value:
+        navLabel: Applying the Principles
+        label: Applying the principles
+        heading: With the app as our base, we could focus on making our interactions stronger.
+        body: Early testing showed confusion around pickup logistics, so we added clearer status indicators.
+        image: /images/projects/swapp/wireframe-sketches.png
+    - discriminant: decisions
+      value:
+        navLabel: Feature Explorations
+        label: Feature explorations
+        heading: Small layout decisions made items faster to find and sellers easier to trust.
+        rows:
+          - imageA: null
+            imageB: null
+            title: "Decision: a vertical sidebar instead of top navigation."
+            text: Students usually come to SWAPP with an item in mind, especially during move-out. A sidebar keeps every category and filter visible, so they get to the right listing in fewer steps. It also made the site look more established, which helped credibility.
+          - imageA: null
+            imageB: null
+            title: "Decision: a two-column view with the seller's profile next to the conversation."
+            text: The moment a buyer decides to meet up is the moment they need to trust the seller. Putting ratings and profile details beside the chat keeps that information in view, instead of a click away.
+          - imageA: null
+            imageB: null
+            title: "Decision: item details first, seller details second."
+            text: Buyers evaluate the item before they care who's selling it. Price, condition and photos lead the page. Seller info stays one glance away for when they're ready to reach out.
+    - discriminant: cards
+      value:
+        navLabel: Outcome
+        label: Outcome
+        heading: Making campus sustainable one step at a time.
+        intro: This was one of my first experiences leading a cross-functional team. I'm proud that SWAPP helped campus take one more step toward sustainability, with 100+ successful sales on the website since launch.
+        tinted: true
+        cards:
+          - image: null
+            title: Structure beats polish.
+            text: Moving from app to web did more for adoption than any visual refinement could. Reducing friction before interaction is often more powerful than refining aesthetics.
+          - image: null
+            title: Trust is a usability problem.
+            text: In peer-to-peer transactions, making credibility visible mattered as much as making tasks easy.
+          - image: null
+            title: Design for the season, not the year.
+            text: Knowing when students actually need SWAPP shaped every decision, from platform to navigation.

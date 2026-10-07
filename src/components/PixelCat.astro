@@ -1,0 +1,83 @@
+---
+// 17 x 16 pixel cat, traced from the home page layout.
+// "#" is body, "o" an eye. The tail (top left) is drawn separately in two
+// frames that swap to make it wag.
+const body = [
+  '.................',
+  '.................',
+  '.................',
+  '............#...#',
+  '............#####',
+  '......#####.#####',
+  '.#...########o#o#',
+  '.##.#############',
+  '..##############.',
+  '...#####.######..',
+  '...####...####...',
+  '....###...####...',
+  '....##.....###...',
+  '....##.....##....',
+  '....##.....##....',
+  '.....##.....##...',
+];
+// Tail as drawn in the layout, and swung over toward the body.
+const tailRest = ['..#..', '.#.#.', '#....', '#....', '#....', '#....'];
+const tailWag = ['..#..', '.#.#.', '...#.', '..#..', '.#...', '.#...'];
+
+const toPixels = (rows: string[]) =>
+  rows.flatMap((row, y) => [...row].map((c, x) => ({ x, y, c })).filter((p) => p.c !== '.'));
+const { class: className = '' } = Astro.props;
+---
+<svg
+  class={`pixel-cat ${className}`}
+  viewBox="0 0 17 16"
+  shape-rendering="crispEdges"
+  role="img"
+  aria-label="Pixel art black cat"
+>
+  <g class="tail rest">{toPixels(tailRest).map((p) => <rect x={p.x} y={p.y} width="1" height="1" />)}</g>
+  <g class="tail wag">{toPixels(tailWag).map((p) => <rect x={p.x} y={p.y} width="1" height="1" />)}</g>
+  {toPixels(body).map((p) => (
+    <rect x={p.x} y={p.y} width="1" height="1" class={p.c === 'o' ? 'eye' : ''} />
+  ))}
+</svg>
+
+<style>
+  .pixel-cat { display: block; cursor: pointer; }
+  rect { fill: currentColor; }
+  rect.eye { fill: var(--color-paper); }
+  .tail.wag { visibility: hidden; }
+
+  /* The cat sits still until it's hovered (or tapped on a phone). */
+  .pixel-cat:hover rect.eye,
+  .pixel-cat.awake rect.eye { animation: blink 2.4s steps(1) infinite; }
+  .pixel-cat:hover .tail.rest,
+  .pixel-cat.awake .tail.rest { animation: wag-rest 1.2s steps(1) infinite; }
+  .pixel-cat:hover .tail.wag,
+  .pixel-cat.awake .tail.wag { animation: wag-tilt 1.2s steps(1) infinite; }
+
+  /* A quick double blink, then eyes open. */
+  @keyframes blink {
+    0%, 100% { fill: var(--color-paper); }
+    6%, 12% { fill: currentColor; }
+    9%, 15% { fill: var(--color-paper); }
+  }
+  /* The tail swaps between its two frames. */
+  @keyframes wag-rest { 0%, 100% { visibility: hidden; } 50% { visibility: visible; } }
+  @keyframes wag-tilt { 0%, 100% { visibility: visible; } 50% { visibility: hidden; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pixel-cat rect.eye, .pixel-cat .tail { animation: none !important; }
+  }
+</style>
+<script>
+  // Phones have no hover, so a tap wakes the cat for a few seconds.
+  document.querySelectorAll<SVGElement>('.pixel-cat').forEach((cat) => {
+    let timer: number | undefined;
+    cat.addEventListener('click', () => {
+      cat.classList.add('awake');
+      clearTimeout(timer);
+      timer = window.setTimeout(() => cat.classList.remove('awake'), 3000);
+    });
+  });
+</script>

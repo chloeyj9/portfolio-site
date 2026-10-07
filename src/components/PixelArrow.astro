@@ -1,0 +1,15 @@
+---
+const rows = ['..#..', '..#..', '..#..', '#.#.#', '.###.', '..#..'];
+const pixels = rows.flatMap((row, y) =>
+  [...row].map((c, x) => ({ x, y, c })).filter((p) => p.c === '#'),
+);
+---
+<svg class="pixel-arrow" viewBox="0 0 5 6" width="38" height="46" shape-rendering="crispEdges" aria-hidden="true">
+  {pixels.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill="currentColor" />)}
+</svg>
+
+<style>
+  .pixel-arrow { animation: bob 1.6s steps(4) infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+  @media (prefers-reduced-motion: reduce) { .pixel-arrow { animation: none; } }
+</style>

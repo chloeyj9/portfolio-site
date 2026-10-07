@@ -1,0 +1,13 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+import Layout from '../layouts/Layout.astro';
+
+const page = await createReader(process.cwd(), keystaticConfig).singletons.about.readOrThrow();
+---
+<Layout title={`${page.heading} · Chloe Jung`} current="about">
+  <section class="pt-10 pb-32 lg:pt-[14vh]">
+    <h1 class="font-serif text-[clamp(3rem,6vw,4.4rem)] leading-none tracking-[-0.02em]">{page.heading}</h1>
+    <p class="mt-6 max-w-[60ch] whitespace-pre-line font-mono text-[0.95rem] text-ink/70">{page.intro}</p>
+  </section>
+</Layout>
