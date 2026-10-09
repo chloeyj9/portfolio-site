@@ -153,7 +153,7 @@ const meta = [
           <section id={s.anchor} class="section" data-reveal>
             {heading(v)}
             {v.imageRight ? (
-              <div class="split stats-split image-right">
+              <div class:list={['split stats-split image-right', { 'has-image': v.image }]}>
                 <div>
                   {v.intro && <div class="prose stats-intro" set:html={richText(v.intro)} />}
                   {list}
@@ -444,6 +444,7 @@ const meta = [
 
   @container (min-width: 900px) {
     .image-right { grid-template-columns: 810fr 570fr; gap: calc(60 * var(--u)); }
+    .image-right.has-image { grid-template-columns: 700fr 660fr; gap: calc(80 * var(--u)); }
     .features { grid-template-columns: 690fr 390fr 260fr; gap: calc(180 * var(--u)); }
     .next { grid-template-columns: 707fr 660fr; gap: calc(73 * var(--u)); }
   }
@@ -468,6 +469,8 @@ const meta = [
   /* A real image (e.g. a diagram) shows whole, at its own shape, with no gray box. */
   .stats-media.filled, .image-right .stats-media.filled { background: none; aspect-ratio: auto; min-height: 0; height: auto; align-self: center; }
   .stats-media.filled img { height: auto; object-fit: contain; }
+  /* Beside the stats, the image lines up with the first stat rather than centering. */
+  .image-right .stats-media.filled { align-self: start; }
   .stats { display: grid; gap: max(22px, calc(40 * var(--u))); }
   .stats li { display: grid; grid-template-columns: max(64px, calc(90 * var(--u))) 1fr; gap: max(14px, calc(30 * var(--u))); align-items: start; }
   .pill { background: var(--color-ink); color: var(--color-paper); font-weight: 600; text-align: center; border-radius: 3px; font-size: max(15px, calc(20 * var(--u))); line-height: 1.5; }

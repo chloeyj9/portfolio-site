@@ -45,7 +45,7 @@ caseStudy:
         heading: Productivity tools promise focus but deliver surveillance.
         intro: |-
           Productivity tools promise optimization. In practice, they often trade well-being for constant monitoring and performance. We focused on three problems:
-        image: /images/projects/hours-observed/productivity-tools.png
+        image: /images/projects/hours-observed/problem.png
         imageLeft: true
         body: |-
           - **Surveillance sold as help:** Tools framed as support quietly monitor every minute. Because the tracking is invisible, most people never stop to question it.
@@ -62,7 +62,7 @@ caseStudy:
         label: Insights
         heading: Tracking turns real work into a performance of looking busy.
         intro: ''
-        image: /images/projects/hours-observed/insights-flow.png
+        image: /images/projects/hours-observed/insights.jpg
         imageRight: true
         quote: ''
         stats:
