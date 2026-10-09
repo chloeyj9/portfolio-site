@@ -1,2 +1,81 @@
 heading: Sketchbook
-intro: Drawings, studies and side experiments. This page is waiting on its layout.
+intro: Ranging from sculptures to paintings, my work reflects weeks to months of dedication and ultimately embodies my identity as a dreamer, designer, and individual.
+galleries:
+  - discriminant: strip
+    value:
+      - image: /images/sketchbook/packed-like-sardines-1.webp
+        caption: 'Packed Like Sardines, 2022'
+      - image: /images/sketchbook/packed-like-sardines-2.webp
+        caption: ''
+      - image: /images/sketchbook/packed-like-sardines-3.webp
+        caption: ''
+  - discriminant: strip
+    value:
+      - image: /images/sketchbook/forbidden-fruit-1.webp
+        caption: 'Forbidden Fruit, 2022'
+      - image: /images/sketchbook/forbidden-fruit-2.webp
+        caption: ''
+      - image: /images/sketchbook/forbidden-fruit-3.webp
+        caption: ''
+  - discriminant: strip
+    value:
+      - image: /images/sketchbook/hands-are-tied-1.webp
+        caption: 'Hands are Tied, 2022'
+      - image: /images/sketchbook/hands-are-tied-2.webp
+        caption: ''
+      - image: /images/sketchbook/hands-are-tied-3.webp
+        caption: ''
+  - discriminant: strip
+    value:
+      - image: /images/sketchbook/breathe-1.webp
+        caption: 'Breathe, 2022'
+      - image: /images/sketchbook/breathe-2.webp
+        caption: ''
+      - image: /images/sketchbook/breathe-3.webp
+        caption: ''
+  - discriminant: strip
+    value:
+      - image: /images/sketchbook/the-collapse-1.webp
+        caption: 'The Collapse, 2022'
+      - image: /images/sketchbook/the-collapse-2.webp
+        caption: ''
+      - image: /images/sketchbook/the-collapse-3.webp
+        caption: ''
+  - discriminant: masonry
+    value:
+      - image: /images/sketchbook/smile.webp
+        caption: 'Smile!, 2022'
+      - image: /images/sketchbook/over-the-rainbow.webp
+        caption: 'Over the Rainbow, 2022'
+      - image: /images/sketchbook/a-fleeting-memory.webp
+        caption: 'A Fleeting Memory, 2022'
+      - image: /images/sketchbook/inch-by-inch.webp
+        caption: 'Inch by Inch, 2021'
+      - image: /images/sketchbook/the-collector.webp
+        caption: 'The Collector, 2021'
+      - image: /images/sketchbook/scraps-of-life.webp
+        caption: 'Scraps of Life, 2021'
+      - image: /images/sketchbook/self-portrait.webp
+        caption: 'Self Portrait, 2021'
+      - image: /images/sketchbook/helping-hands.webp
+        caption: '"Helping" Hands, 2020'
+      - image: /images/sketchbook/double-vision.webp
+        caption: 'Double Vision, 2020'
+      - image: /images/sketchbook/beads.webp
+        caption: 'Beads, 2019'
+      - image: /images/sketchbook/garlic.webp
+        caption: 'Garlic, 2019'
+      - image: /images/sketchbook/lost-travels.webp
+        caption: 'Lost Travels, 2019'
+      - image: /images/sketchbook/through-the-car-window.jpg
+        caption: 'Through the Car Window, 2019'
+  - discriminant: masonry
+    value:
+      - image: /images/sketchbook/logic.webp
+        caption: 'Logic, 2023'
+      - image: /images/sketchbook/expression.webp
+        caption: 'Expression, 2023'
+      - image: /images/sketchbook/still.webp
+        caption: 'Still, 2023'
+      - image: /images/sketchbook/movement.webp
+        caption: 'Movement, 2023'

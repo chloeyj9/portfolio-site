@@ -1,13 +1,100 @@
 ---
+import { readFile } from 'node:fs/promises';
 import { createReader } from '@keystatic/core/reader';
+import { imageMetadata } from 'astro/assets/utils';
 import keystaticConfig from '../../keystatic.config';
 import Layout from '../layouts/Layout.astro';
 
 const page = await createReader(process.cwd(), keystaticConfig).singletons.sketchbook.readOrThrow();
+
+type Item = { image: string | null; caption: string };
+type Sized = { src: string; caption: string; ratio: number; index: number };
+
+// Read each image's shape from public/, so rows and columns can be laid out without scripts.
+const sized = async (items: readonly Item[]): Promise<Sized[]> => {
+  const out: Sized[] = [];
+  for (const [index, it] of items.entries()) {
+    if (!it.image) continue;
+    const { width, height } = await imageMetadata(await readFile(`public${it.image}`), it.image);
+    out.push({ src: it.image, caption: it.caption, ratio: width / height, index });
+  }
+  return out;
+};
+
+// Masonry fills two columns in order, each piece going to the shorter column.
+const toColumns = (items: Sized[]) => {
+  const cols: Sized[][] = [[], []];
+  const heights = [0, 0];
+  for (const it of items) {
+    const c = heights[0] <= heights[1] ? 0 : 1;
+    cols[c].push(it);
+    heights[c] += 1 / it.ratio + (it.caption ? 0.08 : 0);
+  }
+  return cols;
+};
+
+const galleries = await Promise.all(
+  (page.galleries ?? []).map(async (g) => ({ kind: g.discriminant, items: await sized(g.value) })),
+);
 ---
 <Layout title={`${page.heading} · Chloe Jung`} current="sketchbook">
-  <section class="pt-10 pb-32 lg:pt-[14vh]">
+  <section class="pt-10 lg:pt-[14vh]">
     <h1 class="font-serif text-[clamp(3rem,6vw,4.4rem)] leading-none tracking-[-0.02em]">{page.heading}</h1>
     <p class="mt-6 max-w-[60ch] whitespace-pre-line font-mono text-[0.95rem] text-ink/70">{page.intro}</p>
   </section>
+
+  <div class="galleries">
+    {galleries.map((g) =>
+      g.kind === 'strip' ? (
+        <div class="strip">
+          {g.items.map((it) => (
+            <figure style={`flex-grow:${it.ratio}`}>
+              <img src={it.src} alt={it.caption} loading="lazy" decoding="async" style={`aspect-ratio:${it.ratio}`} />
+              {it.caption && <figcaption>{it.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      ) : (
+        <div class="masonry">
+          {toColumns(g.items).map((col) => (
+            <div class="column">
+              {col.map((it) => (
+                <figure style={`order:${it.index}`}>
+                  <img src={it.src} alt={it.caption} loading="lazy" decoding="async" style={`aspect-ratio:${it.ratio}`} />
+                  {it.caption && <figcaption>{it.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          ))}
+        </div>
+      ),
+    )}
+  </div>
 </Layout>
+
+<style>
+  /* Spacing follows the artwork page: 10px between strip photos, 16px in the masonry. */
+  .galleries { display: grid; gap: max(40px, calc(72 * var(--u))); margin-top: max(48px, calc(96 * var(--u))); padding-bottom: max(80px, calc(128 * var(--u))); }
+  figure { margin: 0; min-width: 0; }
+  img { display: block; width: 100%; height: auto; }
+  figcaption {
+    margin-top: 0.6em;
+    font-family: var(--font-mono); font-size: max(13px, calc(16 * var(--u)));
+    color: color-mix(in srgb, var(--color-ink) 64%, transparent);
+  }
+
+  /* A strip keeps every photo the same height by giving each a share of the row equal to its width-to-height ratio. */
+  .strip { display: flex; align-items: flex-start; gap: max(6px, calc(10 * var(--u))); }
+  .strip figure { flex-basis: 0; }
+
+  .masonry { display: flex; align-items: flex-start; gap: max(10px, calc(16 * var(--u))); }
+  .column { flex: 1; display: grid; gap: max(16px, calc(28 * var(--u))); min-width: 0; }
+
+  /* Phones: one column, back in the original order. */
+  @container (max-width: 560px) {
+    .strip { flex-direction: column; gap: 10px; }
+    .strip figure { flex: none; width: 100%; }
+    .masonry { flex-direction: column; gap: 24px; }
+    .column { display: contents; }
+  }
+</style>

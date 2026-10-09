@@ -4,7 +4,11 @@ const img = (label: string) =>
   fields.image({ label, directory: 'public/images/projects', publicPath: '/images/projects/' });
 const text = (label: string, description?: string) =>
   fields.text({ label, multiline: true, description });
-const formatting = 'Use **double asterisks** for bold. Leave a blank line between paragraphs. Start lines with "1." for a numbered list or "- " for bullets.';
+const sketchbookItem = fields.object({
+  image: fields.image({ label: 'Image', directory: 'public/images/sketchbook', publicPath: '/images/sketchbook/' }),
+  caption: fields.text({ label: 'Caption (e.g. Title, 2022)', description: 'Leave empty for no caption.' }),
+});
+const formatting ='Use **double asterisks** for bold. Leave a blank line between paragraphs. Start lines with "1." for a numbered list or "- " for bullets.';
 
 // Every section has a short name for the sidebar plus a label and heading.
 const sectionBasics = {
@@ -210,6 +214,19 @@ export default config({
       schema: {
         heading: fields.text({ label: 'Heading', defaultValue: 'Sketchbook' }),
         intro: fields.text({ label: 'Intro', multiline: true }),
+        galleries: fields.blocks(
+          {
+            strip: {
+              label: 'Strip (one piece, photos side by side at equal height)',
+              schema: fields.array(sketchbookItem, { label: 'Photos', itemLabel: (p) => p.fields.caption.value || 'Photo' }),
+            },
+            masonry: {
+              label: 'Masonry (two columns, caption under each)',
+              schema: fields.array(sketchbookItem, { label: 'Pieces', itemLabel: (p) => p.fields.caption.value || 'Piece' }),
+            },
+          },
+          { label: 'Galleries' },
+        ),
       },
     }),
     about: singleton({
