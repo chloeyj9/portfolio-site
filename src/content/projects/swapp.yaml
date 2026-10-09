@@ -95,13 +95,13 @@ caseStudy:
           As a solution, we rebuilt SWAPP as a website around three principles from our user insights:
         tinted: false
         cards:
-          - image: null
+          - image: /images/projects/swapp/solution-discovery.png
             title: Fast Discovery
             text: Students can browse right away, with no download. Categories and filters stay in view, so they reach the right item in a few steps.
-          - image: null
+          - image: /images/projects/swapp/solution-transactions.png
             title: Transparent Transactions
             text: Price, condition, photos and pickup status are clear up front, so there are no surprises when it's time to meet.
-          - image: null
+          - image: /images/projects/swapp/solution-trust.png
             title: Integrated Trust
             text: Seller profiles and ratings sit right next to listings and messages, so trust is part of every decision instead of a separate step.
     - discriminant: textAndImage
