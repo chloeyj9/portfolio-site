@@ -42,10 +42,10 @@ caseStudy:
         intro: "When people manage their Netflix content, they want to organize and share watchlists for different moods or different people. Today they can't, for two reasons:"
         tinted: false
         cards:
-          - image: null
+          - image: /images/projects/netflix/problem-one-list.png
             title: One list for everything
             text: A comfort rewatch, a horror movie for Friday and a documentary for later all land in the same place. The longer the list gets, the harder it is to find the right watch.
-          - image: null
+          - image: /images/projects/netflix/problem-outside-app.png
             title: Recommendations happen outside the app
             text: Sharing a show means remembering to bring it up in conversation or sending a link in a text. Most recommendations get lost before anyone presses play.
     - discriminant: callout
