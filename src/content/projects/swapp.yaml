@@ -117,16 +117,16 @@ caseStudy:
         label: Feature explorations
         heading: Small layout decisions made items faster to find and sellers easier to trust.
         rows:
-          - imageA: null
-            imageB: null
+          - imageA: /images/projects/swapp/sidebar-before.png
+            imageB: /images/projects/swapp/sidebar-after.png
             title: "Decision: a vertical sidebar instead of top navigation."
             text: Students usually come to SWAPP with an item in mind, especially during move-out. A sidebar keeps every category and filter visible, so they get to the right listing in fewer steps. It also made the site look more established, which helped credibility.
-          - imageA: null
-            imageB: null
+          - imageA: /images/projects/swapp/messages-before.png
+            imageB: /images/projects/swapp/messages-after.png
             title: "Decision: a two-column view with the seller's profile next to the conversation."
             text: The moment a buyer decides to meet up is the moment they need to trust the seller. Putting ratings and profile details beside the chat keeps that information in view, instead of a click away.
-          - imageA: null
-            imageB: null
+          - imageA: /images/projects/swapp/listing-before.png
+            imageB: /images/projects/swapp/listing-after.png
             title: "Decision: item details first, seller details second."
             text: Buyers evaluate the item before they care who's selling it. Price, condition and photos lead the page. Seller info stays one glance away for when they're ready to reach out.
     - discriminant: cards
