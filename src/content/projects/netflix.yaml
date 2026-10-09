@@ -33,7 +33,7 @@ caseStudy:
           While scrolling through my Netflix recommendations, I'd often find shows I wanted to watch. Sometimes I'd text a friend about one, partly hoping it would remind me later. Other times I would jot it down in my Notes app before forgetting about that, too. Every so often I'd add it to "My List," a watch-later type of feature on the Netflix app, only to never remember to check the list on a later day.
 
           Netflix was great at helping me find shows, so I wanted to explore how it could help me actually come back to them. Over 7 weeks, I took the idea from research to a high-fidelity prototype, working solo, but constantly getting feedback from the fellow binge-watchers around me.
-        images: [null, null]
+        images: [/images/projects/netflix/context.png]
     - discriminant: cards
       value:
         navLabel: Problem
