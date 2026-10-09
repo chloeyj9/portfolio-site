@@ -44,13 +44,13 @@ caseStudy:
         intro: "Students wanted to buy and sell secondhand. They just didn't want to do it on SWAPP. Our audit of the old app found three reasons:"
         tinted: false
         cards:
-          - image: null
+          - image: /images/projects/swapp/problem-friction.png
             title: Too much friction to start
             text: Selling a single item meant downloading an app first. For something students do once or twice a year, that step alone sent them back to Facebook Marketplace.
-          - image: null
+          - image: /images/projects/swapp/problem-return.png
             title: No reason to come back
             text: Resale clusters around move-out, so even students who downloaded SWAPP rarely opened it again. The app sat unused for most of the year.
-          - image: null
+          - image: /images/projects/swapp/problem-trust.png
             title: Hard to trust
             text: Buyers couldn't easily tell whether a seller was legit. An inconsistent visual design made SWAPP feel less credible than the platforms students already used.
     - discriminant: callout
