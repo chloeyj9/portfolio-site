@@ -7,7 +7,7 @@ year: '2025'
 caseStudy:
   enabled: true
   accent: '#175c35'
-  tint: '#d5eade'
+  tint: '#cdecc6'
   hero: /images/projects/swapp/hero.jpg
   headline: Making SWAPP the easy choice at move-out
   summary: >-
@@ -66,10 +66,10 @@ caseStudy:
         intro: "We ran semi-structured interviews with Cornell students who had bought or sold secondhand, backed by a survey and the old app's usage data."
         image: null
         stats:
-          - value: 80%
+          - value: 58%
             line: of students only buy or sell secondhand around move-out.
             detail: Students don't download apps for seasonal needs. An app they use twice a year never earns a spot on their phone.
-          - value: 80%
+          - value: 92%
             line: of students buy and sell through a platform they already have.
             detail: Students resell where they already are. A new, single-purpose app was one step too many.
           - value: 80%
