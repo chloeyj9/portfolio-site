@@ -61,7 +61,12 @@ const caseStudySections = fields.blocks(
     },
     text: {
       label: 'Text only',
-      schema: fields.object({ ...sectionBasics, body: text('Text', formatting), wide: fields.checkbox({ label: 'Full width text', defaultValue: false }) }),
+      schema: fields.object({
+        ...sectionBasics,
+        body: text('Text', formatting),
+        wide: fields.checkbox({ label: 'Full width text', defaultValue: false }),
+        narrow: fields.checkbox({ label: 'Narrow text (about two-thirds width)', defaultValue: false }),
+      }),
     },
     images: {
       label: 'Row of images',
@@ -73,6 +78,11 @@ const caseStudySections = fields.blocks(
           }),
           { label: 'Images' },
         ),
+        crop: fields.checkbox({
+          label: 'Same height, cropped to fill',
+          description: 'Otherwise each image shows whole, at its own shape.',
+          defaultValue: false,
+        }),
       }),
     },
     stats: {

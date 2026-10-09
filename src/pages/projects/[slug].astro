@@ -110,7 +110,7 @@ const meta = [
         return (
           <section id={s.anchor} class="section" data-reveal>
             {heading(v)}
-            <div class:list={['prose', 'intro', { 'wide-intro': v.wide }]} set:html={richText(v.body)} />
+            <div class:list={['prose', 'intro', { 'wide-intro': v.wide, 'narrow-intro': v.narrow && !v.wide }]} set:html={richText(v.body)} />
           </section>
         );
       }
@@ -118,7 +118,7 @@ const meta = [
       if (s.discriminant === 'images') {
         const v = s.value;
         return (
-          v.images.every((im) => im.image) ? (
+          v.images.every((im) => im.image) && !v.crop ? (
             <div class="image-strip natural" data-reveal>
               {v.images.map((im) => <img src={im.image!} alt="" style={`flex:${im.width || 1}`} />)}
             </div>
@@ -400,6 +400,7 @@ const meta = [
   .prose :global(ol) { list-style: decimal; padding-left: 1.6em; }
   .intro { margin-top: max(18px, calc(40 * var(--u))); max-width: 50ch; }
   .wide-intro { max-width: none; }
+  .intro.narrow-intro:not(.wide-intro) { max-width: max(32ch, calc(920 * var(--u))); }
 
   .split { margin-top: max(18px, calc(40 * var(--u))); display: grid; gap: 32px; }
   @container (min-width: 900px) {

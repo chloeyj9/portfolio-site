@@ -1,6 +1,75 @@
 title: Gensler
 order: 1
-description: Case study coming soon
+description: Shaping workplaces around how people actually work
 cover: /images/projects/gensler/cover.jpg
 tags: [Strategy, Design Systems]
 year: '2026'
+caseStudy:
+  enabled: true
+  accent: '#ee3224'
+  tint: '#f1c3bf'
+  hero: /images/projects/gensler/hero.jpg
+  headline: Shaping workplaces around how people actually work
+  summary: >-
+    A summer as a Design Strategy Intern at Gensler, working with clients in
+    financial services, energy and life science. I turned stakeholder
+    interviews, visioning workshops and competitor research into strategy and
+    requirements that tied the workplace experience to each client’s business
+    goals.
+  role: Design Strategy Intern
+  team: |-
+    Strategy Team
+    Intern Team
+  timeline: 10 weeks, Summer 2026
+  skills: |-
+    User Research
+    Data Analysis
+    Workplace Strategy
+  sections:
+    - discriminant: text
+      value:
+        navLabel: Under NDA
+        label: Under NDA
+        heading: The full case study is confidential.
+        body: This work was done for Gensler clients and is under NDA. I'm happy to walk through the research, strategy and designs in conversation.
+        wide: false
+        narrow: true
+    - discriminant: text
+      value:
+        navLabel: Overview
+        label: Overview
+        heading: Helping Gensler clients shape workplaces around how their people actually work.
+        body: As a Design Strategy Intern at Gensler, I worked with clients in financial services, energy and life science to understand where their workplaces and digital workflows were getting in the way. I ran stakeholder interviews and competitor analysis, facilitated visioning workshops, and turned what we heard into user stories and requirement documents tied to each client's business goals. I also led design strategy and the project narrative for our intern team's ground-up project, reimagining an 80,000 sq ft empty lot as a mixed-use community hub.
+        wide: false
+    - discriminant: callout
+      value:
+        label: Problem statement
+        serif: false
+        text: How might we design workplaces and experiences that **support how people really work**, not just how an organization thinks they do?
+    - discriminant: text
+      value:
+        navLabel: Outcome
+        label: Outcome
+        heading: Good strategy turns what people say into something a team can build.
+        body: |-
+          **Listen across the whole organization.**
+          Ten stakeholder interviews across five clients showed me how differently people experience the same workplace. The strongest recommendations came from patterns across roles, not from any single request.
+
+          **Alignment can be a design problem too.**
+          Facilitating visioning workshops taught me that getting stakeholders to agree on a direction is as much a part of the work as the design itself. A shared vision made every later decision easier.
+
+          **Requirements are where design meets the business.**
+          Writing user stories and requirement documents pushed me to connect every design need to a business goal. That translation is what made our recommendations something clients could act on.
+
+          **Every space needs a story.**
+          Leading the narrative for our mixed-use intern project, I learned that an empty lot only becomes a community hub when people can picture themselves in it. Telling that story clearly mattered as much as the plan.
+        wide: false
+        narrow: true
+    - discriminant: images
+      value:
+        images:
+          - image: /images/projects/gensler/team.jpg
+            width: 17
+          - image: /images/projects/gensler/presentation.jpg
+            width: 15
+        crop: true
