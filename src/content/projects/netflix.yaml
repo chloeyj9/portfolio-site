@@ -59,7 +59,7 @@ caseStudy:
         label: Insights
         heading: Viewers want Pinterest-style boards for shows, and an easier way to share them.
         intro: "I interviewed Netflix users about how they save, find and share shows."
-        image: null
+        image: /images/projects/netflix/insights.png
         imageRight: true
         stats:
           - value: 90%
@@ -85,7 +85,7 @@ caseStudy:
     - discriminant: images
       value:
         images:
-          - image: null
+          - image: /images/projects/netflix/solution.png
             width: 1
     - discriminant: features
       value:
@@ -111,7 +111,7 @@ caseStudy:
     - discriminant: images
       value:
         images:
-          - image: /images/projects/netflix/design-system-and-flows.png
+          - image: /images/projects/netflix/process.png
             width: 1
     - discriminant: cards
       value:
