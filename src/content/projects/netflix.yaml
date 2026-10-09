@@ -62,15 +62,15 @@ caseStudy:
         image: null
         imageRight: true
         stats:
-          - value: 80%
+          - value: 90%
             line: of users said they rarely use the “My List” feature
             detail: Netflix’s homepage is built with strong recommendation algorithms. It’s easy to find something you want to watch, but hard to remember every single one.
             quote: ''
-          - value: 80%
+          - value: 93%
             line: of users said their "My List" feels cluttered or hard to browse.
             detail: Viewers think in categories, not one long list. They already sort shows in their heads by mood, genre or who they'll watch with.
             quote: "“I’ll add stuff to it sporadically, but when I actually end up going back to “My List,” I forget why I even added some of the shows in the first place.”"
-          - value: ''
+          - value: 78%
             line: of users said they recommend shows mostly in person or over text.
             detail: Recommendations depend on timing. If the moment doesn't come up, the recommendation never gets made.
             quote: '"I can only recommend shows when I see that person or when I''m already talking about that show."'
