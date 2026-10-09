@@ -119,16 +119,8 @@ caseStudy:
               **Why it provokes:** As the clock falls behind real time, a hidden cost becomes something you can watch happen. By 5pm, a full 9-to-5 might register as far fewer hours, leaving you to ask where the rest went.
           - title: System
             subtitle: an AI that can't see real work
-            image: /images/projects/hours-observed/system-base.jpg
-            floats:
-              - image: /images/projects/hours-observed/system-code.png
-                left: 21.33
-                top: 5.33
-                width: 75.2
-              - image: /images/projects/hours-observed/system-console.png
-                left: 69.87
-                top: 29.84
-                width: 23.47
+            image: /images/projects/hours-observed/system.png
+            floats: []
             body: |-
               **Decision:** the AI judges appearance, and its judgment is final.
 
