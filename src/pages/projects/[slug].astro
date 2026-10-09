@@ -192,7 +192,11 @@ const meta = [
                   </li>
                 ))}
               </ul>
-              <div class="media feature-media">{v.image && <img src={v.image} alt="" />}</div>
+              {v.video ? (
+                <div class="feature-media has-video"><video src={v.video} muted loop playsinline autoplay preload="metadata" /></div>
+              ) : (
+                <div class="media feature-media">{v.image && <img src={v.image} alt="" />}</div>
+              )}
             </div>
           </section>
         );
@@ -458,6 +462,9 @@ const meta = [
   .feature-list h3 { font-weight: 600; font-size: max(16px, calc(21 * var(--u))); margin-bottom: 0.9em; }
   .feature-list .prose { max-width: 30em; }
   .feature-media { min-height: 320px; }
+  /* A video shows whole, at its own shape, with no gray box. */
+  .feature-media.has-video { min-height: 0; align-self: start; }
+  .feature-media video { display: block; width: 100%; height: auto; }
 
   .table-wrap { margin-top: max(24px, calc(48 * var(--u))); overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; background: #0a0a0a; color: #fafafa; font-size: max(13px, calc(16 * var(--u))); }

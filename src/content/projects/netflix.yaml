@@ -1,9 +1,9 @@
 title: Netflix
-order: 4
+order: 5
 description: Reimagining Netflix’s “My List” feature to be organizable and shareable
 cover: /images/projects/netflix/cover.jpg
 tags: [Product Design, Concept]
-year: '2025'
+year: '2024'
 caseStudy:
   enabled: true
   accent: '#9d0d0d'
@@ -101,6 +101,7 @@ caseStudy:
           - title: "Shared comments: recommend without waiting"
             text: Viewers can create named lists, like Pinterest boards, so shows are grouped by mood or occasion the way people already sort them in their heads.
         image: null
+        video: /images/projects/netflix/added-features.mp4
     - discriminant: text
       value:
         navLabel: Process

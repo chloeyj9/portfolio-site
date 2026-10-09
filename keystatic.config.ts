@@ -104,6 +104,11 @@ const caseStudySections = fields.blocks(
           { label: 'Features', itemLabel: (p) => p.fields.title.value },
         ),
         image: img('Tall image beside the cards'),
+        video: fields.file({
+          label: 'Video beside the cards (optional, plays muted on loop; .mp4). Shown instead of the image.',
+          directory: 'public/images/projects',
+          publicPath: '/images/projects/',
+        }),
       }),
     },
     accordion: {
