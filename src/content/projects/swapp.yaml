@@ -64,7 +64,7 @@ caseStudy:
         label: Insights
         heading: Students resell a few times a year, through tools and sellers they can know.
         intro: "We ran semi-structured interviews with Cornell students who had bought or sold secondhand, backed by a survey and the old app's usage data."
-        image: null
+        image: /images/projects/swapp/insights.png
         stats:
           - value: 58%
             line: of students only buy or sell secondhand around move-out.
