@@ -26,16 +26,18 @@ caseStudy:
     UX Research
     Web Design
   sections:
-    - discriminant: textWithImages
+    - discriminant: mediaText
       value:
         navLabel: Context
         label: Context
         heading: SWAPP aimed to cut move-out waste, but students weren't using it.
+        intro: ''
+        image: /images/projects/swapp/context.jpg
+        imageLeft: true
         body: |-
           Every move-out, Cornell students throw away things another student could use. SWAPP was built to keep those items circulating between students.
 
           **The idea was right, but the product wasn't working.** The original mobile app had low downloads and almost no repeat use. Students who wanted to sell still went to Facebook Marketplace and Craigslist. Our team of 3 designers and 3 developers had 10 weeks to relaunch it. As UI/UX lead, I owned research synthesis, the information architecture and the final interface.
-        images: [null, null]
     - discriminant: cards
       value:
         navLabel: Problem
