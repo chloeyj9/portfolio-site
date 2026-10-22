@@ -46,7 +46,12 @@ const items = [
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 32px;
     padding: max(48px, calc(95 * var(--u))) var(--gutter) max(48px, calc(98 * var(--u)));
   }
-  .hello :global(.cat) { display: block; width: max(80px, calc(150 * var(--u))); height: auto; aspect-ratio: 150 / 143; }
+  /* 18 pixel columns (one spare on the left for the tail), each 150/17 wide, pulled left so the cat lines up. */
+  .hello :global(.cat) {
+    --w: max(80px, calc(150 * var(--u)));
+    display: block; width: calc(var(--w) * 18 / 17); height: auto; aspect-ratio: 2700 / 2431;
+    margin-left: calc(var(--w) / -17);
+  }
   h2 { margin-top: max(8px, calc(12 * var(--u))); white-space: pre-line; }
   .copyright { font-size: max(12px, calc(16 * var(--u))); padding-bottom: 0.3em; text-align: center; }
   nav { justify-self: end; text-align: right; }

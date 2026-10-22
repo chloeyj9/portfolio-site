@@ -91,7 +91,7 @@ const galleries = await Promise.all(
   /* Spacing follows the artwork page: 10px between strip photos, 16px in the masonry. */
   .galleries { display: grid; gap: max(40px, calc(90 * var(--u))); padding: max(32px, calc(70 * var(--u))) var(--pad) max(56px, calc(120 * var(--u))); }
   figure { margin: 0; min-width: 0; }
-  img { display: block; width: 100%; height: auto; border-radius: max(6px, calc(10 * var(--u))); }
+  img { display: block; width: 100%; height: auto; border-radius: var(--radius); }
   figcaption {
     margin-top: 0.8em;
     font-size: max(11px, calc(14 * var(--u))); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em;

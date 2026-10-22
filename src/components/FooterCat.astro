@@ -1,43 +1,118 @@
 ---
 // The arched pixel cat from the footer mockup: 17 x 19 pixels, drawn slightly wider than tall.
+// On hover (or a tap on phones) it wags the tip of its tail and blinks, like the old home page cat.
 const { class: className } = Astro.props;
 ---
-<svg class={className} viewBox="0 0 17 19" preserveAspectRatio="none" fill="currentColor" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="2" y="0" width="1" height="1" />
-  <rect x="1" y="1" width="1" height="1" />
-  <rect x="3" y="1" width="1" height="1" />
-  <rect x="0" y="2" width="1" height="1" />
-  <rect x="0" y="3" width="1" height="1" />
-  <rect x="0" y="4" width="1" height="1" />
-  <rect x="12" y="4" width="1" height="1" />
-  <rect x="16" y="4" width="1" height="1" />
-  <rect x="0" y="5" width="1" height="1" />
-  <rect x="12" y="5" width="5" height="1" />
-  <rect x="0" y="6" width="1" height="1" />
-  <rect x="6" y="6" width="5" height="1" />
-  <rect x="12" y="6" width="5" height="1" />
-  <rect x="1" y="7" width="1" height="1" />
-  <rect x="5" y="7" width="8" height="1" />
-  <rect x="14" y="7" width="1" height="1" />
-  <rect x="16" y="7" width="1" height="1" />
-  <rect x="1" y="8" width="2" height="1" />
-  <rect x="4" y="8" width="13" height="1" />
-  <rect x="2" y="9" width="14" height="1" />
-  <rect x="3" y="10" width="13" height="1" />
-  <rect x="3" y="11" width="5" height="1" />
-  <rect x="9" y="11" width="6" height="1" />
-  <rect x="3" y="12" width="4" height="1" />
-  <rect x="10" y="12" width="4" height="1" />
-  <rect x="4" y="13" width="3" height="1" />
-  <rect x="10" y="13" width="4" height="1" />
-  <rect x="4" y="14" width="2" height="1" />
-  <rect x="11" y="14" width="3" height="1" />
-  <rect x="4" y="15" width="2" height="1" />
-  <rect x="11" y="15" width="2" height="1" />
-  <rect x="4" y="16" width="2" height="1" />
-  <rect x="11" y="16" width="2" height="1" />
-  <rect x="4" y="17" width="2" height="1" />
-  <rect x="11" y="17" width="2" height="1" />
-  <rect x="5" y="18" width="2" height="1" />
-  <rect x="12" y="18" width="2" height="1" />
+<svg class:list={['footer-cat', className]} viewBox="-1 0 18 19" preserveAspectRatio="none" fill="currentColor" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g class="body">
+    <rect x="12" y="4" width="1" height="1" />
+    <rect x="16" y="4" width="1" height="1" />
+    <rect x="12" y="5" width="5" height="1" />
+    <rect x="6" y="6" width="5" height="1" />
+    <rect x="12" y="6" width="5" height="1" />
+    <rect x="5" y="7" width="8" height="1" />
+    <rect x="14" y="7" width="1" height="1" />
+    <rect x="16" y="7" width="1" height="1" />
+    <rect x="4" y="8" width="13" height="1" />
+    <rect x="2" y="9" width="14" height="1" />
+    <rect x="3" y="10" width="13" height="1" />
+    <rect x="3" y="11" width="5" height="1" />
+    <rect x="9" y="11" width="6" height="1" />
+    <rect x="3" y="12" width="4" height="1" />
+    <rect x="10" y="12" width="4" height="1" />
+    <rect x="4" y="13" width="3" height="1" />
+    <rect x="10" y="13" width="4" height="1" />
+    <rect x="4" y="14" width="2" height="1" />
+    <rect x="11" y="14" width="3" height="1" />
+    <rect x="4" y="15" width="2" height="1" />
+    <rect x="11" y="15" width="2" height="1" />
+    <rect x="4" y="16" width="2" height="1" />
+    <rect x="11" y="16" width="2" height="1" />
+    <rect x="4" y="17" width="2" height="1" />
+    <rect x="11" y="17" width="2" height="1" />
+    <rect x="5" y="18" width="2" height="1" />
+    <rect x="12" y="18" width="2" height="1" />
+  </g>
+  <!-- The tip flicks from its curl, to straight up, to leaning left, and back. -->
+  <g class="tail curl">
+    <rect x="2" y="0" width="1" height="1" />
+    <rect x="1" y="1" width="1" height="1" />
+    <rect x="3" y="1" width="1" height="1" />
+    <rect x="0" y="2" width="1" height="1" />
+    <rect x="0" y="3" width="1" height="1" />
+    <rect x="0" y="4" width="1" height="1" />
+    <rect x="0" y="5" width="1" height="1" />
+    <rect x="0" y="6" width="1" height="1" />
+    <rect x="1" y="7" width="1" height="1" />
+    <rect x="1" y="8" width="1" height="1" />
+    <rect x="2" y="8" width="1" height="1" />
+  </g>
+  <g class="tail up">
+    <rect x="0" y="0" width="1" height="1" />
+    <rect x="0" y="1" width="1" height="1" />
+    <rect x="0" y="2" width="1" height="1" />
+    <rect x="0" y="3" width="1" height="1" />
+    <rect x="0" y="4" width="1" height="1" />
+    <rect x="0" y="5" width="1" height="1" />
+    <rect x="0" y="6" width="1" height="1" />
+    <rect x="1" y="7" width="1" height="1" />
+    <rect x="1" y="8" width="1" height="1" />
+    <rect x="2" y="8" width="1" height="1" />
+  </g>
+  <g class="tail left">
+    <rect x="-1" y="0" width="1" height="1" />
+    <rect x="0" y="1" width="1" height="1" />
+    <rect x="0" y="2" width="1" height="1" />
+    <rect x="0" y="3" width="1" height="1" />
+    <rect x="0" y="4" width="1" height="1" />
+    <rect x="0" y="5" width="1" height="1" />
+    <rect x="0" y="6" width="1" height="1" />
+    <rect x="1" y="7" width="1" height="1" />
+    <rect x="1" y="8" width="1" height="1" />
+    <rect x="2" y="8" width="1" height="1" />
+  </g>
+  <!-- Eyelids fill the two eye holes for a moment. -->
+  <g class="lids">
+    <rect x="13" y="7" width="1" height="1" />
+    <rect x="15" y="7" width="1" height="1" />
+  </g>
 </svg>
+
+<style>
+  /* One extra pixel column on the left gives the tip room to lean; the cat itself stays put. */
+  .footer-cat { cursor: pointer; }
+  .lids, .tail.up, .tail.left { visibility: hidden; }
+
+  /* Still until it's hovered (or tapped on a phone): curl, up, left, up, over 1.2s. */
+  .footer-cat:hover .tail.curl, .footer-cat.awake .tail.curl { animation: tail-curl 1.2s steps(1) infinite; }
+  .footer-cat:hover .tail.up, .footer-cat.awake .tail.up { animation: tail-up 1.2s steps(1) infinite; }
+  .footer-cat:hover .tail.left, .footer-cat.awake .tail.left { animation: tail-left 1.2s steps(1) infinite; }
+  .footer-cat:hover .lids, .footer-cat.awake .lids { animation: blink 2.4s steps(1) infinite; }
+
+  @keyframes tail-curl { 0%, 100% { visibility: visible; } 25% { visibility: hidden; } }
+  @keyframes tail-up { 0%, 100% { visibility: hidden; } 25% { visibility: visible; } 50% { visibility: hidden; } 75% { visibility: visible; } }
+  @keyframes tail-left { 0%, 100% { visibility: hidden; } 50% { visibility: visible; } 75% { visibility: hidden; } }
+  /* A quick double blink, then eyes open. */
+  @keyframes blink {
+    0%, 100% { visibility: hidden; }
+    6%, 12% { visibility: visible; }
+    9%, 15% { visibility: hidden; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-cat .tail, .footer-cat .lids { animation: none !important; }
+    .footer-cat .tail.curl { visibility: visible; }
+  }
+</style>
+
+<script>
+  // Phones have no hover, so a tap wakes the cat for a few seconds.
+  document.querySelectorAll<SVGElement>('.footer-cat').forEach((cat) => {
+    let timer: number | undefined;
+    cat.addEventListener('click', () => {
+      cat.classList.add('awake');
+      clearTimeout(timer);
+      timer = window.setTimeout(() => cat.classList.remove('awake'), 3000);
+    });
+  });
+</script>
