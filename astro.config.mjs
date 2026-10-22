@@ -14,6 +14,8 @@ const withDashboard =
 
 export default defineConfig({
   output: 'static',
+  // The Sketchbook page is now My Studio.
+  redirects: { '/sketchbook': '/studio' },
   integrations: [react(), markdoc(), ...(withDashboard ? [keystatic()] : [])],
   vite: { plugins: [tailwindcss()] },
 });

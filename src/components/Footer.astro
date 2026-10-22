@@ -12,53 +12,63 @@ const contact = [
   { label: footer.linkedinLabel, href: footer.linkedinUrl || null },
 ];
 ---
-<footer class="site-footer">
-  <div class="top">
-    <div>
-      <h2 class="font-serif">{footer.heading}</h2>
-      <ul class="list contact font-mono">
-        {contact.map((c) => (
-          <li>
-            {c.href ? (
-              <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{c.label}</a>
-            ) : (
-              <span>{c.label}</span>
-            )}
-          </li>
-        ))}
-      </ul>
+<footer class="row site-footer">
+  <div class="cell gutter"></div>
+  <div class="cell main">
+    <div class="top">
+      <div>
+        <h2 class="font-serif">{footer.heading}</h2>
+        <ul class="list contact">
+          {contact.map((c) => (
+            <li>
+              {c.href ? (
+                <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{c.label}</a>
+              ) : (
+                <span>{c.label}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <nav aria-label="Footer">
+        <ul class="list">
+          {links.map((l) => <li>{l.href ? <a href={l.href}>{l.label}</a> : <span>{l.label}</span>}</li>)}
+        </ul>
+      </nav>
     </div>
-    <nav aria-label="Footer">
-      <ul class="list font-mono">
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
+    <p class="copyright">{footer.copyright}</p>
   </div>
-  <p class="copyright font-mono">{footer.copyright}</p>
+  <div class="cell gutter"></div>
 </footer>
 
 <style>
-  /* Measured on the 1560px frame: 370px tall, 66px heading, 24px mono text. */
-  .site-footer {
-    padding-block: max(40px, calc(64 * var(--u))) max(32px, calc(40 * var(--u)));
-    color: color-mix(in srgb, var(--color-ink) 64%, transparent);
+  /* The bottom edge sits off the page, so only the upper corners show. */
+  .site-footer .cell { border-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .main {
+    padding: max(40px, calc(90 * var(--u))) var(--pad) max(28px, calc(40 * var(--u)));
+    color: var(--color-muted);
   }
   .top { display: grid; gap: 40px; }
-  @container (min-width: 700px) { .top { grid-template-columns: 1fr calc(210 * var(--u)); } }
+  @container (min-width: 700px) { .top { grid-template-columns: 1fr auto; } }
   h2 {
     color: var(--color-ink);
-    font-size: max(32px, calc(66 * var(--u)));
-    line-height: 1; letter-spacing: -0.01em; text-wrap: balance;
+    font-size: max(32px, calc(64 * var(--u)));
+    line-height: 1.05; text-wrap: balance;
   }
-  .list { font-size: max(14px, calc(24 * var(--u))); line-height: 1.3; text-transform: uppercase; }
-  .contact { margin-top: max(18px, calc(30 * var(--u))); }
-  .copyright { margin-top: max(56px, calc(80 * var(--u))); font-size: max(13px, calc(24 * var(--u))); }
+  .list {
+    font-size: max(12px, calc(16 * var(--u))); font-weight: 700;
+    line-height: 1.9; text-transform: uppercase; letter-spacing: 0.02em;
+  }
+  .contact { margin-top: max(16px, calc(28 * var(--u))); }
+  nav .list { text-align: right; }
+  @container (max-width: 699px) { nav .list { text-align: left; } }
+  .copyright { margin-top: max(48px, calc(90 * var(--u))); font-size: max(12px, calc(14 * var(--u))); }
 
   /* Links darken and draw an underline on hover. */
   a {
     background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
     transition: color 0.25s, background-size 0.4s cubic-bezier(.2, .7, .2, 1);
   }
-  a[href]:hover, a:focus-visible { color: var(--color-ink); background-size: 100% 1px; }
+  a:hover, a:focus-visible { color: var(--color-ink); background-size: 100% 1px; }
   a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
 </style>

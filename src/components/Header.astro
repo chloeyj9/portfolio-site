@@ -1,0 +1,146 @@
+---
+import Logo from './Logo.astro';
+import { navLinks, type NavLink, type Page } from '../navLinks';
+
+interface Props {
+  current: Page;
+  // A project page passes its sections, which show as a second bar that tracks the scroll.
+  sections?: NavLink[];
+}
+const { current, sections } = Astro.props;
+const { links } = await navLinks(current);
+---
+<header class="site-header">
+  <div class="row top">
+    <div class="cell gutter"></div>
+    <div class="bar">
+      <a href={current === 'home' ? '#top' : '/'} class="cell logo" aria-label="Chloe Jung, home"><Logo /></a>
+      <nav class="links" aria-label="Main">
+        {links.map((l) => (
+          l.href
+            ? <a class="cell link" href={l.href} aria-current={l.key === current ? 'page' : undefined}>{l.label}</a>
+            : <span class="cell link">{l.label}</span>
+        ))}
+      </nav>
+    </div>
+    <div class="cell gutter"></div>
+  </div>
+
+  {sections && sections.length > 0 && (
+    <div class="row sub">
+      <div class="cell gutter"></div>
+      <nav class="cell sections" aria-label="On this page">
+        <ul>
+          {sections.map((s) => <li><a href={s.href} data-key={s.key}>{s.label}</a></li>)}
+        </ul>
+        <span class="progress" aria-hidden="true"></span>
+      </nav>
+      <div class="cell gutter"></div>
+    </div>
+  )}
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 30; background: var(--color-paper); }
+  /* The top edge sits off the page, so only the lower corners show. */
+  .top .cell { border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+  .top { height: var(--bar); }
+
+  .bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .logo { display: flex; align-items: center; padding-inline: max(14px, calc(30 * var(--u))); }
+  .logo :global(svg) { width: max(48px, calc(81 * var(--u))); height: auto; transition: transform 0.4s cubic-bezier(.2, .8, .2, 1); }
+  .logo:hover :global(svg) { transform: rotate(-4deg) scale(1.06); }
+
+  .links { display: grid; grid-template-columns: repeat(3, max(84px, calc(210 * var(--u)))); }
+  .link {
+    display: grid; place-items: center; text-align: center;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+    font-size: max(11px, calc(16 * var(--u)));
+    transition: background-color 0.25s, color 0.25s;
+  }
+  a.link:hover, a.link:focus-visible { background: color-mix(in srgb, var(--color-ink) 5%, var(--color-paper)); }
+  a.link[aria-current='page'] { color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
+  span.link { cursor: default; }
+  a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -4px; }
+
+  /* Section bar on project pages. */
+  .sections { position: relative; height: max(44px, calc(60 * var(--u))); padding-inline: var(--pad); overflow: hidden; }
+  .sections ul { display: flex; justify-content: space-evenly; align-items: center; height: 100%; gap: max(18px, calc(24 * var(--u))); }
+  .sections a {
+    display: block; white-space: nowrap; text-transform: uppercase; font-weight: 600;
+    font-size: max(10px, calc(12 * var(--u))); letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+    transition: color 0.3s, transform 0.3s cubic-bezier(.2, .8, .2, 1);
+  }
+  .sections a:hover { color: var(--color-ink); }
+  .sections a.on { color: color-mix(in srgb, var(--color-ink) 78%, transparent); font-weight: 700; transform: scale(1.16); }
+  .progress {
+    position: absolute; left: var(--pad); bottom: 0; width: 0;
+    height: max(4px, calc(9 * var(--u))); border-radius: 999px 999px 0 0;
+    background: var(--color-line);
+  }
+
+  /* Phones: the logo gets its own line above the three links; sections scroll sideways. */
+  @media (max-width: 640px) {
+    .top { height: auto; }
+    .bar { grid-template-columns: 1fr; }
+    .logo { height: 52px; }
+    .links { grid-template-columns: repeat(3, 1fr); height: 44px; }
+    .sections { overflow-x: auto; scrollbar-width: none; padding-inline: 16px; }
+    .sections ul { justify-content: flex-start; width: max-content; padding-inline: 4px; }
+    .progress { left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .sections a { transition: none; } }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header')!;
+  const setHeight = () => document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
+  setHeight();
+  addEventListener('resize', setHeight);
+
+  // The bar grows under the section labels as you scroll, and the label you're in stands out.
+  const bar = header.querySelector<HTMLElement>('.sections');
+  if (bar) {
+    const links = [...bar.querySelectorAll<HTMLAnchorElement>('a')];
+    const progress = bar.querySelector<HTMLElement>('.progress')!;
+    const targets = links.map((a) => document.getElementById(a.dataset.key!));
+    let active = -1;
+
+    const update = () => {
+      const line = scrollY + header.offsetHeight + innerHeight * 0.2;
+      const tops = targets.map((t) => (t ? t.getBoundingClientRect().top + scrollY : Infinity));
+      const ends = links.map((a) => a.offsetLeft + a.offsetWidth / 2);
+      const left = progress.offsetLeft;
+      const bottom = document.documentElement.scrollHeight;
+
+      let i = -1;
+      tops.forEach((t, j) => { if (t <= line) i = j; });
+      let x: number;
+      if (i < 0) {
+        x = left + (ends[0] - left) * Math.max(0, line / tops[0]);
+      } else {
+        const from = tops[i];
+        const to = i + 1 < tops.length ? tops[i + 1] : bottom;
+        const next = i + 1 < ends.length ? ends[i + 1] : bar.scrollWidth - left;
+        const f = Math.min(1, Math.max(0, (line - from) / Math.max(1, to - from)));
+        x = ends[i] + (next - ends[i]) * f;
+      }
+      progress.style.width = `${Math.max(0, x - left)}px`;
+
+      if (i !== active) {
+        active = i;
+        links.forEach((a, j) => a.classList.toggle('on', j === i));
+        // On phones, keep the current label in view.
+        const on = links[i];
+        if (on && bar.scrollWidth > bar.clientWidth) {
+          bar.scrollTo({ left: on.offsetLeft - bar.clientWidth / 2 + on.offsetWidth / 2, behavior: 'smooth' });
+        }
+      }
+    };
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    document.fonts?.ready.then(update);
+    update();
+  }
+</script>

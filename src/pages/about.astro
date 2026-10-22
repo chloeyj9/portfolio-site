@@ -6,8 +6,18 @@ import Layout from '../layouts/Layout.astro';
 const page = await createReader(process.cwd(), keystaticConfig).singletons.about.readOrThrow();
 ---
 <Layout title={`${page.heading} · Chloe Jung`} current="about">
-  <section class="pt-10 pb-32 lg:pt-[14vh]">
-    <h1 class="font-serif text-[clamp(3rem,6vw,4.4rem)] leading-none tracking-[-0.02em]">{page.heading}</h1>
-    <p class="mt-6 max-w-[60ch] whitespace-pre-line font-mono text-[0.95rem] text-ink/70">{page.intro}</p>
+  <section class="row">
+    <div class="cell"></div>
+    <div class="cell main">
+      <h1 class="font-serif">{page.heading}</h1>
+      <p class="intro">{page.intro}</p>
+    </div>
+    <div class="cell"></div>
   </section>
 </Layout>
+
+<style>
+  .main { min-height: max(360px, calc(600 * var(--u))); padding: max(40px, calc(90 * var(--u))) var(--pad); }
+  h1 { font-size: max(40px, calc(68 * var(--u))); line-height: 1; }
+  .intro { margin-top: 24px; max-width: 60ch; white-space: pre-line; font-size: max(15px, calc(18 * var(--u))); color: var(--color-muted); }
+</style>

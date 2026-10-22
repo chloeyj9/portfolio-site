@@ -2,9 +2,8 @@
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
 import Layout from '../layouts/Layout.astro';
-import PixelCat from '../components/PixelCat.astro';
-import PixelArrow from '../components/PixelArrow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import MagentaShape from '../components/MagentaShape.astro';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 const home = await reader.singletons.home.readOrThrow();
@@ -12,94 +11,164 @@ const projects = (await reader.collections.projects.all())
   .filter((p) => !p.entry.hidden)
   .sort((a, b) => (a.entry.order ?? 0) - (b.entry.order ?? 0));
 
-// "*why*" in the tagline becomes italic.
-const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
-const tagline = escape(home.tagline).replace(/\*(.+?)\*/g, '<em class="font-medium">$1</em>');
+// The work grid is a lattice: spacer rows between rows of cards, padding cells between columns.
+// It's built once for two columns and once for one; the window width picks which shows.
+const lattice = (cols: number) => {
+  const rows: (typeof projects[number] | null)[][] = [];
+  for (let i = 0; i < projects.length; i += cols) {
+    rows.push(Array.from({ length: cols }, (_, j) => projects[i + j] ?? null));
+  }
+  return rows;
+};
+const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
 ---
 <Layout title="Chloe Jung" current="home">
-  <section class="hero">
-    <PixelCat class="hero-cat text-ink" />
-    <h1 class="greeting font-serif" aria-label={home.greeting}>
-      {[...home.greeting].map((ch, i) => (
-        <span class="char" style={`--i:${i}`} aria-hidden="true">{ch === ' ' ? '\u00a0' : ch}</span>
-      ))}
-    </h1>
-    <p class="tagline font-mono" data-reveal set:html={tagline} />
-    <p class="subtitle font-mono" data-reveal>{home.subtitle}</p>
+  <section class="row hero">
+    <div class="cell"></div>
+    <div class="cell main">
+      <h1 class="name font-serif" aria-label={`${home.firstName} ${home.lastName}`}>
+        <span data-hero>{home.firstName}</span>
+        <MagentaShape class="shape" data-hero />
+        <span data-hero>{home.lastName}</span>
+      </h1>
+      <p class="tagline font-serif" data-hero>
+        <span>{home.tagline}<span class="highlight">{home.highlight}</span></span>
+        <span>{home.taglineSecond}</span>
+      </p>
+    </div>
+    <div class="cell"></div>
   </section>
 
-  <a href="#projects" class="scroll-cue" data-reveal>
-    <span class="font-mono">{home.scrollPrompt}</span>
-    <PixelArrow />
-  </a>
+  <section id="work" class="row heading-row">
+    <div class="cell"></div>
+    <div class="cell main"><h2 class="font-serif" data-reveal>{home.projectsHeading}</h2></div>
+    <div class="cell"></div>
+  </section>
 
-  <section id="projects" class="projects">
-    <h2 class="font-serif" data-reveal>{home.projectsHeading}</h2>
-    <div class="grid">
-      {projects.map(({ slug, entry }) => (
-        <ProjectCard
-          href={entry.caseStudy.enabled ? `/projects/${slug}` : `#${slug}`}
-          title={entry.title}
-          description={entry.description}
-          tags={entry.tags}
-          year={entry.year}
-          cover={entry.cover}
-        />
+  {[2, 1].map((cols) => (
+    <div class={`work work-${cols}`} style={`--cols:${cols}`}>
+      <div class="cell" style={`grid-row: 1 / span ${lattice(cols).length * 2 + 1}; grid-column: 1`}></div>
+      <div class="cell" style={`grid-row: 1 / span ${lattice(cols).length * 2 + 1}; grid-column: -2`}></div>
+      {lattice(cols).map((row, r) => (
+        <>
+          {Array.from({ length: cols * 2 + 1 }, () => <div class="cell space"></div>)}
+          {row.map((p, i) => (
+            <>
+              {i === 0 && <div class="cell"></div>}
+              {p ? (
+                <ProjectCard
+                  href={p.entry.caseStudy.enabled ? `/projects/${p.slug}` : undefined}
+                  title={p.entry.description}
+                  tags={p.entry.tags}
+                  year={p.entry.year}
+                  cover={p.entry.cover}
+                  accent={p.entry.caseStudy.accent || '#0a0a0a'}
+                />
+              ) : <div class="cell"></div>}
+              <div class="cell"></div>
+            </>
+          ))}
+          {r === lattice(cols).length - 1 && Array.from({ length: cols * 2 + 1 }, () => <div class="cell space"></div>)}
+        </>
       ))}
     </div>
+  ))}
+
+  <section class="row studio">
+    <div class="cell"></div>
+    <a href="/studio" class="cell main">
+      <h2 class="font-serif" data-reveal>{home.studioHeading}</h2>
+      <div class="peek" data-reveal>
+        {studioImages.map((src) => <span class="peek-item"><img src={src!} alt="" loading="lazy" /></span>)}
+      </div>
+    </a>
+    <div class="cell"></div>
   </section>
 
-    <script>
-      import { animate, inView, stagger } from 'motion';
+  <script>
+    import { animate, inView, stagger } from 'motion';
 
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Greeting letters rise in under the cat.
-      if (!reduce) {
-        animate('.greeting .char', { opacity: [0, 1], y: [24, 0] }, {
-          delay: stagger(0.035, { startDelay: 0.55 }),
-          duration: 0.6,
+    // The name, shape and tagline rise in one after another.
+    if (!reduce) {
+      animate('[data-hero]', { opacity: [0, 1], y: [24, 0] }, {
+        delay: stagger(0.12, { startDelay: 0.15 }),
+        duration: 0.7,
+        ease: [0.2, 0.7, 0.2, 1],
+      });
+    }
+
+    // Everything else fades up as it scrolls into view; cards in a row stagger.
+    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+      if (reduce) return;
+      inView(el, () => {
+        const cards = el.classList.contains('card')
+          ? [...el.parentElement!.querySelectorAll('.card')]
+          : [];
+        const col = cards.length ? cards.indexOf(el) % Number(getComputedStyle(el.parentElement!).getPropertyValue('--cols') || 1) : 0;
+        animate(el, { opacity: [0, 1], y: [28, 0] }, {
+          duration: 0.8,
+          delay: 0.1 + col * 0.12,
           ease: [0.2, 0.7, 0.2, 1],
         });
-      }
-
-      // Everything else fades up as it scrolls into view; cards in a row stagger.
-      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
-        if (reduce) return;
-        inView(el, () => {
-          const col = el.classList.contains('card')
-            ? [...el.parentElement!.children].indexOf(el) % 2
-            : 0;
-          animate(el, { opacity: [0, 1], y: [28, 0] }, {
-            duration: 0.8,
-            delay: 0.15 + col * 0.12,
-            ease: [0.2, 0.7, 0.2, 1],
-          });
-        }, { amount: 0.2 });
-      });
-
-    </script>
+      }, { amount: 0.2 });
+    });
+  </script>
 </Layout>
 
 <style>
-  /* Sizes are design pixels on the 1560px frame (--u), with floors for small screens. */
-  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: max(72px, calc(240 * var(--u))); }
-  .hero :global(.hero-cat) { width: max(84px, calc(210 * var(--u))); }
-  .greeting { margin-top: max(16px, calc(46 * var(--u))); font-size: max(40px, calc(104 * var(--u))); line-height: 1; letter-spacing: -0.02em; }
-  .greeting .char { display: inline-block; }
-  .js .greeting .char { opacity: 0; }
-  .tagline { margin-top: max(24px, calc(54 * var(--u))); font-size: max(13px, calc(24 * var(--u))); }
-  .tagline :global(em) { font-weight: 500; }
-  .subtitle { margin-top: max(12px, calc(26 * var(--u))); font-size: max(13px, calc(24 * var(--u))); line-height: 1.3; white-space: pre-line; color: color-mix(in srgb, var(--color-ink) 60%, transparent); }
+  /* Sizes are design pixels on the 1920px homepage (--u), with floors for small screens. */
+  .hero .main {
+    min-height: max(440px, calc(1080 * var(--u)));
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px var(--pad); text-align: center;
+  }
+  .name {
+    display: flex; align-items: center; justify-content: center;
+    gap: max(10px, calc(40 * var(--u)));
+    font-size: max(52px, calc(136 * var(--u))); line-height: 1;
+  }
+  .name :global(.shape) { width: max(84px, calc(243 * var(--u))); height: auto; flex-shrink: 0; margin-top: calc(-28 * var(--u)); }
+  .tagline {
+    margin-top: max(28px, calc(70 * var(--u)));
+    display: flex; flex-direction: column; align-items: center;
+    font-size: max(26px, calc(88 * var(--u))); line-height: 1.22; text-wrap: balance;
+  }
+  .highlight {
+    display: inline-grid; place-items: center; vertical-align: middle;
+    margin-left: 0.25em; min-width: 1.17em; height: 1.27em; padding-inline: 0.15em;
+    background: #ffe680; border-radius: max(6px, calc(12 * var(--u)));
+    transition: transform 0.4s cubic-bezier(.2, .8, .2, 1), background-color 0.3s;
+  }
+  .highlight:hover { transform: rotate(-6deg) scale(1.08); background: #ffd84d; }
+  .js [data-hero] { opacity: 0; }
 
-  .scroll-cue { margin: max(48px, calc(170 * var(--u))) 0 0 auto; display: flex; width: fit-content; align-items: center; gap: max(20px, calc(60 * var(--u))); }
-  .scroll-cue span { white-space: pre-line; text-align: right; font-size: max(11px, calc(21 * var(--u))); line-height: 1.3; }
-  .scroll-cue :global(.pixel-arrow) { width: max(28px, calc(60 * var(--u))); height: auto; }
+  .heading-row .main { display: grid; place-items: center; min-height: max(120px, calc(240 * var(--u))); }
+  .heading-row h2 { font-size: max(40px, calc(68 * var(--u))); line-height: 1; }
 
-  .projects { scroll-margin-top: 96px; padding-bottom: max(64px, calc(160 * var(--u))); }
-  .projects h2 { margin-top: max(32px, calc(90 * var(--u))); text-align: center; font-size: max(32px, calc(68 * var(--u))); line-height: 1; }
-  .projects .grid { margin-top: max(32px, calc(84 * var(--u))); display: grid; column-gap: calc(60 * var(--u)); row-gap: max(48px, calc(94 * var(--u))); }
-  @container (min-width: 900px) { .projects .grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 768px) { .projects { scroll-margin-top: 40px; } }
-  @media (prefers-reduced-motion: reduce) { .js .greeting .char { opacity: 1; } }
+  /* gutter | pad | card | pad | card | pad | gutter, with 30px spacer rows. */
+  .work { display: grid; grid-template-columns: var(--gutter) var(--pad) repeat(var(--cols), minmax(0, 1fr) var(--pad)) var(--gutter); }
+  .work .space { height: max(14px, calc(30 * var(--u))); }
+  .work-1 { display: none; }
+  @container (max-width: 760px) {
+    .work-2 { display: none; }
+    .work-1 { display: grid; }
+  }
+
+  .studio .main {
+    display: grid; align-items: center; gap: 32px;
+    min-height: max(320px, calc(600 * var(--u)));
+    padding: max(40px, calc(60 * var(--u))) var(--pad);
+  }
+  @container (min-width: 900px) { .studio .main { grid-template-columns: auto 1fr; } }
+  .studio h2 { font-size: max(36px, calc(70 * var(--u))); line-height: 1.2; white-space: pre-line; }
+  .peek { display: grid; grid-template-columns: 210fr 420fr 300fr; gap: max(10px, calc(30 * var(--u))); width: 100%; max-width: calc(930 * var(--u) + 2 * max(10px, calc(30 * var(--u)))); justify-self: end; }
+  @container (max-width: 899px) { .peek { max-width: none; } }
+  .peek-item { aspect-ratio: auto; height: max(110px, calc(240 * var(--u))); border-radius: var(--radius); overflow: hidden; background: var(--color-placeholder); }
+  .peek-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(.2, .7, .2, 1); }
+  .studio a:hover .peek-item img, .studio .main:hover .peek-item img { transform: scale(1.05); }
+  .studio .main:hover h2 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+
+  @media (prefers-reduced-motion: reduce) { .js [data-hero] { opacity: 1; } }
 </style>

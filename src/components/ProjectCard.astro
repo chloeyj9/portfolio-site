@@ -1,55 +1,43 @@
 ---
 interface Props {
   title: string;
-  description: string;
   tags: readonly string[];
   year: string;
   cover: string | null;
-  href: string;
+  accent: string;
+  // Projects without a page yet show as a card that doesn't link anywhere.
+  href?: string;
 }
-const { title, description, tags, year, cover, href } = Astro.props;
+const { title, tags, year, cover, accent, href } = Astro.props;
+const Tag = href ? 'a' : 'div';
 ---
-<a href={href} class="card group block" data-reveal>
-  <div class="media relative overflow-hidden bg-placeholder">
-    {cover && (
-      <img
-        src={cover}
-        alt=""
-        loading="lazy"
-        class="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.04]"
-      />
-    )}
-    <span class="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/5"></span>
+<Tag href={href} class:list={['card', { linked: href }]} style={`--accent:${accent}`} data-reveal>
+  <div class="cell media">
+    {cover && <img src={cover} alt="" loading="lazy" />}
   </div>
-  <div class="meta flex flex-wrap items-center">
-    <h3 class="mr-auto font-serif">
-      <span class="title-underline">{title}</span>
-    </h3>
-    <div class="tags flex flex-wrap">
-    {tags.map((tag) => (
-      <span class="tag bg-tag font-mono uppercase text-ink/60 transition-colors duration-300 group-hover:bg-ink/15 group-hover:text-ink/80">
-        {tag}
-      </span>
-    ))}
-    <span class="tag bg-ink font-mono text-paper">{year}</span>
-    </div>
+  <div class="cell caption">
+    <h3>{title}</h3>
+    <p class="kind"><span>{tags.join(' & ')}</span> - {year}</p>
   </div>
-  <p class="desc text-ink/90">{description}</p>
-</a>
+</Tag>
 
 <style>
-  /* Measured on the 1560px frame: 690 x 419 image, 50px title, 20px description. */
-  .media { aspect-ratio: 690 / 419; max-width: 100%; }
-  .meta { margin-top: max(10px, calc(24 * var(--u))); gap: max(8px, calc(14 * var(--u))) max(12px, calc(24 * var(--u))); }
-  .tags { gap: max(6px, calc(14 * var(--u))); }
-  h3 { font-size: max(28px, calc(52 * var(--u))); line-height: 1; letter-spacing: -0.01em; }
-  .tag { font-size: max(10px, calc(15 * var(--u))); padding: max(3px, calc(5 * var(--u))) max(8px, calc(16 * var(--u))); letter-spacing: 0.04em; }
-  .desc { margin-top: max(10px, calc(20 * var(--u))); font-size: max(14px, calc(20 * var(--u))); }
+  /* Measured on the 1920px homepage: 780 x 510 image over a 90px caption. */
+  .card { display: flex; flex-direction: column; }
+  .media { aspect-ratio: 780 / 510; overflow: hidden; background: var(--color-placeholder); border-color: var(--color-placeholder); }
+  .media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(.2, .7, .2, 1); }
+  .linked:hover .media img { transform: scale(1.04); }
 
-  .title-underline {
-    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
-    transition: background-size 0.45s cubic-bezier(.2, .7, .2, 1);
+  .caption {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 4px max(12px, calc(24 * var(--u)));
+    min-height: max(56px, calc(90 * var(--u)));
+    padding: 10px max(14px, calc(30 * var(--u)));
+    font-size: max(11px, calc(16 * var(--u))); font-weight: 600; text-transform: uppercase;
+    color: var(--color-muted);
   }
-  .group:hover .title-underline,
-  .group:focus-visible .title-underline { background-size: 100% 1px; }
+  h3 { transition: color 0.25s; }
+  .linked:hover h3, .linked:focus-visible h3 { color: var(--color-ink); }
+  .kind span { color: var(--accent); }
+  .card:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 4px; border-radius: var(--radius); }
 </style>

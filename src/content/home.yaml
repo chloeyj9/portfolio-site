@@ -1,9 +1,13 @@
-greeting: hello! i’m chloe
-tagline: Always curious about the *why*, I connect patterns to design clearer systems.
-subtitle: |-
-  Currently studying Design & Environmental Analysis @ Cornell,
-  Prev @ Gensler.
-scrollPrompt: |-
-  scroll to see what
-  i’ve been working on
-projectsHeading: Projects
+firstName: Chloe
+lastName: Jung
+tagline: Always curious about the
+highlight: 'Y'
+taglineSecond: I connect patterns to design clearer systems
+projectsHeading: Work
+studioHeading: |-
+  Take a peek
+  into my Studio!
+studioImages:
+  - /images/sketchbook/forbidden-fruit-2.webp
+  - /images/sketchbook/a-fleeting-memory.webp
+  - /images/sketchbook/through-the-car-window.jpg

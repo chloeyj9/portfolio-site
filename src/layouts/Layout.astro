@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { NavLink, Page } from '../navLinks';
 
@@ -29,20 +29,19 @@ const { title, current, sections } = Astro.props;
     </script>
   </head>
   <body id="top">
-    <div class="mx-auto max-w-[1920px] md:flex">
-      <Sidebar current={current} sections={sections} />
-      <!-- Content is designed on a 1560px frame and scales with the window (see --u). -->
-      <main class="frame min-w-0 flex-1">
-        <div class="page">
-          <slot />
-          <Footer current={current} />
-        </div>
+    <!-- Designed on a 1920px canvas; everything scales with the window (see --u). -->
+    <div class="site">
+      <Header current={current} sections={sections} />
+      <main>
+        <slot />
       </main>
+      <Footer current={current} />
     </div>
   </body>
 </html>
 
 <style>
-  .frame { container-type: inline-size; }
-  .page { padding-inline: max(16px, calc(60 * var(--u))); }
+  .site { max-width: 1920px; margin-inline: auto; container-type: inline-size; }
+  /* Section links land just below the sticky header. */
+  .site :global([id]) { scroll-margin-top: var(--header-h, 160px); }
 </style>

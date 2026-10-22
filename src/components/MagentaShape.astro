@@ -1,0 +1,14 @@
+---
+// The pink parallelogram from MagentaRec.svg.
+const { class: className, ...rest } = Astro.props;
+---
+<svg class={className} {...rest} viewBox="0 0 243 242" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M242.5 16H48L13 241.5H211L242.5 16Z" fill="#B8237A" />
+  <path d="M229.5 0H35L0 225.5H198L229.5 0Z" fill="url(#magenta-shape-fill)" />
+  <defs>
+    <linearGradient id="magenta-shape-fill" x1="29.5" y1="40.5" x2="220" y2="243.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFECF7" />
+      <stop offset="1" stop-color="#B8237A" />
+    </linearGradient>
+  </defs>
+</svg>

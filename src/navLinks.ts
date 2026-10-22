@@ -1,21 +1,20 @@
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../keystatic.config';
 
-export type Page = 'home' | 'sketchbook' | 'about' | 'project';
+export type Page = 'home' | 'studio' | 'about' | 'project';
 export type NavLink = { key: string; label: string; href?: string };
 
-// The four site links, shared by the sidebar and the footer.
+// The three site links, shared by the header and the footer. The logo links home.
 export async function navLinks(current: Page) {
   const nav = await createReader(process.cwd(), keystaticConfig).singletons.navigation.readOrThrow();
   const onHome = current === 'home';
   return {
     nav,
     links: [
-      { key: 'home', label: nav.homeLabel, href: onHome ? '#top' : '/' },
-      { key: 'projects', label: nav.projectsLabel, href: onHome ? '#projects' : '/#projects' },
-      { key: 'sketchbook', label: nav.sketchbookLabel, href: '/sketchbook' },
+      { key: 'work', label: nav.projectsLabel, href: onHome ? '#work' : '/#work' },
+      { key: 'studio', label: nav.sketchbookLabel, href: '/studio' },
       // About isn't linked for now; it shows in the menu but goes nowhere.
       { key: 'about', label: nav.aboutLabel },
-    ],
+    ] as NavLink[],
   };
 }

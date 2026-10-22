@@ -201,11 +201,8 @@ export default config({
       path: 'src/content/navigation',
       format: { data: 'yaml' },
       schema: {
-        siteName: fields.text({ label: 'Name at the top', defaultValue: 'Chloe Jung' }),
-        panelLabel: fields.text({ label: 'Panel label', defaultValue: 'Navigation' }),
-        homeLabel: fields.text({ label: 'Home link', defaultValue: 'Home' }),
-        projectsLabel: fields.text({ label: 'Projects link', defaultValue: 'Projects' }),
-        sketchbookLabel: fields.text({ label: 'Sketchbook link', defaultValue: 'Sketchbook' }),
+        projectsLabel: fields.text({ label: 'Work link', defaultValue: 'Work' }),
+        sketchbookLabel: fields.text({ label: 'Studio link', defaultValue: 'My Studio' }),
         aboutLabel: fields.text({ label: 'About link', defaultValue: 'About Me' }),
       },
     }),
@@ -223,11 +220,11 @@ export default config({
       },
     }),
     sketchbook: singleton({
-      label: 'Sketchbook page',
+      label: 'My Studio page',
       path: 'src/content/pages/sketchbook',
       format: { data: 'yaml' },
       schema: {
-        heading: fields.text({ label: 'Heading', defaultValue: 'Sketchbook' }),
+        heading: fields.text({ label: 'Heading', defaultValue: 'My Studio' }),
         intro: fields.text({ label: 'Intro', multiline: true }),
         galleries: fields.blocks(
           {
@@ -258,15 +255,17 @@ export default config({
       path: 'src/content/home',
       format: { data: 'yaml' },
       schema: {
-        greeting: fields.text({ label: 'Big greeting', defaultValue: "hello! i’m chloe" }),
-        tagline: fields.text({
-          label: 'Tagline',
-          description: 'Wrap a word in *asterisks* to make it italic.',
-          multiline: true,
-        }),
-        subtitle: fields.text({ label: 'Subtitle (grey text)', multiline: true }),
-        scrollPrompt: fields.text({ label: 'Scroll prompt', multiline: true }),
-        projectsHeading: fields.text({ label: 'Projects heading', defaultValue: 'Projects' }),
+        firstName: fields.text({ label: 'First name (left of the pink shape)', defaultValue: 'Chloe' }),
+        lastName: fields.text({ label: 'Last name (right of the pink shape)', defaultValue: 'Jung' }),
+        tagline: fields.text({ label: 'Tagline, first line' }),
+        highlight: fields.text({ label: 'Word in the yellow box', defaultValue: 'Y' }),
+        taglineSecond: fields.text({ label: 'Tagline, second line' }),
+        projectsHeading: fields.text({ label: 'Projects heading', defaultValue: 'Work' }),
+        studioHeading: fields.text({ label: 'Studio teaser heading', multiline: true }),
+        studioImages: fields.array(
+          fields.image({ label: 'Image', directory: 'public/images/sketchbook', publicPath: '/images/sketchbook/' }),
+          { label: 'Studio teaser images (narrow, wide, medium)', itemLabel: (p) => p.value?.filename ?? 'Image' },
+        ),
       },
     }),
   },
