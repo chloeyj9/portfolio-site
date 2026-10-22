@@ -19,11 +19,11 @@ const items = [
   <div class="inner">
     <div class="hello">
       <FooterCat class="cat" />
-      <h2 class="font-serif">{footer.heading}</h2>
+      <h2 class="text-display">{footer.heading}</h2>
     </div>
     <p class="copyright">{footer.copyright}</p>
     <nav aria-label="Footer">
-      <ul class="font-serif">
+      <ul class="text-display">
         {items.map((l) => (
           <li>
             {l.href ? (
@@ -47,7 +47,6 @@ const items = [
     padding: max(48px, calc(95 * var(--u))) var(--gutter) max(48px, calc(98 * var(--u)));
   }
   .hello :global(.cat) { display: block; width: max(80px, calc(150 * var(--u))); height: auto; aspect-ratio: 150 / 143; }
-  h2, ul { font-size: max(36px, calc(64 * var(--u))); line-height: 0.94; }
   h2 { margin-top: max(8px, calc(12 * var(--u))); white-space: pre-line; }
   .copyright { font-size: max(12px, calc(16 * var(--u))); padding-bottom: 0.3em; text-align: center; }
   nav { justify-self: end; text-align: right; }

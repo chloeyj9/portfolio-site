@@ -5,7 +5,7 @@
 @import "@fontsource/open-sans/600.css";
 @import "@fontsource/open-sans/700.css";
 
-@theme {
+@theme static {
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --color-paper: #fafafa;
@@ -26,6 +26,14 @@
   --radius: max(7px, calc(10 * var(--u)));
   --bar: max(56px, calc(90 * var(--u)));
 }
+
+/*
+  Display type: the big serif lines that label parts of the site
+  ("Work", "Take a peek into my Studio!", page headings and all the footer text).
+  Change the size here and every one of them follows.
+*/
+:root { --text-display: max(36px, calc(64 * var(--u))); }
+.text-display { font-family: var(--font-serif); font-weight: 400; font-size: var(--text-display); line-height: 1; }
 
 html { background: var(--color-paper); color: var(--color-ink); scroll-behavior: smooth; }
 body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }

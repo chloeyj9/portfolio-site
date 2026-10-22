@@ -41,7 +41,7 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
 
   <section id="work" class="row heading-row">
     <div class="cell"></div>
-    <div class="cell main"><h2 class="font-serif" data-reveal>{home.projectsHeading}</h2></div>
+    <div class="cell main"><h2 class="text-display" data-reveal>{home.projectsHeading}</h2></div>
     <div class="cell"></div>
   </section>
 
@@ -77,7 +77,7 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
   <section class="row studio">
     <div class="cell"></div>
     <a href="/studio" class="cell main">
-      <h2 class="font-serif" data-reveal>{home.studioHeading}</h2>
+      <h2 class="text-display" data-reveal>{home.studioHeading}</h2>
       <div class="peek" data-reveal>
         {studioImages.map((src) => <span class="peek-item"><img src={src!} alt="" loading="lazy" /></span>)}
       </div>
@@ -145,7 +145,6 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
   .js [data-hero] { opacity: 0; }
 
   .heading-row .main { display: grid; place-items: center; min-height: max(120px, calc(240 * var(--u))); }
-  .heading-row h2 { font-size: max(40px, calc(68 * var(--u))); line-height: 1; }
 
   /* gutter | pad | card | pad | card | pad | gutter, with 30px spacer rows. */
   .work { display: grid; grid-template-columns: var(--gutter) var(--pad) repeat(var(--cols), minmax(0, 1fr) var(--pad)) var(--gutter); }
@@ -162,7 +161,7 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
     padding: max(40px, calc(60 * var(--u))) var(--pad);
   }
   @container (min-width: 900px) { .studio .main { grid-template-columns: auto 1fr; } }
-  .studio h2 { font-size: max(36px, calc(70 * var(--u))); line-height: 1.2; white-space: pre-line; }
+  .studio h2 { white-space: pre-line; }
   .peek { display: grid; grid-template-columns: 210fr 420fr 300fr; gap: max(10px, calc(30 * var(--u))); width: 100%; max-width: calc(930 * var(--u) + 2 * max(10px, calc(30 * var(--u)))); justify-self: end; }
   @container (max-width: 899px) { .peek { max-width: none; } }
   .peek-item { aspect-ratio: auto; height: max(110px, calc(240 * var(--u))); border-radius: var(--radius); overflow: hidden; background: var(--color-placeholder); }

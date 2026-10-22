@@ -41,7 +41,7 @@ const galleries = await Promise.all(
   <section class="row heading-row">
     <div class="cell"></div>
     <div class="cell main">
-      <h1 class="font-serif">{page.heading}</h1>
+      <h1 class="text-display">{page.heading}</h1>
       {page.intro && <p class="intro">{page.intro}</p>}
     </div>
     <div class="cell"></div>
@@ -86,7 +86,6 @@ const galleries = await Promise.all(
     display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
     min-height: max(180px, calc(320 * var(--u))); padding: 40px var(--pad);
   }
-  h1 { font-size: max(40px, calc(68 * var(--u))); line-height: 1; }
   .intro { margin-top: max(16px, calc(28 * var(--u))); max-width: 60ch; font-size: max(15px, calc(18 * var(--u))); line-height: 1.45; color: var(--color-muted); }
 
   /* Spacing follows the artwork page: 10px between strip photos, 16px in the masonry. */
