@@ -38,10 +38,28 @@ const { links } = await navLinks(current);
       <div class="cell gutter"></div>
     </div>
   )}
+
+  <!-- The lower half of each star where the gutter lines meet the bar, so it stays whole while the page scrolls under. -->
+  <span class="joint left-of start" aria-hidden="true"></span>
+  <span class="joint right-of start" aria-hidden="true"></span>
+  <span class="joint left-of end" aria-hidden="true"></span>
+  <span class="joint right-of end" aria-hidden="true"></span>
 </header>
 
 <style>
   .site-header { position: sticky; top: 0; z-index: 30; background: var(--color-paper); }
+  /* Each joint is a quarter circle: clear inside the curve, page colour in the notch outside it. */
+  .joint {
+    position: absolute; top: 100%; width: var(--radius); height: var(--radius); pointer-events: none;
+    --ring: transparent calc(var(--radius) - 1px), var(--color-line) calc(var(--radius) - 1px), var(--color-line) var(--radius), var(--color-paper) var(--radius);
+  }
+  .joint.left-of { background: radial-gradient(circle at 0 100%, var(--ring)); }
+  .joint.right-of { background: radial-gradient(circle at 100% 100%, var(--ring)); }
+  .joint.start.left-of { left: calc(var(--gutter) + 1px - var(--radius)); }
+  .joint.start.right-of { left: var(--gutter); }
+  .joint.end.left-of { right: calc(var(--gutter) - 1px); }
+  .joint.end.right-of { right: calc(var(--gutter) - var(--radius)); }
+
   /* The top edge sits off the page, so only the lower corners show. */
   .top .cell { border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
   .top { height: var(--bar); }

@@ -211,7 +211,7 @@ export default config({
       path: 'src/content/footer',
       format: { data: 'yaml' },
       schema: {
-        heading: fields.text({ label: 'Heading', defaultValue: 'Curious about anything? Let’s talk!' }),
+        heading: fields.text({ label: 'Heading', multiline: true, defaultValue: 'Curious about\nanything? Let’s chat!' }),
         email: fields.text({ label: 'Email address', description: 'Leave empty to hide the link.' }),
         emailLabel: fields.text({ label: 'Email link text', defaultValue: 'Email' }),
         linkedinUrl: fields.url({ label: 'LinkedIn URL', description: 'Leave empty to hide the link.' }),

@@ -35,13 +35,15 @@ const { title, current, sections } = Astro.props;
       <main>
         <slot />
       </main>
-      <Footer current={current} />
     </div>
+    <Footer current={current} />
   </body>
 </html>
 
 <style>
-  .site { max-width: 1920px; margin-inline: auto; container-type: inline-size; }
+  /* On short pages the footer still sits at the bottom of the window. */
+  body { min-height: 100svh; display: flex; flex-direction: column; }
+  .site { flex: 1; display: flex; flex-direction: column; width: 100%; max-width: 1920px; margin-inline: auto; container-type: inline-size; }
   /* Section links land just below the sticky header. */
   .site :global([id]) { scroll-margin-top: var(--header-h, 160px); }
 </style>

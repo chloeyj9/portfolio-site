@@ -23,7 +23,7 @@
   --u: calc(min(100vw, 1920px) / 1920);
   --gutter: max(12px, calc(90 * var(--u)));
   --pad: max(16px, calc(60 * var(--u)));
-  --radius: max(10px, calc(15 * var(--u)));
+  --radius: max(7px, calc(10 * var(--u)));
   --bar: max(56px, calc(90 * var(--u)));
 }
 
@@ -42,4 +42,17 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
 @media (prefers-reduced-motion: reduce) {
   .js [data-reveal] { opacity: 1 !important; transform: none !important; }
   html { scroll-behavior: auto; }
+}
+
+/*
+  The last row runs straight into the footer: it stretches to fill any space left
+  above the footer, and has no bottom edge or rounded corners.
+*/
+main { flex: 1; display: flex; flex-direction: column; }
+main > .cs { flex: 1; display: flex; flex-direction: column; }
+main > .row:not(:has(~ .row, ~ .cs, ~ .work)),
+main > .cs > .row:last-child { flex: 1; }
+main > .row:not(:has(~ .row, ~ .cs, ~ .work)) > .cell,
+main > .cs > .row:last-child > .cell {
+  border-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0;
 }
