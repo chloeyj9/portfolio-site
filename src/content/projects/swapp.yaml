@@ -112,7 +112,7 @@ caseStudy:
         label: Applying the principles
         heading: With the app as our base, we could focus on making our interactions stronger.
         body: Early testing showed confusion around pickup logistics, so we added clearer status indicators.
-        image: /images/projects/swapp/wireframe-sketches.png
+        image: /images/projects/swapp/wireframe-sketches.jpg
     - discriminant: decisions
       value:
         navLabel: Feature Explorations
