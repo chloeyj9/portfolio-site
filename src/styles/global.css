@@ -60,7 +60,15 @@ main { flex: 1; display: flex; flex-direction: column; }
 main > .cs { flex: 1; display: flex; flex-direction: column; }
 main > .row:not(:has(~ .row, ~ .cs, ~ .work)),
 main > .cs > .row:last-child { flex: 1; }
-main > .row:not(:has(~ .row, ~ .cs, ~ .work)) > .cell,
-main > .cs > .row:last-child > .cell {
+main > .row:not(:has(~ .row, ~ .cs, ~ .work)) .cell,
+main > .cs > .row:last-child .cell {
   border-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0;
+}
+
+/* The outer gutters run off the sides of the page: no outside edge or rounded corners there. */
+.row > .cell:first-child, .cell.edge-start {
+  border-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0;
+}
+.row > .cell:last-child, .cell.edge-end {
+  border-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0;
 }

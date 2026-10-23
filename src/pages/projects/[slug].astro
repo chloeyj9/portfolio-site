@@ -6,13 +6,28 @@ import { richText, inline, lines } from '../../richText';
 
 export async function getStaticPaths() {
   const reader = createReader(process.cwd(), keystaticConfig);
-  const projects = await reader.collections.projects.all();
+  // Same order as the home page; each page links on to the project after it.
+  const projects = (await reader.collections.projects.all())
+    .filter((p) => !p.entry.hidden)
+    .sort((a, b) => (a.entry.order ?? 0) - (b.entry.order ?? 0));
   return projects
-    .filter((p) => p.entry.caseStudy.enabled)
-    .map((p) => ({ params: { slug: p.slug }, props: { project: p.entry } }));
+    .map((p, i) => ({ p, next: projects[i + 1] ?? projects[0] }))
+    .filter(({ p }) => p.entry.caseStudy.enabled)
+    .map(({ p, next }) => ({
+      params: { slug: p.slug },
+      props: {
+        project: p.entry,
+        next: {
+          title: next.entry.title,
+          cover: next.entry.cover,
+          // A project without its own page yet shows as "Coming soon!".
+          href: next.entry.caseStudy.enabled ? `/projects/${next.slug}` : null,
+        },
+      },
+    }));
 }
 
-const { project } = Astro.props;
+const { project, next } = Astro.props;
 const cs = project.caseStudy;
 const id = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -336,6 +351,24 @@ const meta = [
     </article>
     <div class="cell"></div>
     </div>
+
+    <nav class="row more" aria-label="More projects">
+      <div class="cell"></div>
+      <div class="more-cells">
+        <a href="/#work" class="cell more-link back"><span aria-hidden="true">&lt;</span> Return to homepage</a>
+        {next.href ? (
+          <a href={next.href} class="cell more-media" aria-label={`Next project: ${next.title}`} tabindex="-1">
+            <span class="media">{next.cover && <img src={next.cover} alt="" loading="lazy" />}</span>
+          </a>
+        ) : (
+          <div class="cell more-media"><span class="media">{next.cover && <img src={next.cover} alt="" loading="lazy" />}</span></div>
+        )}
+        {next.href
+          ? <a href={next.href} class="cell more-link">See next project <span aria-hidden="true">&gt;</span></a>
+          : <p class="cell more-link soon">Coming soon!</p>}
+      </div>
+      <div class="cell"></div>
+    </nav>
   </div>
 
   <script>
@@ -539,6 +572,28 @@ const meta = [
   .split-images.big .image-row > * { aspect-ratio: 451 / 360; width: 100%; height: auto; object-fit: cover; }
   .split-images.big .prose :global(ul) { padding-left: 1.2em; list-style: disc; }
   .split-images.big .prose :global(li + li) { margin-top: 1.1em; }
+
+  /* Bottom row: back home, the next project's cover, and a link on to it. 570 | 600 | 570 on the 1920px layout. */
+  .more-cells { display: grid; grid-template-columns: 570fr 600fr 570fr; }
+  .more-link {
+    display: flex; align-items: center; justify-content: center; gap: 1.2em;
+    font-weight: 700; text-transform: uppercase; font-size: max(12px, calc(16 * var(--u)));
+    transition: background-color 0.25s;
+  }
+  .more-link span { transition: transform 0.3s cubic-bezier(.2, .8, .2, 1); }
+  a.more-link:hover { background: color-mix(in srgb, var(--color-ink) 4%, var(--color-paper)); }
+  a.more-link:hover span { transform: translateX(4px); }
+  a.more-link.back:hover span { transform: translateX(-4px); }
+  .more-media { display: flex; align-items: center; padding-block: max(32px, calc(90 * var(--u))); }
+  .more-media .media { display: block; width: 100%; aspect-ratio: 600 / 360; }
+  .more-media img { transition: transform 0.7s cubic-bezier(.2, .7, .2, 1); }
+  a.more-media:hover img { transform: scale(1.04); }
+  .more a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -4px; }
+  @container (max-width: 700px) {
+    .more-cells { grid-template-columns: 1fr; }
+    .more-media { order: -1; }
+    .more-link { min-height: 64px; }
+  }
 
   /* Drop-down section, measured on the Hours, Observed layout. */
   .accordion-section.dark {

@@ -22,9 +22,9 @@ const Tag = href ? 'a' : 'div';
 </Tag>
 
 <style>
-  /* Measured on the 1920px homepage: 780 x 510 image over a 90px caption. */
+  /* Measured on the 1920px homepage: 780 x 480 image over a 90px caption. */
   .card { display: flex; flex-direction: column; }
-  .media { aspect-ratio: 780 / 510; overflow: hidden; background: var(--color-placeholder); border-color: var(--color-placeholder); }
+  .media { aspect-ratio: 780 / 480; overflow: hidden; background: var(--color-placeholder); border-color: var(--color-placeholder); }
   .media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(.2, .7, .2, 1); }
   .linked:hover .media img { transform: scale(1.04); }
 
