@@ -255,10 +255,10 @@ export default config({
       path: 'src/content/home',
       format: { data: 'yaml' },
       schema: {
-        firstName: fields.text({ label: 'First name (left of the pink shape)', defaultValue: 'Chloe' }),
-        lastName: fields.text({ label: 'Last name (right of the pink shape)', defaultValue: 'Jung' }),
+        loadingLine: fields.text({ label: 'Loading screen line (put *stars* around the bold italic word)', defaultValue: 'where does *curiosity* take you?' }),
+        name: fields.text({ label: 'Name', defaultValue: 'Chloe Y. Jung' }),
         tagline: fields.text({ label: 'Tagline, first line' }),
-        highlight: fields.text({ label: 'Word in the yellow box', defaultValue: 'Y' }),
+        highlight: fields.text({ label: 'Italic word ending the first line', defaultValue: 'why' }),
         taglineSecond: fields.text({ label: 'Tagline, second line' }),
         projectsHeading: fields.text({ label: 'Projects heading', defaultValue: 'Work' }),
         studioHeading: fields.text({ label: 'Studio teaser heading', multiline: true }),

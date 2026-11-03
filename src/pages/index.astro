@@ -3,7 +3,8 @@ import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import MagentaShape from '../components/MagentaShape.astro';
+import Bloom from '../components/Bloom.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 const home = await reader.singletons.home.readOrThrow();
@@ -23,18 +24,19 @@ const lattice = (cols: number) => {
 const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
 ---
 <Layout title="Chloe Jung" current="home">
+  <LoadingScreen line={home.loadingLine} />
+
   <section class="row hero">
     <div class="cell"></div>
     <div class="cell main">
-      <h1 class="name font-serif" aria-label={`${home.firstName} ${home.lastName}`}>
-        <span data-hero>{home.firstName}</span>
-        <MagentaShape class="shape" data-hero />
-        <span data-hero>{home.lastName}</span>
-      </h1>
-      <p class="tagline font-serif" data-hero>
-        <span>{home.tagline}<span class="highlight">{home.highlight}</span></span>
-        <span>{home.taglineSecond}</span>
-      </p>
+      <div class="intro">
+        <h1 class="name font-serif" data-hero>{home.name}</h1>
+        <p class="tagline" data-hero>
+          <span>{home.tagline} <em>{home.highlight}</em>,</span>
+          <span>{home.taglineSecond}</span>
+        </p>
+      </div>
+      <Bloom class="hero-bloom" data-hero />
     </div>
     <div class="cell"></div>
   </section>
@@ -91,12 +93,15 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // The name, shape and tagline rise in one after another.
+    // If the loading screen is up, wait for it to lift first.
+    const rise = () => animate('[data-hero]', { opacity: [0, 1], y: [24, 0] }, {
+      delay: stagger(0.12, { startDelay: 0.15 }),
+      duration: 0.7,
+      ease: [0.2, 0.7, 0.2, 1],
+    });
     if (!reduce) {
-      animate('[data-hero]', { opacity: [0, 1], y: [24, 0] }, {
-        delay: stagger(0.12, { startDelay: 0.15 }),
-        duration: 0.7,
-        ease: [0.2, 0.7, 0.2, 1],
-      });
+      if (document.documentElement.classList.contains('loading')) document.addEventListener('loader:done', rise, { once: true });
+      else rise();
     }
 
     // Everything else fades up as it scrolls into view; cards in a row stagger.
@@ -119,29 +124,30 @@ const studioImages = home.studioImages.filter(Boolean).slice(0, 3);
 
 <style>
   /* Sizes are design pixels on the 1920px homepage (--u), with floors for small screens. */
+  /* Name and tagline on the left, the dot bloom on the right; they stack on narrow screens. */
   .hero .main {
-    min-height: max(440px, calc(1080 * var(--u)));
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 48px var(--pad); text-align: center;
+    display: grid; align-items: center; gap: 32px;
+    padding: 48px var(--pad);
   }
-  .name {
-    display: flex; align-items: center; justify-content: center;
-    gap: max(10px, calc(40 * var(--u)));
-    font-size: max(52px, calc(136 * var(--u))); line-height: 1;
+  @container (min-width: 900px) {
+    .hero .main {
+      min-height: calc(600 * var(--u));
+      grid-template-columns: minmax(0, 1fr) calc(825 * var(--u));
+      gap: calc(40 * var(--u));
+      padding: calc(30 * var(--u)) calc(46 * var(--u)) calc(30 * var(--u)) calc(90 * var(--u));
+    }
   }
-  .name :global(.shape) { width: max(84px, calc(243 * var(--u))); height: auto; flex-shrink: 0; margin-top: calc(-28 * var(--u)); }
+  .name { font-size: max(44px, calc(94 * var(--u))); line-height: 1; font-weight: 400; }
   .tagline {
-    margin-top: max(28px, calc(70 * var(--u)));
-    display: flex; flex-direction: column; align-items: center;
-    font-size: max(26px, calc(88 * var(--u))); line-height: 1.22; text-wrap: balance;
+    margin-top: max(16px, calc(40 * var(--u)));
+    display: flex; flex-direction: column;
+    font-size: max(15px, calc(23 * var(--u))); line-height: 1.45;
+    color: var(--color-muted);
   }
-  .highlight {
-    display: inline-grid; place-items: center; vertical-align: middle;
-    margin-left: 0.25em; min-width: 1.17em; height: 1.27em; padding-inline: 0.15em;
-    background: #ffea7e; border-radius: max(8px, calc(15 * var(--u)));
-    transition: transform 0.4s cubic-bezier(.2, .8, .2, 1), background-color 0.3s;
-  }
-  .highlight:hover { transform: rotate(-6deg) scale(1.08); background: #ffd84d; }
+  .tagline em { font-style: italic; }
+  @container (min-width: 900px) { .intro { align-self: end; padding-bottom: calc(50 * var(--u)); } }
+  .hero-bloom { width: 100%; max-width: 640px; justify-self: center; }
+  @container (min-width: 900px) { .hero-bloom { max-width: none; } }
   .js [data-hero] { opacity: 0; }
 
   .heading-row .main { display: grid; place-items: center; min-height: max(120px, calc(240 * var(--u))); }
