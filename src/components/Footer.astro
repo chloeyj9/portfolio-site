@@ -1,7 +1,6 @@
 ---
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
-import FooterCat from './FooterCat.astro';
 import { navLinks, type Page } from '../navLinks';
 
 interface Props { current: Page; }
@@ -18,7 +17,7 @@ const items = [
 <footer class="site-footer">
   <div class="inner">
     <div class="hello">
-      <FooterCat class="cat" />
+      <img class="cat" src="/images/footer-cat.webp" alt="" width="1008" height="444" loading="lazy" />
       <h2 class="text-display">{footer.heading}</h2>
     </div>
     <p class="copyright">{footer.copyright}</p>
@@ -39,19 +38,16 @@ const items = [
 </footer>
 
 <style>
-  /* Measured on the 1920 x 484 footer mockup. The pink runs edge to edge. */
-  .site-footer { background: #ffecf7; color: #b8237a; container-type: inline-size; }
+  /* Measured on the 1920 x 484 footer mockup. The blue runs edge to edge. */
+  .site-footer { background: #4f98d5; color: #cce1f5; container-type: inline-size; }
   .inner {
     max-width: 1920px; margin-inline: auto;
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 32px;
     padding: max(48px, calc(95 * var(--u))) var(--gutter) max(48px, calc(98 * var(--u)));
   }
-  /* 18 pixel columns (one spare on the left for the tail), each 150/17 wide, pulled left so the cat lines up. */
-  .hello :global(.cat) {
-    --w: max(80px, calc(150 * var(--u)));
-    display: block; width: calc(var(--w) * 18 / 17); height: auto; aspect-ratio: 2700 / 2431;
-    margin-left: calc(var(--w) / -17);
-  }
+  /* The lying cat swings its tail. Its white dots are softened to the text's pale blue. */
+  .cat { display: block; width: max(140px, calc(254 * var(--u))); height: auto; margin-left: calc(-4 * var(--u)); opacity: 0.72; }
+  .hello { padding-left: calc(18 * var(--u)); }
   h2 { margin-top: max(8px, calc(12 * var(--u))); white-space: pre-line; }
   .copyright { font-size: max(12px, calc(16 * var(--u))); padding-bottom: 0.3em; text-align: center; }
   nav { justify-self: end; text-align: right; }
