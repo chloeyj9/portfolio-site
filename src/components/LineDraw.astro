@@ -1,0 +1,101 @@
+---
+// When a page opens, the grid lines on screen draw themselves: each edge grows
+// from its midpoint out to the corners, then the real borders take over.
+---
+<script is:inline>
+  // Hide the borders before the first paint so they don't flash in and then redraw.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('lines-drawing');
+    // Safety net: never leave the borders hidden.
+    setTimeout(() => document.documentElement.classList.remove('lines-drawing'), 8000);
+  }
+</script>
+
+<style is:global>
+  .lines-drawing .cell { border-color: transparent !important; }
+  .line-draw { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 40; overflow: visible; }
+  .line-draw path { fill: none; stroke-width: 1; stroke-linecap: butt; }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const DURATION = 700;
+
+  const draw = () => {
+    if (!root.classList.contains('lines-drawing')) return;
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.classList.add('line-draw');
+    svg.setAttribute('width', String(document.documentElement.scrollWidth));
+    svg.setAttribute('height', String(innerHeight + scrollY));
+    const paths: SVGPathElement[] = [];
+
+    // Measure with the borders' real colours (they're only transparent while drawing).
+    root.classList.remove('lines-drawing');
+    const cells = [...document.querySelectorAll<HTMLElement>('.cell')]
+      .map((el) => ({ r: el.getBoundingClientRect(), cs: getComputedStyle(el) }))
+      .filter(({ r }) => r.bottom > 0 && r.top < innerHeight && r.width > 0);
+    const specs = cells.map(({ r, cs }) => {
+      const w = (side: string) => parseFloat(cs.getPropertyValue(`border-${side}-width`)) > 0;
+      const rad = (corner: string) => parseFloat(cs.getPropertyValue(`border-${corner}-radius`)) || 0;
+      return {
+        x0: r.left + 0.5, y0: r.top + scrollY + 0.5, x1: r.right - 0.5, y1: r.bottom + scrollY - 0.5,
+        t: w('top'), b: w('bottom'), l: w('left'), rt: w('right'),
+        tl: rad('top-left'), tr: rad('top-right'), bl: rad('bottom-left'), br: rad('bottom-right'),
+        // A side switched off with \`border-top: 0\` reports the text colour, so take it from a side that's drawn.
+        color: cs.getPropertyValue(`border-${['top', 'right', 'bottom', 'left'].find(w) ?? 'top'}-color`),
+      };
+    });
+    root.classList.add('lines-drawing');
+
+    const add = (d: string, color: string) => {
+      const p = document.createElementNS(ns, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('stroke', color);
+      svg.appendChild(p);
+      paths.push(p);
+    };
+
+    for (const c of specs) {
+      const { x0, y0, x1, y1 } = c;
+      const mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+      // Horizontal edges carry the rounded corners; vertical edges stop where a corner begins.
+      if (c.t) {
+        const rl = c.l ? c.tl : 0, rr = c.rt ? c.tr : 0;
+        add(`M${mx} ${y0}H${x0 + rl}` + (rl ? `A${rl} ${rl} 0 0 0 ${x0} ${y0 + rl}` : ''), c.color);
+        add(`M${mx} ${y0}H${x1 - rr}` + (rr ? `A${rr} ${rr} 0 0 1 ${x1} ${y0 + rr}` : ''), c.color);
+      }
+      if (c.b) {
+        const rl = c.l ? c.bl : 0, rr = c.rt ? c.br : 0;
+        add(`M${mx} ${y1}H${x0 + rl}` + (rl ? `A${rl} ${rl} 0 0 1 ${x0} ${y1 - rl}` : ''), c.color);
+        add(`M${mx} ${y1}H${x1 - rr}` + (rr ? `A${rr} ${rr} 0 0 0 ${x1} ${y1 - rr}` : ''), c.color);
+      }
+      for (const [on, x, rTop, rBot] of [[c.l, x0, c.t ? c.tl : 0, c.b ? c.bl : 0], [c.rt, x1, c.t ? c.tr : 0, c.b ? c.br : 0]] as const) {
+        if (!on) continue;
+        add(`M${x} ${my}V${y0 + rTop}`, c.color);
+        add(`M${x} ${my}V${y1 - rBot}`, c.color);
+      }
+    }
+
+    document.body.appendChild(svg);
+    // Every half-line starts as a dot at its midpoint and grows out to its end.
+    for (const p of paths) {
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = `${len} ${len}`;
+      p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: DURATION, easing: 'cubic-bezier(.45, 0, .2, 1)', fill: 'forwards' });
+    }
+    setTimeout(() => {
+      root.classList.remove('lines-drawing');
+      svg.remove();
+    }, DURATION + 50);
+  };
+
+  // Start once the fonts are in (so the layout has settled), without waiting for every image.
+  // On the homepage, wait for the loading screen to lift first.
+  const start = () => setTimeout(draw, 60);
+  const ready = Promise.race([document.fonts?.ready ?? Promise.resolve(), new Promise((r) => setTimeout(r, 600))]);
+  ready.then(() => {
+    if (root.classList.contains('loading')) document.addEventListener('loader:done', start, { once: true });
+    else start();
+  });
+</script>
