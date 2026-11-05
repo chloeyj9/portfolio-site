@@ -334,7 +334,7 @@ const meta = [
           <section id={s.anchor} class="section impact-section" data-reveal>
             {v.label && <p class="eyebrow">{v.label}</p>}
             <ul class="impact">
-              {v.items.map((it) => <li><span class="impact-value">{it.value}</span><span class="impact-label">{it.label}</span></li>)}
+              {v.items.map((it) => <li><span class="impact-value" data-count={it.value}>{it.value}</span><span class="impact-label">{it.label}</span></li>)}
             </ul>
           </section>
         );
@@ -596,6 +596,20 @@ const meta = [
     } else {
       document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => (el.style.opacity = '1'));
     }
+
+    // Impact numbers count up from zero the first time they scroll into view.
+    document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
+      const m = el.dataset.count!.match(/^(\D*)([\d,.]+)(.*)$/);
+      if (!m || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const [, before, num, after] = m;
+      const target = parseFloat(num.replace(/,/g, ''));
+      const decimals = (num.split('.')[1] ?? '').length;
+      const show = (n: number) => (el.textContent = before + n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + after);
+      show(0);
+      inView(el, () => {
+        animate(0, target, { delay: 0.15, duration: 1.1, ease: [0.22, 1, 0.36, 1], onUpdate: show });
+      }, { amount: 0.6 });
+    });
 
     // Charts animate in the first time they're on screen and showing.
     document.querySelectorAll<HTMLElement>('.survey-visuals').forEach((wrap) => {
@@ -873,7 +887,7 @@ const meta = [
     border: 1px solid var(--accent); border-radius: var(--radius);
     min-height: max(110px, calc(150 * var(--u))); padding: max(16px, calc(24 * var(--u))) max(20px, calc(44 * var(--u)));
   }
-  .impact-value { font-family: var(--font-serif); color: var(--accent); font-size: max(36px, calc(50 * var(--u))); line-height: 1; }
+  .impact-value { font-variant-numeric: tabular-nums; font-family: var(--font-serif); color: var(--accent); font-size: max(36px, calc(50 * var(--u))); line-height: 1; }
   .impact-label { text-transform: uppercase; font-weight: 600; font-size: max(13px, calc(16 * var(--u))); }
 
   .media-text.big-image .mt-media { aspect-ratio: 810 / 420; }
