@@ -1,75 +1,313 @@
 title: Gensler
 order: 1
-description: Shaping spaces that guide people
+description: Designing for Belonging
 cover: /images/projects/gensler/cover.jpg
 tags: [Strategy, Design Systems]
 year: '2026'
 caseStudy:
   enabled: true
   accent: '#ee3224'
-  tint: '#f1c3bf'
+  tint: '#f8d2cf'
   hero: /images/projects/gensler/hero.jpg
-  headline: Shaping workplaces around how people actually work
+  headline: 'The Mews at North Park: Designing for Belonging'
   summary: >-
-    A summer as a Design Strategy Intern at Gensler, working with clients in
-    financial services, energy and life science. I turned stakeholder
-    interviews, visioning workshops and competitor research into strategy and
-    requirements that tied the workplace experience to each client’s business
-    goals.
-  role: Design Strategy Intern
+    For the 2026 Gensler Morristown intern project, our team designed a
+    mixed-use development for SJP Properties on a quiet corner of the
+    Morristown Green. We started from one question, "What does belonging mean
+    to you?", and let community research shape everything from the program to
+    the brand.
+  role: Design Strategist
   team: |-
-    Strategy Team
-    Intern Team
-  timeline: 10 weeks, Summer 2026
+    2 Architects
+    1 Interior Designer
+    2 Design Strategists
+  timeline: 9 weeks, Summer 2026
   skills: |-
-    User Research
-    Data Analysis
-    Workplace Strategy
+    Communications Research
+    Data Visualization
+    Programming & Strategy
   sections:
-    - discriminant: text
+    - discriminant: impact
       value:
-        navLabel: Under NDA
-        label: Under NDA
-        heading: The full case study is confidential.
-        body: This work was done for Gensler clients and is under NDA. I'm happy to walk through the research, strategy and designs in conversation.
-        wide: false
-        narrow: true
-    - discriminant: text
+        navLabel: Impact
+        label: Impact
+        items:
+          - value: 50+
+            label: Community voices surveyed
+          - value: 100+
+            label: Potential new homes
+          - value: 560%
+            label: More storage frontage
+    - discriminant: mediaText
       value:
-        navLabel: Overview
-        label: Overview
-        heading: Helping Gensler clients shape workplaces around how their people actually work.
-        body: As a Design Strategy Intern at Gensler, I worked with clients in financial services, energy and life science to understand where their workplaces and digital workflows were getting in the way. I ran stakeholder interviews and competitor analysis, facilitated visioning workshops, and turned what we heard into user stories and requirement documents tied to each client's business goals. I also led design strategy and the project narrative for our intern team's ground-up project, reimagining an 80,000 sq ft empty lot as a mixed-use community hub.
-        wide: false
+        navLabel: Context
+        label: Context
+        heading: Turning an overlooked edge of the Green into a destination.
+        intro: ''
+        body: |-
+          I spent my internship at Gensler's Morristown, New Jersey office. Our project site sat right next door, on the corner of the Morristown Green, a place rich in history and culture.
+
+          Our client, SJP Properties, asked us to design a mixed-use development with ground-floor retail and residential units above. The design had to follow realistic architectural standards, activate the underused side of the Green, and keep the direct connection between the Dalton Garage and the Green.
+
+          Over 9 weeks, five interns from architecture, interiors, and design strategy took the project from research to final renderings. We then presented our strategy and designs to the Gensler Morristown office and SJP Properties.
+        image: /images/projects/gensler/context-map.jpg
+        imageLeft: true
+        bigImage: true
     - discriminant: callout
       value:
-        label: Problem statement
+        label: Why?
         serif: false
-        text: How might we design workplaces and experiences that **support how people really work**, not just how an organization thinks they do?
-    - discriminant: text
+        text: Why is **facilitating belonging** in a place important, and how might we **create** it?
+    - discriminant: circles
+      value:
+        navLabel: Site
+        label: Site
+        heading: A prominent corner that people walk past instead of to.
+        circles:
+          - image: /images/projects/gensler/site-retail.jpg
+            label: Retail spaces
+          - image: /images/projects/gensler/site-residential.jpg
+            label: Residential spaces
+          - image: /images/projects/gensler/site-dining.jpg
+            label: Dining spaces
+        body: |-
+          The site anchors a corner of the Morristown Green, fronting North Park Place and Washington Street next to Gensler's own office, with about 23 feet of elevation change across the lot.
+
+          Historically, this corner was a place of arrival, gathering and everyday exchange. Mapping today's **retail**, **residential** and **dining** uses showed the opposite: North Park Place is noticeably quieter than the other edges of the Green.
+        legend:
+          - color: '#ee3224'
+            label: Project Lot
+            outline: true
+          - color: '#c6c7a1'
+            label: Morristown Green
+            outline: false
+          - color: '#a93f3c'
+            label: Current Retail Spaces
+            outline: false
+          - color: '#95bde1'
+            label: Current Residential Spaces
+            outline: false
+          - color: '#778d48'
+            label: Current Dining Spaces
+            outline: false
+    - discriminant: survey
+      value:
+        navLabel: Research
+        label: Research
+        heading: 52 people told us what would make them stay.
+        body: We surveyed 52 people who live, work or visit around the Green. Then we compiled the responses into an interactive Power BI dashboard so the team could compare priorities across retail, housing and public space.
+        tabs:
+          - name: Retail
+            color: '#aa3f3c'
+            quote: '"I want to run errands during lunchtime!"'
+            stats:
+              - value: 83%
+                text: identified new retail/shopping as a future development priority.
+              - value: 77%
+                text: wanted grocery and convenience store offerings.
+              - value: 42%
+                text: prioritized more dining and food options.
+            highlightLabel: 'Identified Retail Gaps:'
+            highlight: Apparel (19 Responses), Grocery/Convenience Store (19 Responses), Pharmacy (14 Responses)
+            note: Survey responses suggest that people are seeking more reasons to visit downtown Morristown. Retail, dining, and convenience offerings emerged as the strongest opportunities to increase activity and strengthen North Park Place as a destination.
+            chart:
+              type: bars
+              title: Missing Retail Themes
+              axis: '# of Respondents'
+              color: '#aa3f3c'
+              bars:
+                - label: Apparel
+                  value: 19
+                - label: Grocery/Convenience Store
+                  value: 18
+                - label: Pharmacy
+                  value: 14
+                - label: Local/Boutique
+                  value: 8
+                - label: One-Stop Shop
+                  value: 5
+                - label: Coffee Shops/Bakeries
+                  value: 4
+                - label: Entertainment/Recreation
+                  value: 2
+                - label: Fitness Center
+                  value: 2
+                - label: Variety Of Cuisines
+                  value: 2
+                - label: Daycare
+                  value: 1
+                - label: Dog Daycare
+                  value: 1
+                - label: Grab & Go
+                  value: 1
+                - label: Healthcare Provider
+                  value: 1
+                - label: Specialty Food Markets
+                  value: 1
+          - name: Residential
+            color: '#3355af'
+            quote: '"I wish there was space that is more secluded from the busy streets."'
+            stats:
+              - value: 69%
+                text: listed a rooftop terrace as a preferred residential amenity.
+              - value: 67%
+                text: listed a fitness center as a preferred residential amenity.
+              - value: 65%
+                text: listed an outdoor courtyard as a preferred residential amenity.
+            highlightLabel: 'Additional Desired Amenities:'
+            highlight: Pet Amenities, Mail/Secure Package Room, Resident Event Space, Co-working/Lounge Space
+            note: Together, these findings suggest that residents value environments that support daily routines, encourage time outdoors, and contribute to an overall sense of comfort and renewal.
+            chart:
+              type: treemap
+              title: Preferred Residential Amenities
+              axis: ''
+              color: '#3355af'
+              bars:
+                - label: Rooftop Terrace
+                  value: 36
+                - label: Fitness Center
+                  value: 35
+                - label: Outdoor Courtyard
+                  value: 34
+                - label: Pet Amenities
+                  value: 16
+                - label: Mail Room/ Secure Package Room
+                  value: 16
+                - label: Resident Event Space
+                  value: 10
+                - label: Co-Working/Lounge Space
+                  value: 9
+          - name: Community
+            color: '#778d48'
+            quote: '"Anything that brings the community together."'
+            stats:
+              - value: 1/3
+                text: prioritized community events as a desired public space amenity.
+              - value: 28%
+                text: prioritized outdoor amenities and extra seating.
+              - value: 61%
+                text: of all desired public space amenities when above combined.
+              - value: 16%
+                text: asked for entertainment and recreation.
+            highlightLabel: ''
+            highlight: ''
+            note: Respondents consistently prioritize spaces that support interaction, gathering, and shared experiences, emphasizing the importance of a community centered public space.
+            chart:
+              type: pie
+              title: Desired Public Space Amenities
+              axis: ''
+              color: '#778d48'
+              bars:
+                - label: Community Events
+                  value: 33
+                  color: '#7a8f4f'
+                - label: Outdoor Amenities
+                  value: 28
+                  color: '#9aac6a'
+                - label: Entertainment/Recreation
+                  value: 16
+                  color: '#6b2522'
+                - label: Food & Dining
+                  value: 12
+                  color: '#84332f'
+                - label: Local/Boutique
+                  value: 5
+                  color: '#9d4540'
+                - label: Retail
+                  value: 5
+                  color: '#b4615c'
+                - label: Grocery/Convenience Store
+                  value: 2
+                  color: '#c98783'
+        image: null
+    - discriminant: cards
+      value:
+        navLabel: Principles
+        label: Principles of Belonging
+        heading: Three reasons to come, to stay, and to belong.
+        narrowIntro: true
+        intro: We turned the history, site analysis and survey into three principles. Each one draws its color from a piece of Morristown, and became the lens for every design decision after it.
+        tinted: false
+        cards:
+          - image: null
+            title: Gather, reasons to come.
+            text: Unique retail, dining, everyday conveniences and active storefronts turn the corner into a destination. Its red comes from Morristown's historic brick streets.
+          - image: null
+            title: Dwell, reasons to stay.
+            text: Outdoor space, wellness amenities and comfortable places help people build routines and a sense of home. Its blue comes from the Whippany River, where Morristown was first settled.
+          - image: null
+            title: Connect, reasons to belong.
+            text: Community programming and shared public space strengthen ties between residents, workers and visitors. Its green comes from the Green itself, the town's heart for over 300 years.
+    - discriminant: cards
+      value:
+        navLabel: Design
+        label: Design
+        heading: From what people asked for to a building around a courtyard.
+        narrowIntro: true
+        intro: We turned the history, site analysis and survey into three principles. Each one draws its color from a piece of Morristown, and became the lens for every design decision after it.
+        tinted: false
+        cards:
+          - image: null
+            title: Programming straight from the survey.
+            text: We sorted every requested use, from grocery and pharmacy to a beer hall and speakeasy, under Gather, Dwell and Connect. That bubble diagram became the retail floor plan, with an outdoor court at its center.
+          - image: null
+            title: Massing that opens up the block.
+            text: The mass was carved step by step, cutting a path through the site to keep the garage-to-Green connection. The courtyard it opens gives the ground floor 5.6x more storefront frontage than it would have without it.
+    - discriminant: steps
+      value:
+        navLabel: Branding
+        label: Branding
+        heading: Naming The Mews at North Park.
+        steps:
+          - image: /images/projects/gensler/mews.jpg
+            label: 'Step 1: Traditional definition'
+            title: mews
+            subtitle: /myo͞oz/
+            body: A mews is a row or courtyard of stables and carriage houses with living quarters above them. Today, these former stables have largely been converted into highly desirable, charming residential homes.
+            detailImage: /images/projects/gensler/historic-map.jpg
+            detailCaption: Hotel stables found right between the Century21 and our lots on historic site map from 1885
+          - image: /images/projects/gensler/mews-redefined.jpg
+            label: 'Step 2: Our definition'
+            title: mews *(redefined)*
+            titleImage: null
+            subtitle: /myo͞oz/
+            body: A mews is a row or courtyard of **retail spaces and community spaces** with living quarters above them. Today, these ground-floor spaces serve as an **active destinations that bring people together**, creating highly desirable, charming residential homes.
+            detailImage: null
+            detailCaption: ''
+          - image: /images/projects/gensler/mews-courtyard.jpg
+            label: 'Step 3: Adding the identity'
+            title: The Mews at North Park
+            titleImage: /images/projects/gensler/mews-logo.png
+            subtitle: ''
+            body: |-
+              The mews provides the idea.
+              **North Park provides the identity.**
+
+              By pairing the name with its location and drawing from the character of downtown Morristown, the brand becomes uniquely tied to the neighborhood it serves.
+            detailImage: null
+            detailCaption: ''
+    - discriminant: cards
       value:
         navLabel: Outcome
         label: Outcome
-        heading: Good strategy turns what people say into something a team can build.
-        body: |-
-          **Listen across the whole organization.**
-          Ten stakeholder interviews across five clients showed me how differently people experience the same workplace. The strongest recommendations came from patterns across roles, not from any single request.
-
-          **Alignment can be a design problem too.**
-          Facilitating visioning workshops taught me that getting stakeholders to agree on a direction is as much a part of the work as the design itself. A shared vision made every later decision easier.
-
-          **Requirements are where design meets the business.**
-          Writing user stories and requirement documents pushed me to connect every design need to a business goal. That translation is what made our recommendations something clients could act on.
-
-          **Every space needs a story.**
-          Leading the narrative for our mixed-use intern project, I learned that an empty lot only becomes a community hub when people can picture themselves in it. Telling that story clearly mattered as much as the plan.
-        wide: false
-        narrow: true
+        heading: Belonging is something you can design for, if you ask questions first.
+        intro: We turned the history, site analysis and survey into three principles. Each one draws its color from a piece of Morristown, and became the lens for every design decision after it.
+        tinted: true
+        cards:
+          - image: null
+            title: Research can drive the floor plan.
+            text: Every design decision traces back to something people told us in the survey, which made our design decisions easy to defend in front of the client.
+          - image: null
+            title: A shared framework helps a mixed team.
+            text: Gather, Dwell and Connect gave architects, interior designers and strategists a common language, from early bubble diagrams to the final interiors.
+          - image: null
+            title: Strategy carries all the way to the brand.
+            text: The same principles shaped the name, the colors and the story we told, so the presentation felt like one connected idea.
     - discriminant: images
       value:
         images:
           - image: /images/projects/gensler/team.jpg
-            width: 17
+            width: 750
           - image: /images/projects/gensler/presentation.jpg
-            width: 15
+            width: 840
         crop: true

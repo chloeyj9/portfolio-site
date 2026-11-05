@@ -37,6 +37,7 @@ const caseStudySections = fields.blocks(
         body: text('Text beside the image', formatting),
         image: img('Image'),
         imageLeft: fields.checkbox({ label: 'Image on the left (text on the right)', defaultValue: false }),
+        bigImage: fields.checkbox({ label: 'Larger image (about half the width, text centered beside it)', defaultValue: false }),
       }),
     },
     cards: {
@@ -45,6 +46,7 @@ const caseStudySections = fields.blocks(
         ...sectionBasics,
         intro: text('Intro text', formatting),
         tinted: fields.checkbox({ label: 'Green tinted cards without images', defaultValue: false }),
+        narrowIntro: fields.checkbox({ label: 'Narrow intro text (about half width)', defaultValue: false }),
         cards: fields.array(
           fields.object({ image: img('Image'), title: fields.text({ label: 'Title' }), text: text('Text') }),
           { label: 'Cards', itemLabel: (p) => p.fields.title.value },
@@ -184,6 +186,103 @@ const caseStudySections = fields.blocks(
         rows: fields.array(
           fields.object({ imageA: img('First image'), imageB: img('Second image'), title: fields.text({ label: 'Title' }), text: text('Text') }),
           { label: 'Rows', itemLabel: (p) => p.fields.title.value },
+        ),
+      }),
+    },
+    impact: {
+      label: 'Impact numbers (boxes in a row)',
+      schema: fields.object({
+        navLabel: sectionBasics.navLabel,
+        label: sectionBasics.label,
+        items: fields.array(
+          fields.object({ value: fields.text({ label: 'Number (e.g. 50+)' }), label: fields.text({ label: 'What it counts' }) }),
+          { label: 'Boxes', itemLabel: (p) => `${p.fields.value.value} ${p.fields.label.value}` },
+        ),
+      }),
+    },
+    circles: {
+      label: 'Circle images with text and a legend',
+      schema: fields.object({
+        ...sectionBasics,
+        circles: fields.array(
+          fields.object({ image: img('Image (cropped to a circle)'), label: fields.text({ label: 'Label under it' }) }),
+          { label: 'Circles', itemLabel: (p) => p.fields.label.value },
+        ),
+        body: text('Text beside the circles', formatting),
+        legend: fields.array(
+          fields.object({
+            color: fields.text({ label: 'Color (e.g. #a93f3c)' }),
+            label: fields.text({ label: 'Label' }),
+            outline: fields.checkbox({ label: 'Outline only', defaultValue: false }),
+          }),
+          { label: 'Legend', itemLabel: (p) => p.fields.label.value },
+        ),
+      }),
+    },
+    survey: {
+      label: 'Survey findings in tabs, with an image',
+      schema: fields.object({
+        ...sectionBasics,
+        body: text('Text above the tabs', formatting),
+        tabs: fields.array(
+          fields.object({
+            name: fields.text({ label: 'Tab name' }),
+            color: fields.text({ label: 'Color (e.g. #aa3f3c)', defaultValue: '#aa3f3c' }),
+            quote: fields.text({ label: 'Quote in the colored bar' }),
+            stats: fields.array(
+              fields.object({ value: fields.text({ label: 'Number (e.g. 83%)' }), text: fields.text({ label: 'Text' }) }),
+              { label: 'Stats', itemLabel: (p) => `${p.fields.value.value} ${p.fields.text.value}` },
+            ),
+            highlightLabel: fields.text({ label: 'Colored lead-in (e.g. Identified Retail Gaps:)' }),
+            highlight: text('Text after the lead-in'),
+            note: text('Grey note at the bottom'),
+            chart: fields.object(
+              {
+                type: fields.select({
+                  label: 'Chart type',
+                  options: [
+                    { label: 'Bar chart', value: 'bars' },
+                    { label: 'Treemap (boxes sized by value)', value: 'treemap' },
+                    { label: 'Pie chart (values are percentages)', value: 'pie' },
+                  ],
+                  defaultValue: 'bars',
+                }),
+                title: fields.text({ label: 'Chart title' }),
+                axis: fields.text({ label: 'Axis label, bar charts only (e.g. # of Respondents)' }),
+                color: fields.text({ label: 'Color', defaultValue: '#aa3f3c' }),
+                bars: fields.array(
+                  fields.object({
+                    label: fields.text({ label: 'Label' }),
+                    value: fields.number({ label: 'Value' }),
+                    color: fields.text({ label: 'Own color (pie charts; optional, e.g. #778d48)' }),
+                  }),
+                  { label: 'Values (largest first)', itemLabel: (p) => `${p.fields.label.value}: ${p.fields.value.value ?? ''}` },
+                ),
+              },
+              { label: 'Chart shown on the right while this tab is open' },
+            ),
+          }),
+          { label: 'Tabs', itemLabel: (p) => p.fields.name.value },
+        ),
+        image: img('Image on the right (shown for tabs without a chart)'),
+      }),
+    },
+    steps: {
+      label: 'Step-by-step box (with a Next step button)',
+      schema: fields.object({
+        ...sectionBasics,
+        steps: fields.array(
+          fields.object({
+            image: img('Image on the left'),
+            label: fields.text({ label: 'Step label (e.g. Step 1: Traditional definition)' }),
+            title: fields.text({ label: 'Big title (e.g. mews). Put *stars* around words to make them red italic.' }),
+            titleImage: img('Image shown as the title instead (e.g. a logo)'),
+            subtitle: fields.text({ label: 'Line under the title (e.g. /myo͞oz/)' }),
+            body: text('Text (**bold** words show in red)', formatting),
+            detailImage: img('Smaller image under the text (optional)'),
+            detailCaption: text('Caption beside the smaller image'),
+          }),
+          { label: 'Steps', itemLabel: (p) => p.fields.label.value || 'Step' },
         ),
       }),
     },

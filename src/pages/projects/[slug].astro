@@ -3,6 +3,7 @@ import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
 import Layout from '../../layouts/Layout.astro';
 import { richText, inline, lines } from '../../richText';
+import { squarify, shade } from '../../treemap';
 
 export async function getStaticPaths() {
   const reader = createReader(process.cwd(), keystaticConfig);
@@ -110,7 +111,7 @@ const meta = [
         return (
           <section id={s.anchor} class="section" data-reveal>
             {heading(v)}
-            {v.intro && <div class="prose intro wide-intro" set:html={richText(v.intro)} />}
+            {v.intro && <div class:list={['prose intro', v.narrowIntro ? 'card-intro-narrow' : 'wide-intro']} set:html={richText(v.intro)} />}
             <div class:list={['cards', { tinted: v.tinted, two: v.cards.length === 2 }]}>
               {v.cards.map((c) => (
                 <div class="card">
@@ -237,7 +238,7 @@ const meta = [
           <section id={s.anchor} class="section" data-reveal>
             {heading(v)}
             {v.intro && <div class="prose intro mt-intro" set:html={richText(v.intro)} />}
-            <div class:list={['split media-text', { 'image-left': v.imageLeft }]}>
+            <div class:list={['split media-text', { 'image-left': v.imageLeft, 'big-image': v.bigImage }]}>
               <div class="media mt-media">{v.image && <img src={v.image} alt="" />}</div>
               <div class="prose mt-body" set:html={richText(v.body)} />
             </div>
@@ -327,6 +328,219 @@ const meta = [
         );
       }
 
+      if (s.discriminant === 'impact') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section impact-section" data-reveal>
+            {v.label && <p class="eyebrow">{v.label}</p>}
+            <ul class="impact">
+              {v.items.map((it) => <li><span class="impact-value">{it.value}</span><span class="impact-label">{it.label}</span></li>)}
+            </ul>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'circles') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class="split circles-split">
+              <ul class="circles">
+                {v.circles.map((c) => (
+                  <li>
+                    <span class="media circle">{c.image && <img src={c.image} alt="" />}</span>
+                    <span class="circle-label">{c.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <div>
+                <div class="prose" set:html={richText(v.body)} />
+                {v.legend.length > 0 && (
+                  <ul class="legend">
+                    {v.legend.map((l) => (
+                      <li><span class:list={['swatch', { hollow: l.outline }]} style={`--swatch:${l.color}`}></span>{l.label}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'survey') {
+        const v = s.value;
+        const key = s.anchor || 'survey';
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            <div class="split survey-split">
+              <div>
+                {heading(v)}
+                <div class="prose survey-body" set:html={richText(v.body)} />
+                <div class="tabs" data-tabs>
+                  <div class="tab-list" role="tablist">
+                    {v.tabs.map((t, i) => (
+                      <button type="button" role="tab" class="tab" id={`${key}-tab-${i}`} aria-controls={`${key}-panel-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} style={`--c:${t.color}`}>{t.name}</button>
+                    ))}
+                  </div>
+                  <div class="tab-panels">
+                  {v.tabs.map((t, i) => (
+                    <div class:list={['tab-panel', { off: i !== 0 }]} role="tabpanel" id={`${key}-panel-${i}`} aria-labelledby={`${key}-tab-${i}`} aria-hidden={i !== 0 ? 'true' : undefined} inert={i !== 0} style={`--c:${t.color}`}>
+                      {t.quote && <p class="tab-quote">{t.quote}</p>}
+                      {t.stats.length > 0 && (
+                        <ul class="tab-stats">
+                          {t.stats.map((st) => <li><span class="tab-pill">{st.value}</span><span>{st.text}</span></li>)}
+                        </ul>
+                      )}
+                      {(t.highlightLabel || t.highlight) && <p class="tab-highlight"><strong>{t.highlightLabel}</strong> {t.highlight}</p>}
+                      {t.note && <p class="tab-note">{t.note}</p>}
+                    </div>
+                  ))}
+                  </div>
+                </div>
+              </div>
+              <div class="survey-visuals">
+                {v.tabs.map((t, i) => {
+                  const c = t.chart;
+                  const cls = ['visual', { off: i !== 0 }];
+                  const hide = i !== 0 ? 'true' : undefined;
+                  if (!c.bars.length) {
+                    return <div class:list={[...cls, 'media survey-media']} aria-hidden={hide}>{v.image && <img src={v.image} alt="" />}</div>;
+                  }
+                  if (c.type === 'pie') {
+                    // Slices go clockwise from 12 o'clock; each label sits partway out along its slice's middle.
+                    const total = c.bars.reduce((sum, b) => sum + (b.value ?? 0), 0) || 1;
+                    const pt = (a: number, r: number) => [50 + r * Math.sin(a), 50 - r * Math.cos(a)].map((n) => n.toFixed(3)).join(' ');
+                    let at = 0;
+                    const slices = c.bars.map((b, k) => {
+                      const a0 = (at / total) * 2 * Math.PI;
+                      at += b.value ?? 0;
+                      const a1 = (at / total) * 2 * Math.PI;
+                      const mid = (a0 + a1) / 2;
+                      const big = a1 - a0 > Math.PI ? 1 : 0;
+                      // Thin slices put their label just outside the pie so neighbours don't collide.
+                      const thin = (b.value ?? 0) / total < 0.08;
+                      const [lx, ly] = pt(mid, thin ? 55 : 31).split(' ');
+                      return {
+                        d: `M50 50L${pt(a0, 48)}A48 48 0 ${big} 1 ${pt(a1, 48)}Z`,
+                        color: b.color || shade(c.color || '#aa3f3c', -0.35 + (0.6 * k) / Math.max(1, c.bars.length - 1)),
+                        lx, ly, k, thin, label: b.label, value: b.value,
+                      };
+                    });
+                    return (
+                      <figure class:list={[...cls, 'chart']} aria-hidden={hide}>
+                        {c.title && <figcaption class="chart-title">{c.title}</figcaption>}
+                        <div class="pie-wrap">
+                          <div class="pie">
+                            <svg viewBox="0 0 100 100" role="img" aria-label={c.bars.map((b) => `${b.label} ${b.value}%`).join(', ')}>
+                              {slices.map((sl) => <path d={sl.d} fill={sl.color} style={`--k:${sl.k}`}><title>{sl.label}: {sl.value}%</title></path>)}
+                            </svg>
+                            {slices.map((sl) => <span class:list={['pie-value', { outside: sl.thin }]} style={`left:${sl.lx}%;top:${sl.ly}%;--k:${sl.k}`}>{sl.value}%</span>)}
+                          </div>
+                          <ul class="pie-legend">
+                            {slices.map((sl) => <li><span style={`background:${sl.color}`}></span>{sl.label}</li>)}
+                          </ul>
+                        </div>
+                      </figure>
+                    );
+                  }
+                  if (c.type === 'treemap') {
+                    const cells = squarify(c.bars.map((b) => b.value ?? 0));
+                    const n = c.bars.length;
+                    return (
+                      <figure class:list={[...cls, 'chart']} aria-hidden={hide}>
+                        {c.title && <figcaption class="chart-title">{c.title}</figcaption>}
+                        <div class="treemap">
+                          {c.bars.map((b, k) => (
+                            <div
+                              class="tm-cell"
+                              style={`left:${cells[k].x}%;top:${cells[k].y}%;width:${cells[k].w}%;height:${cells[k].h}%;background:${shade(c.color || '#3355af', n > 1 ? -0.45 + (0.9 * k) / (n - 1) : 0)};--k:${k}`}
+                            >
+                              <span class="tm-label">{(b.label ?? '').replace(/\//g, '/\u200b')}</span>
+                              <span class="tm-value">{b.value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </figure>
+                    );
+                  }
+                  const top = Math.max(...c.bars.map((b) => b.value ?? 0));
+                  const step = top > 50 ? 20 : top > 20 ? 10 : 5;
+                  const max = Math.ceil(top / step) * step || step;
+                  const ticks = Array.from({ length: max / step + 1 }, (_, k) => k * step);
+                  return (
+                    <figure class:list={[...cls, 'chart']} aria-hidden={hide} style={`--bar:${c.color || '#aa3f3c'}`}>
+                      {c.title && <figcaption class="chart-title">{c.title}</figcaption>}
+                      <div class="chart-plot" style={`--rows:${c.bars.length}`}>
+                        <div class="chart-grid" aria-hidden="true">
+                          {ticks.map((tk) => <span style={`left:${(tk / max) * 100}%`}></span>)}
+                        </div>
+                        {c.bars.map((b, k) => (
+                          <>
+                            <span class="chart-label" style={`grid-row:${k + 1}`}>{b.label}</span>
+                            <span class="chart-track" style={`grid-row:${k + 1}`}>
+                              <span class="chart-bar" style={`--w:${((b.value ?? 0) / max) * 100}%;--k:${k}`}><span>{b.value}</span></span>
+                            </span>
+                          </>
+                        ))}
+                        <div class="chart-ticks" aria-hidden="true">
+                          {ticks.map((tk) => <span style={`left:${(tk / max) * 100}%`}>{tk}</span>)}
+                        </div>
+                      </div>
+                      {c.axis && <p class="chart-axis">{c.axis}</p>}
+                    </figure>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      if (s.discriminant === 'steps') {
+        const v = s.value;
+        return (
+          <section id={s.anchor} class="section" data-reveal>
+            {heading(v)}
+            <div class="steps" data-steps>
+              {v.steps.map((st, i) => (
+                <div class:list={['step', { off: i !== 0 }]} inert={i !== 0} aria-hidden={i !== 0 ? 'true' : undefined} aria-label={`${i + 1} of ${v.steps.length}`}>
+                  <div class="media step-media">{st.image && <img src={st.image} alt="" />}</div>
+                  <div class="step-body">
+                    <div class="step-main">
+                      {st.label && <p class="eyebrow">{st.label}</p>}
+                      {st.titleImage
+                        ? <img class="step-logo" src={st.titleImage} alt={st.title || ''} />
+                        : st.title && <h3 class="step-title" set:html={inline(st.title)} />}
+                      {st.subtitle && <p class="step-subtitle">{st.subtitle}</p>}
+                      <div class="prose step-text" set:html={richText(st.body)} />
+                    </div>
+                    <div class="step-foot">
+                      {st.detailImage && <img class="step-detail" src={st.detailImage} alt="" />}
+                      {st.detailCaption && <p class="step-caption">{st.detailCaption}</p>}
+                      {v.steps.length > 1 && (
+                        i === v.steps.length - 1 ? (
+                          <button type="button" class="step-next back">
+                            <svg viewBox="0 0 92 12" aria-hidden="true"><path d="M92 6H2M7 1L2 6l5 5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                            Back
+                          </button>
+                        ) : (
+                          <button type="button" class="step-next">
+                            Next step
+                            <svg viewBox="0 0 92 12" aria-hidden="true"><path d="M0 6h90M85 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
       if (s.discriminant === 'decisions') {
         const v = s.value;
         return (
@@ -383,6 +597,61 @@ const meta = [
       document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => (el.style.opacity = '1'));
     }
 
+    // Charts animate in the first time they're on screen and showing.
+    document.querySelectorAll<HTMLElement>('.survey-visuals').forEach((wrap) => {
+      let seen = false;
+      const reveal = () => wrap.querySelectorAll('.chart:not(.off):not(.shown)').forEach((c) => c.classList.add('shown'));
+      inView(wrap, () => { seen = true; reveal(); }, { amount: 0.3 });
+      // When a tab switch shows another chart, let it animate in too.
+      wrap.closest('.survey-split')?.querySelectorAll('[role=tab]').forEach((t) => t.addEventListener('click', () => seen && requestAnimationFrame(reveal)));
+    });
+
+    // Survey tabs: click or use the arrow keys to switch panels.
+    document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((box) => {
+      const tabs = [...box.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+      const panels = [...box.querySelectorAll<HTMLElement>('[role=tabpanel]')];
+      const visuals = [...(box.closest('.survey-split')?.querySelectorAll<HTMLElement>('.visual') ?? [])];
+      const select = (i: number) => {
+        tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+        panels.forEach((p, j) => {
+          const off = i !== j;
+          p.classList.toggle('off', off);
+          p.inert = off;
+          if (off) p.setAttribute('aria-hidden', 'true'); else p.removeAttribute('aria-hidden');
+        });
+        visuals.forEach((vis, j) => {
+          vis.classList.toggle('off', i !== j);
+          if (i !== j) vis.setAttribute('aria-hidden', 'true'); else vis.removeAttribute('aria-hidden');
+        });
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => select(i));
+        t.addEventListener('keydown', (e) => {
+          const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+          if (!d) return;
+          const n = (i + d + tabs.length) % tabs.length;
+          select(n); tabs[n].focus();
+        });
+      });
+    });
+
+    // Step-by-step boxes: Next step moves on, and the last one starts over.
+    document.querySelectorAll<HTMLElement>('[data-steps]').forEach((box) => {
+      const steps = [...box.querySelectorAll<HTMLElement>('.step')];
+      steps.forEach((step, i) => {
+        step.querySelector('.step-next')?.addEventListener('click', () => {
+          const n = (i + 1) % steps.length;
+          steps.forEach((st, j) => {
+            const off = j !== n;
+            st.classList.toggle('off', off);
+            st.inert = off;
+            if (off) st.setAttribute('aria-hidden', 'true'); else st.removeAttribute('aria-hidden');
+          });
+          steps[n].querySelector<HTMLElement>('.step-next')?.focus({ preventScroll: true });
+        });
+      });
+    });
+
     // Drop-downs: one open at a time; the image follows the open item.
     document.querySelectorAll<HTMLElement>('.accordion').forEach((acc) => {
       const items = [...acc.querySelectorAll<HTMLElement>('.acc-item')];
@@ -436,7 +705,6 @@ const meta = [
   .kind span { color: var(--accent); }
   .title { margin-top: max(14px, calc(28 * var(--u))); font-family: var(--font-serif); font-size: max(36px, calc(64 * var(--u))); line-height: 1.3; text-wrap: balance; }
   .summary { font-size: max(16px, calc(20 * var(--u))); line-height: 1.36; }
-  @container (min-width: 900px) { .summary { text-align: justify; } }
   .meta { margin-top: max(24px, calc(48 * var(--u))); display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px max(12px, calc(20 * var(--u))); }
   @container (min-width: 560px) { .meta { grid-template-columns: repeat(4, auto); justify-content: space-between; } }
   .meta dt { font-weight: 700; text-transform: uppercase; color: var(--accent); font-size: max(12px, calc(16 * var(--u))); }
@@ -594,6 +862,193 @@ const meta = [
     .more-media { order: -1; }
     .more-link { min-height: 64px; }
   }
+
+  /* Gensler sections, measured on the 1920px Gensler layout. */
+  .intro.card-intro-narrow { max-width: max(32ch, calc(790 * var(--u))); }
+  .impact-section .eyebrow { margin-bottom: max(14px, calc(30 * var(--u))); }
+  .impact { display: grid; gap: max(14px, calc(45 * var(--u))); }
+  @container (min-width: 760px) { .impact { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+  .impact li {
+    display: grid; align-content: center; gap: max(6px, calc(12 * var(--u)));
+    border: 1px solid var(--accent); border-radius: var(--radius);
+    min-height: max(110px, calc(150 * var(--u))); padding: max(16px, calc(24 * var(--u))) max(20px, calc(44 * var(--u)));
+  }
+  .impact-value { font-family: var(--font-serif); color: var(--accent); font-size: max(36px, calc(50 * var(--u))); line-height: 1; }
+  .impact-label { text-transform: uppercase; font-weight: 600; font-size: max(13px, calc(16 * var(--u))); }
+
+  .media-text.big-image .mt-media { aspect-ratio: 810 / 420; }
+  @container (min-width: 760px) {
+    .media-text.image-left.big-image { grid-template-columns: 810fr 720fr; gap: calc(70 * var(--u)); align-items: start; }
+    .media-text.big-image .mt-body { padding-top: calc(40 * var(--u)); }
+  }
+
+  .circles-split { gap: max(32px, calc(60 * var(--u))); align-items: start; }
+  @container (min-width: 900px) { .circles-split { grid-template-columns: 870fr 690fr; } }
+  .circles { display: grid; grid-template-columns: repeat(3, 1fr); gap: max(12px, calc(30 * var(--u))); margin-top: max(0px, calc(20 * var(--u))); }
+  .circles li { display: grid; justify-items: center; gap: max(12px, calc(30 * var(--u))); text-align: center; }
+  .circle { width: 100%; aspect-ratio: 1; border-radius: 50%; }
+  .circle-label { text-transform: uppercase; font-weight: 700; font-size: max(11px, calc(18 * var(--u))); }
+  .legend { margin-top: max(24px, calc(45 * var(--u))); display: grid; gap: max(4px, calc(4 * var(--u))); font-size: max(12px, calc(14 * var(--u))); }
+  .legend li { display: flex; align-items: center; gap: max(10px, calc(15 * var(--u))); }
+  .swatch { width: max(12px, calc(16 * var(--u))); aspect-ratio: 1; background: var(--swatch); flex-shrink: 0; }
+  .swatch.hollow { background: none; border: 1px solid var(--swatch); }
+
+  .survey-split { margin-top: 0; gap: max(32px, calc(60 * var(--u))); }
+  @container (min-width: 900px) { .survey-split { grid-template-columns: 1fr 1fr; } .survey-media { margin-top: max(0px, calc(25 * var(--u))); } }
+  /* Bar chart beside the survey tabs, drawn in the site's own type. */
+  /* The chart panel starts level with the intro text and ends level with the bottom of the tab box. */
+  .chart {
+    display: flex; flex-direction: column;
+    background: #f4f4f4; border-radius: var(--radius);
+    padding: max(20px, calc(32 * var(--u))) max(16px, calc(40 * var(--u))) max(16px, calc(24 * var(--u)));
+  }
+  /* One chart per tab, all in the same spot; the open tab's chart shows. */
+  .survey-visuals { display: grid; }
+  .survey-visuals > .visual { grid-area: 1 / 1; }
+  .survey-visuals > .visual.off { visibility: hidden; }
+  @container (min-width: 900px) { .survey-visuals { align-self: stretch; margin-top: calc(130 * var(--u)); } }
+  .treemap { position: relative; flex: 1; min-height: 320px; }
+  .tm-cell {
+    position: absolute; display: flex; flex-direction: column; justify-content: space-between;
+    border: max(2px, calc(3 * var(--u))) solid #f4f4f4; color: #fff; overflow: hidden;
+    padding: max(8px, calc(12 * var(--u))) max(8px, calc(14 * var(--u)));
+    font-size: max(12px, calc(17 * var(--u))); line-height: 1.2;
+    transition: filter 0.2s;
+  }
+  .tm-cell:hover { filter: brightness(1.12); }
+  .pie-wrap { flex: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: max(16px, calc(36 * var(--u))); }
+  .pie { position: relative; width: min(100%, max(220px, calc(380 * var(--u)))); aspect-ratio: 1; }
+  .pie svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .pie path { stroke: #f4f4f4; stroke-width: 0.6; transition: filter 0.2s, transform 0.25s cubic-bezier(.2, .8, .2, 1); transform-origin: 50% 50%; }
+  .pie path:hover { filter: brightness(1.12); }
+  .pie-value {
+    position: absolute; translate: -50% -50%; pointer-events: none;
+    background: rgb(0 0 0 / 0.35); color: #fff; border-radius: 4px; padding: 0.1em 0.35em;
+    font-size: max(11px, calc(16 * var(--u))); font-weight: 600;
+  }
+  .pie-value.outside { background: none; color: var(--color-ink); padding: 0; }
+  .pie-legend { display: grid; gap: max(6px, calc(12 * var(--u))); font-size: max(12px, calc(16 * var(--u))); }
+  .pie-legend li { display: flex; align-items: center; gap: 0.6em; }
+  .pie-legend span { width: 0.9em; aspect-ratio: 1; border-radius: 50%; flex-shrink: 0; }
+  .js .chart:not(.shown) .pie path, .js .chart:not(.shown) .pie-value { opacity: 0; }
+  .js .chart:not(.shown) .pie path { transform: scale(0.9); }
+  .chart.shown .pie path, .chart.shown .pie-value { transition: opacity 0.5s ease calc(var(--k) * 70ms), transform 0.6s cubic-bezier(.2, .7, .2, 1) calc(var(--k) * 70ms), filter 0.2s; }
+  @media (prefers-reduced-motion: reduce) { .js .chart:not(.shown) .pie path, .js .chart:not(.shown) .pie-value { opacity: 1; transform: none; } }
+  /* Long names wrap, breaking after a slash where there is one. */
+  .tm-label { font-weight: 700; overflow-wrap: break-word; }
+  .tm-value { font-size: max(14px, calc(20 * var(--u))); }
+  .js .chart:not(.shown) .tm-cell { opacity: 0; transform: scale(0.96); }
+  .chart.shown .tm-cell { transition: opacity 0.6s ease calc(var(--k) * 60ms), transform 0.6s cubic-bezier(.2, .7, .2, 1) calc(var(--k) * 60ms), filter 0.2s; }
+  @media (prefers-reduced-motion: reduce) { .js .chart:not(.shown) .tm-cell { opacity: 1; transform: none; } }
+  .chart-title { font-family: var(--font-serif); font-size: max(22px, calc(32 * var(--u))); line-height: 1.1; text-align: center; margin-bottom: max(12px, calc(20 * var(--u))); }
+  .chart-plot {
+    flex: 1; position: relative; display: grid; grid-template-columns: max-content 1fr; align-items: center;
+    grid-template-rows: repeat(var(--rows), minmax(0, 1fr)) auto;
+    gap: max(4px, calc(6 * var(--u))) max(10px, calc(14 * var(--u)));
+    font-size: max(11px, calc(15 * var(--u)));
+  }
+  .chart-label { grid-column: 1; text-align: right; line-height: 1.2; }
+  .chart-track { grid-column: 2; position: relative; z-index: 1; height: max(18px, calc(22 * var(--u))); }
+  .chart-bar {
+    display: flex; align-items: center; justify-content: flex-end; height: 100%; width: var(--w);
+    background: var(--bar); color: #fff; font-weight: 600; padding-right: 0.5em; min-width: 1.6em;
+    transform-origin: left; transition: filter 0.2s;
+  }
+  .chart-bar:hover { filter: brightness(1.15); }
+  .chart-grid, .chart-ticks { grid-column: 2; position: relative; }
+  .chart-grid { grid-row: 1 / span var(--rows); align-self: stretch; }
+  .chart-grid span { position: absolute; top: 0; bottom: 0; border-left: 1px dotted #bdbdbd; }
+  .chart-ticks { height: 1.6em; margin-top: max(2px, calc(6 * var(--u))); color: var(--color-muted); }
+  .chart-ticks span { position: absolute; translate: -50% 0; }
+  .chart-axis { text-align: center; color: var(--color-muted); font-size: max(11px, calc(15 * var(--u))); margin-top: max(6px, calc(10 * var(--u))); padding-left: 30%; }
+  /* Bars grow in from the left the first time the chart scrolls into view. */
+  .js .chart:not(.shown) .chart-bar { transform: scaleX(0); }
+  .chart.shown .chart-bar { transition: transform 0.8s cubic-bezier(.2, .7, .2, 1) calc(var(--k) * 40ms), filter 0.2s; }
+  @media (prefers-reduced-motion: reduce) { .js .chart:not(.shown) .chart-bar { transform: none; } }
+  .survey-media { min-height: 320px; }
+  .survey-body { margin-top: max(18px, calc(45 * var(--u))); }
+  .survey-media { min-height: 320px; }
+  .tabs { margin-top: max(24px, calc(40 * var(--u))); }
+  .tab-list { display: flex; }
+  .tab {
+    flex: 0 1 max(96px, calc(180 * var(--u))); height: max(44px, calc(60 * var(--u)));
+    font: inherit; text-transform: uppercase; cursor: pointer; white-space: nowrap;
+    font-size: max(13px, calc(18 * var(--u)));
+    background: var(--color-placeholder); color: var(--color-ink);
+    border: 1px solid transparent; border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0;
+    transition: background-color 0.25s, color 0.25s;
+  }
+  .tab:hover { background: color-mix(in srgb, var(--color-placeholder) 70%, #fff); }
+  .tab[aria-selected='true'] {
+    background: #f4f4f4; color: var(--c); font-weight: 700; border-color: var(--c);
+    position: relative; z-index: 1;
+  }
+  /* Covers the box's top edge under the open tab, so tab and box read as one shape. */
+  .tab[aria-selected='true']::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: #f4f4f4; }
+  .tab:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+  /* Every panel sits in the same spot, so the box keeps the tallest one's height and nothing below jumps. */
+  .tab-panels { display: grid; }
+  .tab-panel { grid-area: 1 / 1; }
+  .tab-panel.off { visibility: hidden; }
+  .tab-panel {
+    background: #f4f4f4; border: 1px solid var(--c); border-radius: 0 var(--radius) var(--radius) var(--radius);
+    padding: max(18px, calc(30 * var(--u))) max(18px, calc(29 * var(--u))) max(22px, calc(36 * var(--u)));
+  }
+  .tab-quote {
+    background: var(--c); color: #fff; font-weight: 700; text-align: center; border-radius: 4px;
+    padding: max(12px, calc(16 * var(--u))) 16px;
+  }
+  .tab-stats { margin-top: max(18px, calc(30 * var(--u))); display: grid; gap: max(14px, calc(30 * var(--u))); }
+  .tab-stats li { display: grid; grid-template-columns: max(70px, calc(101 * var(--u))) 1fr; gap: max(14px, calc(34 * var(--u))); align-items: center; }
+  .tab-pill { background: var(--c); color: #fff; font-weight: 700; text-align: center; border-radius: 3px; font-size: max(15px, calc(20 * var(--u))); line-height: 1.5; }
+  .tab-highlight { margin-top: max(20px, calc(36 * var(--u))); }
+  .tab-highlight strong { color: var(--c); font-weight: 700; }
+  .tab-note { margin-top: max(10px, calc(14 * var(--u))); color: #767676; }
+  .tab-stats + .tab-note { margin-top: max(20px, calc(46 * var(--u))); }
+
+  /* All steps sit in the same spot, so the box keeps the tallest one's size whichever step is showing. */
+  .steps { margin-top: max(18px, calc(40 * var(--u))); border: 1px solid var(--accent); border-radius: var(--radius); padding: max(18px, calc(60 * var(--u))); display: grid; }
+  .step { grid-area: 1 / 1; display: grid; gap: max(24px, calc(60 * var(--u))); }
+  .step.off { visibility: hidden; }
+  @container (min-width: 900px) { .step { grid-template-columns: 600fr 840fr; } }
+  /* The photo is at least 600 x 630 and grows to the full height of the step, so its bottom lines up with the map and button. */
+  .step-media { position: relative; }
+  .step-media::before { content: ''; display: block; padding-top: 105%; }
+  .step-media img { position: absolute; inset: 0; }
+  .step-body { display: flex; flex-direction: column; padding-top: max(0px, calc(8 * var(--u))); }
+  .step-title { margin-top: max(8px, calc(14 * var(--u))); font-weight: 700; font-size: max(34px, calc(48 * var(--u))); line-height: 1.1; }
+  .step-title :global(em) { color: var(--accent); font-weight: 400; }
+  .step-logo { display: block; width: 87.5%; height: auto; margin-top: max(18px, calc(36 * var(--u))); }
+  .step-text :global(strong) { color: var(--accent); font-weight: 700; }
+  /* Text sits at the top when there's a map under it, otherwise it's centered beside the photo. */
+  .step-main { margin-bottom: auto; }
+  .step:not(:has(.step-detail)) .step-main { margin-top: auto; }
+  .step-next.back:hover svg { transform: translateX(-5px); }
+  .step-subtitle { margin-top: 0.2em; }
+  .step-text { margin-top: max(18px, calc(40 * var(--u))); }
+  /* The map (with its zoom circles) on the left, the caption beside it, the button in the bottom corner. */
+  .step-foot { padding-top: max(18px, calc(30 * var(--u))); display: grid; grid-template-columns: minmax(0, 608fr) minmax(0, 236fr); align-items: end; }
+  .step-detail { grid-column: 1; grid-row: 1 / span 2; width: 100%; height: auto; display: block; }
+  .step-caption { grid-column: 2; grid-row: 1; align-self: start; font-size: max(12px, calc(14 * var(--u))); line-height: 1.4; margin: calc(80 * var(--u)) 0 0 calc(19 * var(--u)); }
+  .step-next {
+    grid-column: 1 / -1; grid-row: 2; justify-self: end; position: relative;
+    display: inline-flex; align-items: center; gap: max(14px, calc(27 * var(--u)));
+    background: var(--color-ink); color: #fff; font: inherit; font-weight: 700; text-transform: uppercase;
+    font-size: max(14px, calc(18 * var(--u)));
+    height: max(48px, calc(60 * var(--u))); padding-inline: max(18px, calc(30 * var(--u)));
+    border-radius: var(--radius); cursor: pointer;
+  }
+  .step-next svg { width: max(56px, calc(92 * var(--u))); height: auto; transition: transform 0.3s cubic-bezier(.2, .8, .2, 1); }
+  .step-next:hover svg { transform: translateX(5px); }
+  .step-next:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  /* Narrow screens: map, caption, then the button, one under another. */
+  @container (max-width: 899px) {
+    .step-foot { grid-template-columns: 1fr; gap: 14px; }
+    .step-detail, .step-caption, .step-next { grid-column: 1; grid-row: auto; }
+    .step-caption { margin: 0; }
+  }
+  .step-foot:not(:has(.step-detail)) { grid-template-columns: 1fr; }
+  .step-foot:not(:has(.step-detail)) .step-next { grid-column: 1; }
 
   /* Drop-down section, measured on the Hours, Observed layout. */
   .accordion-section.dark {
