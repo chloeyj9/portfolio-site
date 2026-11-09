@@ -229,13 +229,13 @@ caseStudy:
         intro: We turned the history, site analysis and survey into three principles. Each one draws its color from a piece of Morristown, and became the lens for every design decision after it.
         tinted: false
         cards:
-          - image: null
+          - image: /images/projects/gensler/gather.jpg
             title: Gather, reasons to come.
             text: Unique retail, dining, everyday conveniences and active storefronts turn the corner into a destination. Its red comes from Morristown's historic brick streets.
-          - image: null
+          - image: /images/projects/gensler/dwell.jpg
             title: Dwell, reasons to stay.
             text: Outdoor space, wellness amenities and comfortable places help people build routines and a sense of home. Its blue comes from the Whippany River, where Morristown was first settled.
-          - image: null
+          - image: /images/projects/gensler/connect.jpg
             title: Connect, reasons to belong.
             text: Community programming and shared public space strengthen ties between residents, workers and visitors. Its green comes from the Green itself, the town's heart for over 300 years.
     - discriminant: cards
@@ -248,9 +248,11 @@ caseStudy:
         tinted: false
         cards:
           - image: null
+            video: /images/projects/gensler/programming-venn.mp4
             title: Programming straight from the survey.
             text: We sorted every requested use, from grocery and pharmacy to a beer hall and speakeasy, under Gather, Dwell and Connect. That bubble diagram became the retail floor plan, with an outdoor court at its center.
           - image: null
+            video: /images/projects/gensler/massing-process.mp4
             title: Massing that opens up the block.
             text: The mass was carved step by step, cutting a path through the site to keep the garage-to-Green connection. The courtyard it opens gives the ground floor 5.6x more storefront frontage than it would have without it.
     - discriminant: steps

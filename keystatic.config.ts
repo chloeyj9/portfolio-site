@@ -48,7 +48,16 @@ const caseStudySections = fields.blocks(
         tinted: fields.checkbox({ label: 'Green tinted cards without images', defaultValue: false }),
         narrowIntro: fields.checkbox({ label: 'Narrow intro text (about half width)', defaultValue: false }),
         cards: fields.array(
-          fields.object({ image: img('Image'), title: fields.text({ label: 'Title' }), text: text('Text') }),
+          fields.object({
+            image: img('Image'),
+            video: fields.file({
+              label: 'Video instead of the image (optional, loops silently like a GIF; .mp4)',
+              directory: 'public/images/projects',
+              publicPath: '/images/projects/',
+            }),
+            title: fields.text({ label: 'Title' }),
+            text: text('Text'),
+          }),
           { label: 'Cards', itemLabel: (p) => p.fields.title.value },
         ),
       }),
@@ -345,8 +354,10 @@ export default config({
       path: 'src/content/pages/about',
       format: { data: 'yaml' },
       schema: {
-        heading: fields.text({ label: 'Heading', defaultValue: 'About Me' }),
-        intro: fields.text({ label: 'Intro', multiline: true }),
+        heading: fields.text({ label: 'Heading', multiline: true }),
+        body: fields.text({ label: 'Body', multiline: true, description: 'Leave a blank line between paragraphs.' }),
+        photo: fields.image({ label: 'Photo', directory: 'public/images', publicPath: '/images/' }),
+        photoAlt: fields.text({ label: 'Photo description (for screen readers)' }),
       },
     }),
     home: singleton({

@@ -13,8 +13,7 @@ export async function navLinks(current: Page) {
     links: [
       { key: 'work', label: nav.projectsLabel, href: onHome ? '#work' : '/#work' },
       { key: 'studio', label: nav.sketchbookLabel, href: '/studio' },
-      // About isn't linked for now; it shows in the menu but goes nowhere.
-      { key: 'about', label: nav.aboutLabel },
+      { key: 'about', label: nav.aboutLabel, href: '/about' },
     ] as NavLink[],
   };
 }

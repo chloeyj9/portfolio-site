@@ -115,7 +115,13 @@ const meta = [
             <div class:list={['cards', { tinted: v.tinted, two: v.cards.length === 2 }]}>
               {v.cards.map((c) => (
                 <div class="card">
-                  {!v.tinted && <div class="media card-media">{c.image && <img src={c.image} alt="" />}</div>}
+                  {!v.tinted && (
+                    <div class="media card-media">
+                      {c.video
+                        ? <video src={c.video} muted loop playsinline autoplay preload="auto" aria-hidden="true" />
+                        : c.image && <img src={c.image} alt="" />}
+                    </div>
+                  )}
                   <h3>{c.title}</h3>
                   <div class="prose" set:html={richText(c.text)} />
                 </div>
@@ -753,9 +759,9 @@ const meta = [
   .cards { margin-top: max(24px, calc(40 * var(--u))); display: grid; gap: max(24px, calc(17 * var(--u))); }
   @container (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
   .card-media { aspect-ratio: 469 / 300; margin-bottom: max(14px, calc(40 * var(--u))); }
+  .card-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .card h3 { font-weight: 600; }
   .card .prose { margin-top: 0.3em; }
-  .cards:not(.tinted) .card .prose { max-width: 46ch; }
   .tinted { gap: max(16px, calc(45 * var(--u))); }
   .tinted .card { border-radius: max(8px, calc(12 * var(--u))); background: var(--tint); padding: max(18px, calc(23 * var(--u))) max(18px, calc(23 * var(--u))) max(28px, calc(36 * var(--u))); }
   .tinted h3 { font-size: max(17px, calc(21 * var(--u))); margin-bottom: 1em; }
