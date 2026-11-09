@@ -44,7 +44,7 @@ caseStudy:
       value:
         label: Why?
         serif: false
-        text: How might we turn the clinic into a place that connects members to the support they need to stay healthy, before they get sick?
+        text: Why do members and providers feel **disconnected in outpatient care**, and how might we create a system that **builds community** to **bridge** this gap?
     - discriminant: text
       value:
         navLabel: Outcome

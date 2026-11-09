@@ -34,6 +34,11 @@ caseStudy:
 
           Netflix was great at helping me find shows, so I wanted to explore how it could help me actually come back to them. Over 7 weeks, I took the idea from research to a high-fidelity prototype, working solo, but constantly getting feedback from the fellow binge-watchers around me.
         images: [/images/projects/netflix/context.png]
+    - discriminant: callout
+      value:
+        label: Why?
+        serif: false
+        text: Why might users **forget** about the "My List" feature, and how might we update it to make it an **integral part of the viewing experience**?
     - discriminant: cards
       value:
         navLabel: Problem
@@ -48,11 +53,6 @@ caseStudy:
           - image: /images/projects/netflix/problem-outside-app.png
             title: Recommendations happen outside the app
             text: Sharing a show means remembering to bring it up in conversation or sending a link in a text. Most recommendations get lost before anyone presses play.
-    - discriminant: callout
-      value:
-        label: Why?
-        serif: false
-        text: How might we turn "My List" into a space where viewers organize shows their own way and share them with the people they watch with?
     - discriminant: stats
       value:
         navLabel: Insights

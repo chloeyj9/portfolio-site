@@ -40,6 +40,11 @@ caseStudy:
           **The idea was right, but the product wasn't working.** The original mobile app had low downloads and almost no repeat use. Students who wanted to sell still went to Facebook Marketplace and Craigslist. Our team of 3 designers and 3 developers had 10 weeks to relaunch it.
         roleLabel: My Role
         role: As the Design Lead and PM, I set out to discover what was wrong and take SWAPP from an unused mobile app to a go-to campus marketplace.
+    - discriminant: callout
+      value:
+        label: Why?
+        serif: false
+        text: Why do students looking to resell **hesitate** to adopt SWAPP, and how might we **encourage** them?
     - discriminant: cards
       value:
         navLabel: Problem
@@ -57,11 +62,6 @@ caseStudy:
           - image: /images/projects/swapp/problem-trust.png
             title: Hard to trust
             text: Buyers couldn't easily tell whether a seller was legit. An inconsistent visual design made SWAPP feel less credible than the platforms students already used.
-    - discriminant: callout
-      value:
-        label: Why?
-        serif: false
-        text: How might we make campus resale feel as **fast and trustworthy** as the platforms students already use, during the few weeks a year they actually need it?
     - discriminant: stats
       value:
         navLabel: Insights

@@ -38,6 +38,11 @@ caseStudy:
           The idea came from a conversation with friends about working in an office. Many described a quiet pressure to look busy, even during real work that doesn't show on a screen, like thinking, planning or problem-solving. That gap between appearing productive and being productive became our focus.
 
           Workplace AI is starting to judge that gap. Most of it lives inside screens, where its decisions are easy to ignore. We wanted to pull one of those decisions onto a desk, where people would have to face it. Over 8 weeks, a team of 2 designers and 2 technical developers prototyped the concept.
+    - discriminant: callout
+      value:
+        label: Why?
+        serif: false
+        text: Why don't people **question** productivity tracking, and how might we design a product to **inspire** this **conversation**?
     - discriminant: mediaText
       value:
         navLabel: Problem
@@ -45,17 +50,12 @@ caseStudy:
         heading: Productivity tools promise focus but deliver surveillance.
         intro: |-
           Productivity tools promise optimization. In practice, they often trade well-being for constant monitoring and performance. We focused on three problems:
-        image: /images/projects/hours-observed/problem.png
+        image: /images/projects/hours-observed/problem.svg
         imageLeft: true
         body: |-
           - **Surveillance sold as help:** Tools framed as support quietly monitor every minute. Because the tracking is invisible, most people never stop to question it.
           - **The wrong metric:** Many tools measure presence and activity, not the quality of the work. People learn to look busy instead of doing their best work.
           - **Lost trust:** When visibility replaces trust, people feel judged rather than supported. Their sense of self-worth gets tied to a number they can't control.
-    - discriminant: callout
-      value:
-        label: Why?
-        serif: false
-        text: How might we make the **hidden cost of productivity** tracking **tangible** enough that people stop and question it?
     - discriminant: stats
       value:
         navLabel: Insights
