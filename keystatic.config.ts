@@ -356,8 +356,26 @@ export default config({
       schema: {
         heading: fields.text({ label: 'Heading', multiline: true }),
         body: fields.text({ label: 'Body', multiline: true, description: 'Leave a blank line between paragraphs.' }),
-        photo: fields.image({ label: 'Photo', directory: 'public/images', publicPath: '/images/' }),
+        photo: fields.image({ label: 'Photo', directory: 'public/images/about', publicPath: '/images/about/' }),
         photoAlt: fields.text({ label: 'Photo description (for screen readers)' }),
+        hobbiesHeading: fields.text({ label: 'Heading above the hobby photos', defaultValue: 'A designer and…' }),
+        hobbies: fields.array(
+          fields.object({
+            title: fields.text({ label: 'Title' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+            images: fields.array(
+              fields.object({
+                image: fields.image({ label: 'Image', directory: 'public/images/about', publicPath: '/images/about/' }),
+                alt: fields.text({ label: 'Image description (for screen readers)' }),
+              }),
+              { label: 'Images', itemLabel: (p) => p.fields.alt.value || 'Image' },
+            ),
+          }),
+          {
+            label: 'Outside of design (three, laid out as in the design: one photo, two overlapping photos, one photo)',
+            itemLabel: (p) => p.fields.title.value,
+          },
+        ),
       },
     }),
     home: singleton({

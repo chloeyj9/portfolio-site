@@ -5,5 +5,24 @@ body: |-
   Exploring art in many different mediums has let me express myself, my story, and the movements I’ve always been passionate about. Through strategic design, I’ve learned I can do the same at a larger scale: for communities, and especially for the voices that aren’t always heard.
 
   Previously, I worked at Gensler, investigating client insights to guide design recommendations. I specialize in user research and strategy, and I thrive on compassionate, collaborative teams that create impact.
-photo: /images/about-chloe.jpg
+photo: /images/about/chloe.jpg
 photoAlt: Chloe leaning against a brick wall, holding an iced matcha
+hobbiesHeading: A designer and...
+hobbies:
+  - title: Skier and Sweet Treat Enjoyer :-P
+    text: I’ve been skiing since I was young! Being out on the slopes helps me decompress and appreciate nature. And of course, I can never say no to a waffle break!
+    images:
+      - image: /images/about/skiing.jpg
+        alt: Chloe and two friends in ski gear holding waffles
+  - title: Escape Room Champ
+    text: Breaking down escape room puzzles help me stay on my feet. Currently on a 6x win streak!
+    images:
+      - image: /images/about/escape-room.jpg
+        alt: Chloe and friends holding “I escaped” signs in a wooden escape room
+      - image: /images/about/escape-room-2.jpg
+        alt: Chloe and friends after a space-themed escape room
+  - title: Cat Enthusiast
+    text: Meet my best friend and muse, Leo. He shares my curious nature, and always sits by me while I brainstorm my next idea.
+    images:
+      - image: /images/about/leo.jpg
+        alt: Leo, a tabby cat, sitting on a dresser looking up
