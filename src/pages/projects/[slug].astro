@@ -246,7 +246,17 @@ const meta = [
             {v.intro && <div class="prose intro mt-intro" set:html={richText(v.intro)} />}
             <div class:list={['split media-text', { 'image-left': v.imageLeft, 'big-image': v.bigImage }]}>
               <div class="media mt-media">{v.image && <img src={v.image} alt="" />}</div>
-              <div class="prose mt-body" set:html={richText(v.body)} />
+              {v.role ? (
+                <div class="mt-text">
+                  <div class="prose mt-body" set:html={richText(v.body)} />
+                  <div class="role-box">
+                    {v.roleLabel && <p class="role-label">{v.roleLabel}</p>}
+                    <p class="role-text">{v.role}</p>
+                  </div>
+                </div>
+              ) : (
+                <div class="prose mt-body" set:html={richText(v.body)} />
+              )}
             </div>
           </section>
         );
@@ -897,9 +907,20 @@ const meta = [
   .impact-label { text-transform: uppercase; font-weight: 600; font-size: max(13px, calc(16 * var(--u))); }
 
   .media-text.big-image .mt-media { aspect-ratio: 810 / 420; }
+  /* Text with an outlined role box under it; on wide screens the box sits level with the bottom of the image. */
+  .mt-text { display: flex; flex-direction: column; gap: max(24px, calc(40 * var(--u))); }
+  .role-box {
+    border: 1px solid var(--accent); border-radius: max(10px, calc(15 * var(--u)));
+    padding: max(20px, calc(36 * var(--u))) max(18px, calc(28 * var(--u)));
+  }
+  .role-label { text-transform: uppercase; color: var(--accent); font-size: max(12px, calc(16 * var(--u))); }
+  .role-text { margin-top: max(14px, calc(26 * var(--u))); font-weight: 700; font-size: var(--body); line-height: 1.36; }
   @container (min-width: 760px) {
     .media-text.image-left.big-image { grid-template-columns: 810fr 720fr; gap: calc(70 * var(--u)); align-items: start; }
     .media-text.big-image .mt-body { padding-top: calc(40 * var(--u)); }
+    .media-text.big-image:has(.mt-text) { align-items: stretch; }
+    .mt-text { justify-content: space-between; }
+    .media-text.big-image .mt-text .mt-body { padding-top: 0; margin-top: -0.3em; }
   }
 
   .circles-split { gap: max(32px, calc(60 * var(--u))); align-items: start; }

@@ -38,6 +38,8 @@ const caseStudySections = fields.blocks(
         image: img('Image'),
         imageLeft: fields.checkbox({ label: 'Image on the left (text on the right)', defaultValue: false }),
         bigImage: fields.checkbox({ label: 'Larger image (about half the width, text centered beside it)', defaultValue: false }),
+        roleLabel: fields.text({ label: 'Outlined box label (optional, e.g. My Role)' }),
+        role: fields.text({ label: 'Outlined box text (optional, shown bold under the text, lined up with the bottom of the image)', multiline: true }),
       }),
     },
     cards: {
