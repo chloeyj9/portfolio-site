@@ -53,7 +53,7 @@ caseStudy:
           - **Lost trust:** When visibility replaces trust, people feel judged rather than supported. Their sense of self-worth gets tied to a number they can't control.
     - discriminant: callout
       value:
-        label: Problem Statement
+        label: Why?
         serif: false
         text: How might we make the **hidden cost of productivity** tracking **tangible** enough that people stop and question it?
     - discriminant: stats

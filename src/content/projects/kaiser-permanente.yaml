@@ -42,7 +42,7 @@ caseStudy:
         wide: false
     - discriminant: callout
       value:
-        label: Problem statement
+        label: Why?
         serif: false
         text: How might we turn the clinic into a place that connects members to the support they need to stay healthy, before they get sick?
     - discriminant: text

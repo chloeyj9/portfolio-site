@@ -918,9 +918,9 @@ const meta = [
   @container (min-width: 760px) {
     .media-text.image-left.big-image { grid-template-columns: 810fr 720fr; gap: calc(70 * var(--u)); align-items: start; }
     .media-text.big-image .mt-body { padding-top: calc(40 * var(--u)); }
-    .media-text.big-image:has(.mt-text) { align-items: stretch; }
+    .media-text:has(.mt-text) { align-items: stretch; }
     .mt-text { justify-content: space-between; }
-    .media-text.big-image .mt-text .mt-body { padding-top: 0; margin-top: -0.3em; }
+    .media-text .mt-text .mt-body { padding-top: 0; margin-top: -0.3em; }
   }
 
   .circles-split { gap: max(32px, calc(60 * var(--u))); align-items: start; }

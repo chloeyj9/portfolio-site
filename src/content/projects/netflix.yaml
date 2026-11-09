@@ -50,7 +50,7 @@ caseStudy:
             text: Sharing a show means remembering to bring it up in conversation or sending a link in a text. Most recommendations get lost before anyone presses play.
     - discriminant: callout
       value:
-        label: Problem statement
+        label: Why?
         serif: false
         text: How might we turn "My List" into a space where viewers organize shows their own way and share them with the people they watch with?
     - discriminant: stats
