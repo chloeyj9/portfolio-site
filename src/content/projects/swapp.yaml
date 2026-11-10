@@ -9,6 +9,7 @@ caseStudy:
   accent: '#175c35'
   tint: '#cdecc6'
   hero: /images/projects/swapp/hero.jpg
+  heroShape: 1740 / 510
   headline: Making SWAPP the easy choice at move-out
   summary: >-
     SWAPP had demand but no adoption. We moved it from a mobile app to the web,

@@ -74,7 +74,7 @@ const meta = [
 
     <div class="row">
       <div class="cell"></div>
-      <div class="cell hero media">{cs.hero && <img src={cs.hero} alt="" />}</div>
+      <div class="cell hero media" style={cs.heroShape ? `aspect-ratio: ${cs.heroShape}` : undefined}>{cs.hero && <img src={cs.hero} alt="" />}</div>
       <div class="cell"></div>
     </div>
 

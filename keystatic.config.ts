@@ -431,6 +431,7 @@ export default config({
             accent: fields.text({ label: 'Accent color (labels, tag text)', defaultValue: '#175c35' }),
             tint: fields.text({ label: 'Tint color (tags, callouts, cards)', defaultValue: '#d5eade' }),
             hero: img('Big image at the top'),
+            heroShape: fields.text({ label: 'Big image shape (width / height)', description: 'e.g. 1740 / 510. Leave empty for the usual 1440 / 540.' }),
             headline: fields.text({ label: 'Page title' }),
             summary: text('Summary under the title', formatting),
             role: text('Role (one per line)'),

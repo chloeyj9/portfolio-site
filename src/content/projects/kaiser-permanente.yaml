@@ -9,6 +9,7 @@ caseStudy:
   accent: '#367ba7'
   tint: '#b9dae8'
   hero: /images/projects/kaiser-permanente/hero.jpg
+  heroShape: 1470 / 510
   headline: Rethinking the outpatient clinic as an everyday health destination
   summary: >-
     A multidisciplinary partnership with Kaiser Permanente exploring how
