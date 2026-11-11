@@ -791,7 +791,8 @@ const meta = [
   .image-strip img { width: 100%; height: 100%; object-fit: cover; }
   @container (max-width: 600px) { .image-strip { flex-direction: column; height: auto; } .image-strip .media { aspect-ratio: 3 / 2; } }
 
-  .cards.two { column-gap: max(24px, calc(60 * var(--u))); }
+  /* Text runs the full width of each card, so the columns need a wide enough gap to read as separate. */
+  .cards:not(.tinted) { column-gap: max(24px, calc(60 * var(--u))); }
   @container (min-width: 760px) { .cards.two { grid-template-columns: repeat(2, 1fr); } }
   .cards.two .card-media { aspect-ratio: 690 / 480; }
   .image-strip.natural { height: auto; align-items: flex-start; }

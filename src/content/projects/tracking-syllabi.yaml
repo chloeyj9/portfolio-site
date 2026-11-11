@@ -1,12 +1,12 @@
 title: Tracking Syllabi
 order: 6
 description: Tracking syllabi on just one tab
-cover: null
+cover: /images/projects/tracking-syllabi/cover.jpg
 tags: [Product Design, Strategy]
 year: '2026'
 caseStudy:
   enabled: false
-  accent: '#b8237a'
+  accent: '#ff6186'
   tint: '#f6d3e6'
   hero: null
   headline: ''
