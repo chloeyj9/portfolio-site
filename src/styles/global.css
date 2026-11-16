@@ -26,6 +26,12 @@
   --pad: max(16px, calc(60 * var(--u)));
   --radius: max(7px, calc(10 * var(--u)));
   --bar: max(56px, calc(90 * var(--u)));
+  /*
+    The width of a grid line: 1px, or as close as the screen allows at the current zoom
+    (a script in Layout.astro sets it). Cells overlap by exactly this much, so a shared
+    edge is always one line, never two lines a pixel apart.
+  */
+  --hair: 1px;
 }
 
 /*
@@ -39,8 +45,8 @@
 html { background: var(--color-paper); color: var(--color-ink); scroll-behavior: smooth; }
 body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 
-/* A cell in the lattice. Neighbours overlap by 1px so shared edges draw as one line. */
-.cell { border: 1px solid var(--color-line); border-radius: var(--radius); margin: 0 -1px -1px 0; min-width: 0; }
+/* A cell in the lattice. Neighbours overlap by one line width so shared edges draw as one line. */
+.cell { border: var(--hair) solid var(--color-line); border-radius: var(--radius); margin: 0 calc(-1 * var(--hair)) calc(-1 * var(--hair)) 0; min-width: 0; }
 
 /* A full-width row: gutter, main column, gutter. */
 .row { display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr) var(--gutter); }

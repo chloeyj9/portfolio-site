@@ -48,16 +48,25 @@ const { links } = await navLinks(current);
 
 <style>
   .site-header { position: sticky; top: 0; z-index: 30; background: var(--color-paper); }
-  /* Each joint is a quarter circle: clear inside the curve, page colour in the notch outside it. */
+  /*
+    Each joint is one rounded corner, drawn with a real border exactly like the cell corner it
+    stands in for, so it meets the grid lines seamlessly at any zoom. Behind it, page colour fills
+    the notch outside the curve so content scrolling under the bar doesn't show through.
+  */
   .joint {
     position: absolute; top: 100%; width: var(--radius); height: var(--radius); pointer-events: none;
-    --ring: transparent calc(var(--radius) - 1px), var(--color-line) calc(var(--radius) - 1px), var(--color-line) var(--radius), var(--color-paper) var(--radius);
+    box-sizing: border-box; border: 0 solid var(--color-line); border-top-width: var(--hair);
+    --notch: transparent calc(var(--radius) - var(--hair) / 2), var(--color-paper) calc(var(--radius) - var(--hair) / 2);
   }
-  .joint.left-of { background: radial-gradient(circle at 0 100%, var(--ring)); }
-  .joint.right-of { background: radial-gradient(circle at 100% 100%, var(--ring)); }
-  .joint.start.left-of { left: calc(var(--gutter) + 1px - var(--radius)); }
+  /* Positioned inside the border, so pull it out over the border to cover the whole corner. */
+  .joint::before { content: ''; position: absolute; z-index: -1; }
+  .joint.left-of { border-right-width: var(--hair); border-top-right-radius: var(--radius); }
+  .joint.right-of { border-left-width: var(--hair); border-top-left-radius: var(--radius); }
+  .joint.left-of::before { inset: calc(-1 * var(--hair)) calc(-1 * var(--hair)) 0 0; background: radial-gradient(circle at 0 100%, var(--notch)); }
+  .joint.right-of::before { inset: calc(-1 * var(--hair)) 0 0 calc(-1 * var(--hair)); background: radial-gradient(circle at 100% 100%, var(--notch)); }
+  .joint.start.left-of { left: calc(var(--gutter) + var(--hair) - var(--radius)); }
   .joint.start.right-of { left: var(--gutter); }
-  .joint.end.left-of { right: calc(var(--gutter) - 1px); }
+  .joint.end.left-of { right: calc(var(--gutter) - var(--hair)); }
   .joint.end.right-of { right: calc(var(--gutter) - var(--radius)); }
 
   /* The top edge sits off the page, so only the lower corners show. */

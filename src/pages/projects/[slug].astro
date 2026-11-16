@@ -724,6 +724,8 @@ const meta = [
   }
   .case > :first-child { margin-top: 0; }
   .media { background: var(--color-placeholder); overflow: hidden; max-width: 100%; }
+  /* A media cell still has to reach 1px past its track, so its edge lands on its neighbour's. */
+  .cell.media { max-width: none; }
   .media img, .image-row img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   /* Title and summary side by side, then the hero image across the whole column. */

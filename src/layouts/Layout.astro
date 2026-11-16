@@ -16,6 +16,17 @@ const { title, current, sections } = Astro.props;
     <title>{title}</title>
     <script is:inline>
       document.documentElement.classList.add('js');
+      // Grid lines are a whole number of screen pixels wide at any browser zoom (see --hair),
+      // so neighbouring cells' borders always land on exactly the same pixels.
+      (() => {
+        const root = document.documentElement;
+        const set = () => {
+          const dpr = devicePixelRatio || 1;
+          root.style.setProperty('--hair', `${Math.max(1, Math.round(dpr)) / dpr}px`);
+        };
+        set();
+        addEventListener('resize', set);
+      })();
       // Every page opens at the top unless the link points at a section.
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       // scrollIntoView also moves a surrounding frame (like the preview window) to the top.

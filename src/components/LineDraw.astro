@@ -14,7 +14,7 @@
 <style is:global>
   .lines-drawing .cell { border-color: transparent !important; }
   .line-draw { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 40; overflow: visible; }
-  .line-draw path { fill: none; stroke-width: 1; stroke-linecap: butt; }
+  .line-draw path { fill: none; stroke-width: var(--hair, 1px); stroke-linecap: butt; }
 </style>
 
 <script>
@@ -35,11 +35,18 @@
     const cells = [...document.querySelectorAll<HTMLElement>('.cell')]
       .map((el) => ({ r: el.getBoundingClientRect(), cs: getComputedStyle(el) }))
       .filter(({ r }) => r.bottom > 0 && r.top < innerHeight && r.width > 0);
+    // Snap to whole device pixels the way the browser snaps borders, so every drawn line is
+    // exactly 1px and lands on the border it stands in for, rather than blurring across two.
+    const dpr = devicePixelRatio || 1;
+    const snap = (v: number) => Math.round(v * dpr) / dpr;
+    const hair = Math.max(1, Math.round(dpr)) / dpr;
+    svg.style.setProperty('--hair', `${hair}px`);
     const specs = cells.map(({ r, cs }) => {
       const w = (side: string) => parseFloat(cs.getPropertyValue(`border-${side}-width`)) > 0;
       const rad = (corner: string) => parseFloat(cs.getPropertyValue(`border-${corner}-radius`)) || 0;
+      const half = hair / 2;
       return {
-        x0: r.left + 0.5, y0: r.top + scrollY + 0.5, x1: r.right - 0.5, y1: r.bottom + scrollY - 0.5,
+        x0: snap(r.left) + half, y0: snap(r.top + scrollY) + half, x1: snap(r.right) - half, y1: snap(r.bottom + scrollY) - half,
         t: w('top'), b: w('bottom'), l: w('left'), rt: w('right'),
         tl: rad('top-left'), tr: rad('top-right'), bl: rad('bottom-left'), br: rad('bottom-right'),
         // A side switched off with \`border-top: 0\` reports the text colour, so take it from a side that's drawn.
