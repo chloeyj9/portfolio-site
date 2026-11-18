@@ -11,7 +11,7 @@ interface Props {
 const { title, tags, year, cover, accent, href } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
-<Tag href={href} class:list={['card', { linked: href }]} style={`--accent:${accent}`} data-reveal>
+<Tag href={href} class:list={['card', { linked: href }]} style={`--accent:${accent}`} data-cursor={href ? 'Read case study' : 'Coming soon!'} data-reveal>
   <div class="cell media">
     {cover && <img src={cover} alt="" loading="lazy" />}
   </div>

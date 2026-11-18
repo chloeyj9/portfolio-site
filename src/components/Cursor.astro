@@ -1,0 +1,90 @@
+---
+// A blue dot that follows the mouse in place of the arrow. Over anything marked
+// data-cursor="..." it grows into a pill with that label; over the blue footer it turns white;
+// and it squishes a little on click. Touch screens keep their normal behaviour.
+---
+<div class="cursor" aria-hidden="true">
+  <span class="cursor-dot"></span>
+  <span class="cursor-pill"><span class="cursor-label"></span></span>
+</div>
+
+<style is:global>
+  .cursor { display: none; }
+
+  @media (hover: hover) and (pointer: fine) {
+    html.has-cursor, html.has-cursor * { cursor: none !important; }
+
+    .cursor {
+      --cursor-blue: #4f98d5;
+      display: block; position: fixed; left: 0; top: 0; z-index: 1000; pointer-events: none;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .cursor.visible { opacity: 1; }
+
+    /* Both shapes are centred on the pointer. */
+    .cursor-dot, .cursor-pill {
+      position: absolute; left: 0; top: 0; translate: -50% -50%;
+      transition: scale 0.35s cubic-bezier(.34, 1.56, .64, 1), background-color 0.25s, opacity 0.2s;
+    }
+    .cursor-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--cursor-blue); }
+    .cursor-pill {
+      display: grid; place-items: center; white-space: nowrap; box-sizing: border-box;
+      height: 30px; padding: 0 14px; border-radius: 999px; background: var(--cursor-blue); color: #fff;
+      font-family: var(--font-sans); font-size: 13px; line-height: 1;
+      text-transform: uppercase; letter-spacing: 0.02em;
+      scale: 0; opacity: 0;
+    }
+
+    /* Over a project: the dot gives way to the pill. */
+    .cursor.labelled .cursor-dot { scale: 0; opacity: 0; }
+    .cursor.labelled .cursor-pill { scale: 1; opacity: 1; }
+
+    /* Over the blue footer the dot turns white so it still shows. */
+    .cursor.on-blue .cursor-dot { background: #fff; }
+
+    /* A press squishes it down; letting go springs it back past full size and settles. */
+    .cursor.pressed .cursor-dot { scale: 0.65; transition-duration: 0.12s; }
+    .cursor.pressed.labelled .cursor-pill { scale: 0.9; transition-duration: 0.12s; }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+    .cursor-dot, .cursor-pill { transition: opacity 0.15s, background-color 0.15s; }
+  }
+</style>
+
+<script>
+  const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const cursor = document.querySelector<HTMLElement>('.cursor');
+  const label = cursor?.querySelector<HTMLElement>('.cursor-label');
+
+  if (cursor && label && fine.matches) {
+    document.documentElement.classList.add('has-cursor');
+
+    // What sits under the pointer decides the cursor's look.
+    const update = (target: EventTarget | null) => {
+      const el = target instanceof Element ? target : null;
+      const text = el?.closest<HTMLElement>('[data-cursor]')?.dataset.cursor ?? '';
+      if (text) label.textContent = text;
+      cursor.classList.toggle('labelled', !!text);
+      cursor.classList.toggle('on-blue', !!el?.closest('.site-footer'));
+    };
+
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      cursor.classList.add('visible');
+      update(e.target);
+    }, { passive: true });
+
+    // Scrolling moves the page under a still pointer, so check again what's beneath it.
+    addEventListener('scroll', () => {
+      const m = /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(cursor.style.transform);
+      if (m) update(document.elementFromPoint(+m[1], +m[2]));
+    }, { passive: true });
+
+    addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') cursor.classList.add('pressed'); });
+    addEventListener('pointerup', () => cursor.classList.remove('pressed'));
+    document.documentElement.addEventListener('mouseleave', () => cursor.classList.remove('visible', 'pressed'));
+    addEventListener('blur', () => cursor.classList.remove('pressed'));
+  }
+</script>

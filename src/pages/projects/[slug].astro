@@ -587,11 +587,11 @@ const meta = [
       <div class="more-cells">
         <a href="/#work" class="cell more-link back"><span aria-hidden="true">&lt;</span> Return to homepage</a>
         {next.href ? (
-          <a href={next.href} class="cell more-media" aria-label={`Next project: ${next.title}`} tabindex="-1">
+          <a href={next.href} class="cell more-media" aria-label={`Next project: ${next.title}`} tabindex="-1" data-cursor="Read case study">
             <span class="media">{next.cover && <img src={next.cover} alt="" loading="lazy" />}</span>
           </a>
         ) : (
-          <div class="cell more-media"><span class="media">{next.cover && <img src={next.cover} alt="" loading="lazy" />}</span></div>
+          <div class="cell more-media" data-cursor="Coming soon!"><span class="media">{next.cover && <img src={next.cover} alt="" loading="lazy" />}</span></div>
         )}
         {next.href
           ? <a href={next.href} class="cell more-link">See next project <span aria-hidden="true">&gt;</span></a>
